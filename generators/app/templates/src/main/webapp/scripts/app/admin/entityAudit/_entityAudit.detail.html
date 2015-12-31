@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <button aria-label="Close" data-dismiss="modal" class="close" type="button" ng-click="cancel()"><span
+        aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">
+        Audit Details
+    </h4>
+</div>
+<div class="modal-body pad">
+    <div>
+        <strong>{{audit.action}} action was performed on below data</strong><br><br>
+        <del class="diff diff-key">Old/Removed value</del>
+        &nbsp;
+        <ins class="diff diff-key">New/Added value</ins>
+    </div>
+    <br>
+    <label>Changed Fields</label>
+    <pre id="resultChanges" ng-bind-html="diffValueChanges"></pre>
+    <label>All Fields</label>
+    <pre id="result" ng-bind-html="diffValue"></pre>
+</div>
+<div class="modal-footer">
+    <button data-dismiss="modal" class="btn btn-default" type="button" ng-click="cancel()">Done</button>
+</div>

@@ -1,0 +1,99 @@
+<div ng-cloak class="pad">
+    <div class="row">
+        <h3 class="col-sm-12">Entity Audits</h3>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 pad">
+            <h4>Filter</h4>
+
+            <form name="auditForm" role="form" novalidate show-validation>
+                <div class="row">
+                    <div class="col-md-8 form-group">
+                        <label>Entity/Table</label>
+                        <ui-select ng-model="qualifiedName.selected" name="qualifiedName" required>
+                            <ui-select-match placeholder="Select or search an Entity...">
+                                {{getEntityName($select.selected) | camelToHuman}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="entity in entities | filter: $select.search">
+                                <span
+                                    ng-bind-html="getEntityName(entity) | camelToHuman | highlight: $select.search"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                        <div ng-show="auditForm.qualifiedName.$invalid">
+                            <p class="help-block" ng-show="auditForm.qualifiedName.$error.required">
+                                This field is required
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Limit to</label>
+                        <select class="input-sm form-control" name="limit" id="limit" required
+                                ng-options="option for option in limits"
+                                ng-model="limit"></select>
+                    </div>
+                </div>
+                <div class="row pad">
+                    <button ng-disabled="auditForm.$invalid || !qualifiedName.selected"
+                            class="btn btn-primary pull-right" ng-click="loadChanges()"><i
+                        class="fa fa-download"></i>&nbsp;Load Change List
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div ng-show="!loading" >
+        <div class="table-responsive" ng-if="audits.length > 0">
+            <p ng-if="qualifiedName.selected">Last <strong>{{limit}}</strong> Changes for <strong>{{getEntityName(qualifiedName.selected)
+                | camelToHuman}}</strong></p>
+            <table class="table table-bordered table-hover table-striped" >
+                <thead>
+                    <tr>
+                        <th>Entity Id <i class="fa fa-sort pull-right"></i></th>
+                        <th>Action <i class="fa fa-sort pull-right"></i></th>
+                        <th>Version <i class="fa fa-sort pull-right"></i></th>
+                        <th>Value <i class="fa fa-sort pull-right"></i></th>
+                        <th>Modified Date <i class="fa fa-sort pull-right"></i></th>
+                        <th>Modified By <i class="fa fa-sort pull-right"></i></th>
+                        <th><i class="fa fa-edit"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="audit in audits">
+                    <td>{{audit.entityId}}</td>
+                    <td>{{audit.action}}</td>
+                    <td>{{audit.commitVersion}}</td>
+                    <!--<td><pre class="audit-obj" ng-bind-html="format(audit.entityValue)"></pre></td>-->
+                    <td class="no-pad">
+                        <div class="audit-obj">
+                            <table class="table table-bordered table-hover no-margin">
+                                <tr>
+                                    <th>Field</th>
+                                    <th>Value</th>
+                                </tr>
+                                <tr ng-repeat="(k,v) in audit.entityValue" ng-if="!isObject(v)">
+                                    <td>{{k | camelToHuman}}</td>
+                                    <td>
+                                        <span ng-if="isDate(k)">{{v | cmsTime}}</span>
+                                        <span ng-if="!isDate(k)">{{v}}</span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                    <td>{{audit.modifiedDate | date}}</td>
+                    <td>{{audit.modifiedBy}}</td>
+                    <td>
+                        <button type="button" ng-click="openChange(audit)"
+                                tooltip="View Audit Change Details" tooltip-placement="auto"
+                                class="btn btn-info btn-xs">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <p ng-if="displayedChanges.length == 0">No Data found for the filters</p>
+    </div>
+</div>
