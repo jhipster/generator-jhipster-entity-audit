@@ -128,7 +128,7 @@ module.exports = yeoman.generators.Base.extend({
     jhipsterFunc.copyTemplate(resourceDir + '/config/liquibase/changelog/_EntityAuditEvent.xml',
             resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_EntityAuditEvent.xml', TPL, this, { 'interpolate': interpolateRegex });
 
-    jhipsterFunc.addChangelogToLiquibase(this.changelogDate + '_added_entity_EntityAuditEvent.xml');
+    jhipsterFunc.addChangelogToLiquibase(this.changelogDate + '_added_entity_EntityAuditEvent');
     // replace the Listener on the 'AbstractAuditingEntity' class
     jhipsterFunc.replaceContent(javaDir + 'domain/AbstractAuditingEntity.java', 'AuditingEntityListener.class', 'EntityAuditEventListener.class');
     jhipsterFunc.replaceContent(javaDir + 'domain/AbstractAuditingEntity.java',
@@ -161,7 +161,7 @@ module.exports = yeoman.generators.Base.extend({
       jhipsterFunc.addJavaScriptToIndex('app/admin/entityAudit/entityAudit.js');
       jhipsterFunc.addJavaScriptToIndex('app/admin/entityAudit/entityAudit.controller.js');
       // add bower dependency required
-      jhipsterFunc.addBowerDependency('angular-object-diff', '0.1.0');
+      jhipsterFunc.addBowerDependency('angular-object-diff', '0.6.0');
       jhipsterFunc.addAngularJsModule('ds.objectDiff');
       // add new menu entry
       jhipsterFunc.addElementToAdminMenu('entityAudit', 'bell', jhipsterVar.enableTranslation);
