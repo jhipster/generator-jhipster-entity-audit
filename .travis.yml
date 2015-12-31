@@ -16,6 +16,10 @@ env:
   - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
   matrix:
   - JHIPSTER=app-default
+before_install:
+  - chmod +x $JHIPSTER_INSTALL/02-install-jhipster-stack.sh
+  - chmod +x $JHIPSTER_INSTALL/02-downloadDep.sh
+  - chmod +x $JHIPSTER_INSTALL/02-checkVersion.sh
 install:
   - $JHIPSTER_INSTALL/02-install-jhipster-stack.sh
   - $JHIPSTER_INSTALL/03-downloadDep.sh
