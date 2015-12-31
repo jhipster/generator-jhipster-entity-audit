@@ -9,7 +9,7 @@ npm install -g grunt-cli
 npm install -g gulp
 npm install -g generator-jhipster
 #-------------------------------------------------------------------------------
-# Install the latest version of generator-jhipster-swagger2markup
+# Install the latest version of generator-jhipster-entity-audit
 #-------------------------------------------------------------------------------
 cd $TRAVIS_BUILD_DIR/
 npm install

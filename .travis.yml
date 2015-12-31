@@ -23,6 +23,7 @@ before_install:
 before_script:
   - chmod +x $JHIPSTER_SCRIPTS/01-generate-project.sh
   - chmod +x $JHIPSTER_SCRIPTS/02-generate-entities.sh
+  - chmod +x $JHIPSTER_SCRIPTS/03-generate-audit.sh
 install:
   - $JHIPSTER_INSTALL/02-install-jhipster-stack.sh
   - $JHIPSTER_INSTALL/03-downloadDep.sh
@@ -30,3 +31,4 @@ install:
 script:
   - $JHIPSTER_SCRIPTS/01-generate-project.sh
   - $JHIPSTER_SCRIPTS/02-generate-entities.sh
+  - $JHIPSTER_SCRIPTS/03-generate-audit.sh
