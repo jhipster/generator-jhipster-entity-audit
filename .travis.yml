@@ -20,6 +20,9 @@ before_install:
   - chmod +x $JHIPSTER_INSTALL/02-install-jhipster-stack.sh
   - chmod +x $JHIPSTER_INSTALL/03-downloadDep.sh
   - chmod +x $JHIPSTER_INSTALL/04-checkVersion.sh
+before_script:
+  - chmod +x $JHIPSTER_SCRIPTS/01-generate-project.sh
+  - chmod +x $JHIPSTER_SCRIPTS/02-generate-entities.sh
 install:
   - $JHIPSTER_INSTALL/02-install-jhipster-stack.sh
   - $JHIPSTER_INSTALL/03-downloadDep.sh
