@@ -7,6 +7,8 @@ This is a [JHipster](http://jhipster.github.io/) module, that is meant to be use
 
 The module will extend the existing entities with `AbstractAuditingEntity` class to enable audits hence make sure that your entities doesn't have any superclass.
 
+This will also add new columns to the liquibase changeset for the entities, so it is ideal to recreate the tables if you are enabling this for existing entities.
+
 ### Installation
 
 As this is a [JHipster](http://jhipster.github.io/) module, we expect you have [JHipster and its related tools already installed](http://jhipster.github.io/installation.html).

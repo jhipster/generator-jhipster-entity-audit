@@ -5,7 +5,8 @@ var path = require('path'),
     chalk = require('chalk'),
     jhipster = require('generator-jhipster'),
     packagejs = require(__dirname + '/../../package.json'),
-    fs = require('fs');
+    fs = require('fs'),
+    glob = require("glob");
 
 // Stores JHipster variables
 var jhipsterVar = {moduleName: 'entity-audit'};
@@ -144,6 +145,17 @@ module.exports = yeoman.generators.Base.extend({
       console.log('\n' + chalk.bold.yellow('Make sure these classes does not extend any other class to avoid any errors during compilation.'));
       this.entitiesToUpdate.forEach(function(entityName) {
         jhipsterFunc.replaceContent(javaDir + 'domain/' + entityName + '.java', 'public class ' + entityName, 'public class ' + entityName + ' extends AbstractAuditingEntity');
+        //update liquibase changeset
+        var file = glob.sync("src/main/resources/config/liquibase/changelog/*" + entityName + ".xml")[0];
+        var columns = "<column name=\"created_by\" type=\"varchar(50)\">\n" +
+        "                <constraints nullable=\"false\"/>\n" +
+        "            </column>\n" +
+        "            <column name=\"created_date\" type=\"timestamp\" defaultValueDate=\"${now}\">\n" +
+        "                <constraints nullable=\"false\"/>\n" +
+        "            </column>\n" +
+        "            <column name=\"last_modified_by\" type=\"varchar(50)\"/>\n" +
+        "            <column name=\"last_modified_date\" type=\"timestamp\"/>";
+        jhipsterFunc.addColumnToLiquibaseEntityChangeset(file, columns);
       }, this);
     }
 
