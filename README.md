@@ -5,6 +5,8 @@
 
 This is a [JHipster](http://jhipster.github.io/) module, that is meant to be use in a JHipster application.
 
+The module will extend the existing entities with `AbstractAuditingEntity` class to enable audits hence make sure that your entities doesn't have any superclass.
+
 ### Installation
 
 As this is a [JHipster](http://jhipster.github.io/) module, we expect you have [JHipster and its related tools already installed](http://jhipster.github.io/installation.html).
