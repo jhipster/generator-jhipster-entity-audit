@@ -8,9 +8,6 @@ angular.module('<%=angularAppName%>')
         $scope.limits = [25, 50, 100, 200];
         $scope.limit = 25;
 
-        $scope.qualifiedName = {};
-        $scope.user = {};
-
         EntityAuditService.findAllAudited().then(function (data) {
             $scope.entities = data;
         });
@@ -18,8 +15,8 @@ angular.module('<%=angularAppName%>')
         $scope.loading = false;
         $scope.loadChanges = function () {
             $scope.loading = true;
-            var type = $scope.qualifiedName.selected? $scope.qualifiedName.selected : null;
-            EntityAuditService.findByEntity(type, $scope.limit).then(function (data) {
+            var entityType = $scope.qualifiedName;
+            EntityAuditService.findByEntity(entityType, $scope.limit).then(function (data) {
                 $scope.audits = data.map(function(it){
                     it.entityValue = JSON.parse(it.entityValue);
                     return it;
@@ -60,8 +57,9 @@ angular.module('<%=angularAppName%>')
                 EntityAuditService.getPrevVersion(audit.entityType, audit.entityId, audit.commitVersion).then(function (data) {
                     var previousVersion = JSON.parse(data.entityValue),
                         currentVersion = audit.entityValue;
-                    previousVersion = convertDates(previousVersion);
-                    currentVersion = convertDates(currentVersion);
+                    // enable below to have the dates formatted
+                    //previousVersion = convertDates(previousVersion);
+                    //currentVersion = convertDates(currentVersion);
                     var diff = ObjectDiff.diffOwnProperties(previousVersion, currentVersion);
 
                     $uibModal.open({

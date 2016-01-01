@@ -124,6 +124,7 @@ module.exports = yeoman.generators.Base.extend({
     jhipsterFunc.copyTemplate(javaTemplateDir + '/config/audit/_EntityAuditEventListener.java', javaDir + 'config/audit/EntityAuditEventListener.java', TPL, this);
     jhipsterFunc.copyTemplate(javaTemplateDir + '/config/audit/_EntityAuditAction.java', javaDir + 'config/audit/EntityAuditAction.java', TPL, this);
     jhipsterFunc.copyTemplate(javaTemplateDir + '/config/util/_AutowireHelper.java', javaDir + 'config/util/AutowireHelper.java', TPL, this);
+    jhipsterFunc.copyTemplate(javaTemplateDir + '/config/util/_AutowireHelperConfig.java', javaDir + 'config/util/AutowireHelperConfig.java', TPL, this);
     jhipsterFunc.copyTemplate(javaTemplateDir + '/domain/_EntityAuditEvent.java', javaDir + 'domain/EntityAuditEvent.java', TPL, this);
     jhipsterFunc.copyTemplate(javaTemplateDir + '/repository/_EntityAuditEventRepository.java', javaDir + 'repository/EntityAuditEventRepository.java', TPL, this);
     jhipsterFunc.copyTemplate(resourceDir + '/config/liquibase/changelog/_EntityAuditEvent.xml',
@@ -135,7 +136,8 @@ module.exports = yeoman.generators.Base.extend({
     jhipsterFunc.replaceContent(javaDir + 'domain/AbstractAuditingEntity.java',
       'import org.springframework.data.jpa.domain.support.AuditingEntityListener',
       'import ' + this.packageName + '.config.audit.EntityAuditEventListener');
-
+    // remove the jsonIgnore on the audit fields so that the values can be passed
+    jhipsterFunc.replaceContent(javaDir + 'domain/AbstractAuditingEntity.java', '\s*@JsonIgnore', '', true);
     // Update existing entities to enable audit
     if (this.updateType == 'all') {
       this.entitiesToUpdate = this.existingEntities;
@@ -168,15 +170,19 @@ module.exports = yeoman.generators.Base.extend({
       jhipsterFunc.copyTemplate(webappDir + '/scripts/app/admin/entityAudit/_entityAudit.controller.js', webappDir + 'scripts/app/admin/entityAudit/entityAudit.controller.js', TPL, this);
       jhipsterFunc.copyTemplate(webappDir + '/scripts/app/admin/entityAudit/_entityAudit.detail.controller.js', webappDir + 'scripts/app/admin/entityAudit/entityAudit.detail.controller.js', TPL, this);
       jhipsterFunc.copyTemplate(webappDir + '/scripts/components/admin/_entityAudit.service.js', webappDir + 'scripts/components/admin/entityAudit.service.js', TPL, this);
+      jhipsterFunc.copyTemplate(webappDir + '/scripts/components/interceptor/_entity.audit.interceptor.js', webappDir + '/scripts/components/interceptor/entity.audit.interceptor.js', TPL, this);
       // add the scripts to index.html
       jhipsterFunc.addJavaScriptToIndex('components/admin/entityAudit.service.js');
+      jhipsterFunc.addJavaScriptToIndex('components/interceptor/entity.audit.interceptor.js');
       jhipsterFunc.addJavaScriptToIndex('app/admin/entityAudit/entityAudit.js');
       jhipsterFunc.addJavaScriptToIndex('app/admin/entityAudit/entityAudit.controller.js');
+      jhipsterFunc.addJavaScriptToIndex('app/admin/entityAudit/entityAudit.detail.controller.js');
       // add bower dependency required
-      jhipsterFunc.addBowerDependency('angular-object-diff', '0.6.0');
+      jhipsterFunc.addBowerDependency('angular-object-diff', '0.6.1');
       jhipsterFunc.addAngularJsModule('ds.objectDiff');
+      jhipsterFunc.addAngularJsInterceptor('entityAuditInterceptor');
       // add new menu entry
-      jhipsterFunc.addElementToAdminMenu('entityAudit', 'bell', jhipsterVar.enableTranslation);
+      jhipsterFunc.addElementToAdminMenu('entityAudit', 'list-alt', jhipsterVar.enableTranslation);
       jhipsterFunc.addTranslationKeyToAllLanguages('entityAudit', 'Entity Audit', 'addAdminElementTranslationKey', jhipsterVar.enableTranslation);
     }
 

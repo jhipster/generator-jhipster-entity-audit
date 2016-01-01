@@ -16,6 +16,11 @@ angular.module('<%=angularAppName%>')
                         controller: 'EntityAuditController'
                     }
                 },
-                resolve: {}
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('audits');
+                        return $translate.refresh();
+                    }]
+                }
             });
     });

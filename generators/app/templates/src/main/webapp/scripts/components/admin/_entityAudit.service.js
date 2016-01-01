@@ -8,10 +8,10 @@ angular.module('<%=angularAppName%>')
                     return response.data;
                 });
             },
-            findByEntity: function (qualifiedName, limit) {
+            findByEntity: function (entityType, limit) {
                 return $http.get('api/audits/entity/changes', {
-                  params: {
-                        qualifiedName: qualifiedName,
+                    params: {
+                        entityType: entityType,
                         limit: limit
                     }
                 }).then(function (response) {

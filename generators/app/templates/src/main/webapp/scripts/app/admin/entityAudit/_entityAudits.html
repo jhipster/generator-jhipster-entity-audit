@@ -2,7 +2,7 @@
     <div class="row">
         <h3 class="col-sm-12">Entity Audits</h3>
     </div>
-
+    <jh-alert></jh-alert>
     <div class="row">
         <div class="col-md-12 pad">
             <h4>Filter</h4>
@@ -11,15 +11,9 @@
                 <div class="row">
                     <div class="col-md-8 form-group">
                         <label>Entity/Table</label>
-                        <ui-select ng-model="qualifiedName.selected" name="qualifiedName" required>
-                            <ui-select-match placeholder="Select or search an Entity...">
-                                {{getEntityName($select.selected) | camelToHuman}}
-                            </ui-select-match>
-                            <ui-select-choices repeat="entity in entities | filter: $select.search">
-                                <span
-                                    ng-bind-html="getEntityName(entity) | camelToHuman | highlight: $select.search"></span>
-                            </ui-select-choices>
-                        </ui-select>
+                        <select class="input-sm form-control" name="qualifiedName" id="qualifiedName" required
+                                ng-options="getEntityName(entity) for entity in entities"
+                                ng-model="qualifiedName"></select>
                         <div ng-show="auditForm.qualifiedName.$invalid">
                             <p class="help-block" ng-show="auditForm.qualifiedName.$error.required">
                                 This field is required
@@ -34,9 +28,9 @@
                     </div>
                 </div>
                 <div class="row pad">
-                    <button ng-disabled="auditForm.$invalid || !qualifiedName.selected"
+                    <button ng-disabled="auditForm.$invalid"
                             class="btn btn-primary pull-right" ng-click="loadChanges()"><i
-                        class="fa fa-download"></i>&nbsp;Load Change List
+                        class="glyphicon glyphicon-import"></i>&nbsp;Load Change List
                     </button>
                 </div>
             </form>
@@ -44,27 +38,36 @@
     </div>
     <div ng-show="!loading" >
         <div class="table-responsive" ng-if="audits.length > 0">
-            <p ng-if="qualifiedName.selected">Last <strong>{{limit}}</strong> Changes for <strong>{{getEntityName(qualifiedName.selected)
-                | camelToHuman}}</strong></p>
+            <p ng-if="qualifiedName">Last <strong>{{limit}}</strong> Changes for <strong>{{getEntityName(qualifiedName)}}</strong></p>
+            <form class="form-inline">
+              <div class="form-group">
+                <label for="searchField">Filter:</label>
+                <input type="text" class="form-control" id="searchField" ng-model="filter.$" placeholder="global filter">
+              </div>
+              <div class="form-group">
+                <input type="email" class="form-control" id="searchFieldEntityId" ng-model="filter.entityId" placeholder="entity id filter">
+              </div>
+            </form>
             <table class="table table-bordered table-hover table-striped" >
                 <thead>
                     <tr>
-                        <th>Entity Id <i class="fa fa-sort pull-right"></i></th>
-                        <th>Action <i class="fa fa-sort pull-right"></i></th>
-                        <th>Version <i class="fa fa-sort pull-right"></i></th>
-                        <th>Value <i class="fa fa-sort pull-right"></i></th>
-                        <th>Modified Date <i class="fa fa-sort pull-right"></i></th>
-                        <th>Modified By <i class="fa fa-sort pull-right"></i></th>
-                        <th><i class="fa fa-edit"></i></th>
+                        <th>Entity Id</th>
+                        <th>Action</th>
+                        <th>Version</th>
+                        <th>Value</th>
+                        <th>Modified Date</th>
+                        <th>Modified By</th>
+                        <th><i class="glyphicon glyphicon-eye-open"></i></th>
                     </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="audit in audits">
+                <tr ng-repeat="audit in audits | filter:filter">
                     <td>{{audit.entityId}}</td>
                     <td>{{audit.action}}</td>
                     <td>{{audit.commitVersion}}</td>
-                    <!--<td><pre class="audit-obj" ng-bind-html="format(audit.entityValue)"></pre></td>-->
-                    <td class="no-pad">
+                    <td><pre class="audit-obj" ng-bind-html="format(audit.entityValue)"></pre></td>
+                    <!-- comment above line and uncomment below to have Table view of value -->
+                    <!--td class="no-pad">
                         <div class="audit-obj">
                             <table class="table table-bordered table-hover no-margin">
                                 <tr>
@@ -72,22 +75,22 @@
                                     <th>Value</th>
                                 </tr>
                                 <tr ng-repeat="(k,v) in audit.entityValue" ng-if="!isObject(v)">
-                                    <td>{{k | camelToHuman}}</td>
+                                    <td>{{k}}</td>
                                     <td>
-                                        <span ng-if="isDate(k)">{{v | cmsTime}}</span>
+                                        <span ng-if="isDate(k)">{{v | date:'medium'}}</span>
                                         <span ng-if="!isDate(k)">{{v}}</span>
                                     </td>
                                 </tr>
                             </table>
                         </div>
-                    </td>
-                    <td>{{audit.modifiedDate | date}}</td>
+                    </td-->
+                    <td>{{audit.modifiedDate | date:'medium'}}</td>
                     <td>{{audit.modifiedBy}}</td>
                     <td>
                         <button type="button" ng-click="openChange(audit)"
-                                tooltip="View Audit Change Details" tooltip-placement="auto"
+                                uib-tooltip="View Audit Change Details" uib-tooltip-placement="auto"
                                 class="btn btn-info btn-xs">
-                            <i class="fa fa-eye"></i>
+                            <i class="glyphicon glyphicon-eye-open"></i>
                         </button>
                     </td>
                 </tr>

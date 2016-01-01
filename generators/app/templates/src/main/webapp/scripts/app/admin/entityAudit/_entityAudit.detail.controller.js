@@ -7,6 +7,6 @@ angular.module('<%=angularAppName%>')
         $scope.diffValueChanges = $sce.trustAsHtml(ObjectDiff.toJsonDiffView(diff));
         $scope.audit = audit;
         $scope.cancel = function () {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
     });
