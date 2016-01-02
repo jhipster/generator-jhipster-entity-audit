@@ -136,7 +136,7 @@ module.exports = yeoman.generators.Base.extend({
     jhipsterFunc.copyTemplate(webappDir + '/scripts/components/interceptor/_entity.audit.interceptor.js', webappDir + '/scripts/components/interceptor/entity.audit.interceptor.js', TPL, this);
     jhipsterFunc.addJavaScriptToIndex('components/interceptor/entity.audit.interceptor.js');
     jhipsterFunc.addAngularJsInterceptor('entityAuditInterceptor');
-    
+
     // add the new Listener to the 'AbstractAuditingEntity' class and add import
     jhipsterFunc.replaceContent(javaDir + 'domain/AbstractAuditingEntity.java', 'AuditingEntityListener.class', '{AuditingEntityListener.class, EntityAuditEventListener.class}');
     jhipsterFunc.rewriteFile(javaDir + 'domain/AbstractAuditingEntity.java',
@@ -201,6 +201,33 @@ module.exports = yeoman.generators.Base.extend({
     done();
   },
 
+  register: function () {
+      try {
+          var modulesJsonFile = jhipsterVar.modulesJsonFile;
+          var moduleConfig = {
+              name : "Entity Audit",
+              npmPackageName : "generator-jhipster-entity-audit",
+              description : "Add support for entity audit and audit log page",
+              hookFor : "entity",
+              hookType : "post",
+              generatorCallback : "jhipster-entity-audit:entity"
+          }
+          var modules;
+          if (shelljs.test('-f', modulesJsonFile)) {
+              // file is present append to it
+              try {
+                  modules = JSON.parse(fs.readFileSync(modulesJsonFile, 'utf8'));
+              } catch (err) {
+                  console.log(chalk.red('The module configuration file could not be read!'));
+              }
+              modules.push(moduleConfig);
+          } else {
+              console.log(chalk.red('The module configuration file is not found!'));
+          }
+      } catch (err) {
+          console.log('\n' + chalk.bold.red('Could not register as a post entity creation hook'));
+      }
+  }
   install: function () {
     var injectDependenciesAndConstants = function () {
       switch (this.frontendBuilder) {
