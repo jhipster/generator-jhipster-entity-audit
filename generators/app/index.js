@@ -127,15 +127,16 @@ module.exports = yeoman.generators.Base.extend({
     jhipsterFunc.copyTemplate(javaTemplateDir + '/config/util/_AutowireHelperConfig.java', javaDir + 'config/util/AutowireHelperConfig.java', TPL, this);
     jhipsterFunc.copyTemplate(javaTemplateDir + '/domain/_EntityAuditEvent.java', javaDir + 'domain/EntityAuditEvent.java', TPL, this);
     jhipsterFunc.copyTemplate(javaTemplateDir + '/repository/_EntityAuditEventRepository.java', javaDir + 'repository/EntityAuditEventRepository.java', TPL, this);
+    jhipsterFunc.copyTemplate(javaTemplateDir + '/web/rest/dto/_AbstractAuditingDTO.java', javaDir + 'web/rest/dto/AbstractAuditingDTO.java', TPL, this);
     jhipsterFunc.copyTemplate(resourceDir + '/config/liquibase/changelog/_EntityAuditEvent.xml',
             resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_EntityAuditEvent.xml', TPL, this, { 'interpolate': interpolateRegex });
 
     jhipsterFunc.addChangelogToLiquibase(this.changelogDate + '_added_entity_EntityAuditEvent');
-    // replace the Listener on the 'AbstractAuditingEntity' class
-    jhipsterFunc.replaceContent(javaDir + 'domain/AbstractAuditingEntity.java', 'AuditingEntityListener.class', 'EntityAuditEventListener.class');
-    jhipsterFunc.replaceContent(javaDir + 'domain/AbstractAuditingEntity.java',
+    // add the new Listener to the 'AbstractAuditingEntity' class and add import
+    jhipsterFunc.replaceContent(javaDir + 'domain/AbstractAuditingEntity.java', 'AuditingEntityListener.class', '{AuditingEntityListener.class, EntityAuditEventListener.class}');
+    jhipsterFunc.rewriteFile(javaDir + 'domain/AbstractAuditingEntity.java',
       'import org.springframework.data.jpa.domain.support.AuditingEntityListener',
-      'import ' + this.packageName + '.config.audit.EntityAuditEventListener');
+      'import ' + this.packageName + '.config.audit.EntityAuditEventListener;');
     // remove the jsonIgnore on the audit fields so that the values can be passed
     jhipsterFunc.replaceContent(javaDir + 'domain/AbstractAuditingEntity.java', '\s*@JsonIgnore', '', true);
     // Update existing entities to enable audit
@@ -145,8 +146,16 @@ module.exports = yeoman.generators.Base.extend({
     if (this.entitiesToUpdate && this.entitiesToUpdate.length > 0 && this.entitiesToUpdate != 'none') {
       console.log('\n' + chalk.bold.green('Updating selected entities ') + chalk.bold.yellow(this.entitiesToUpdate));
       console.log('\n' + chalk.bold.yellow('Make sure these classes does not extend any other class to avoid any errors during compilation.'));
+      var jsonObj = null;
       this.entitiesToUpdate.forEach(function(entityName) {
+        // extend entity with AbstractAuditingEntity
         jhipsterFunc.replaceContent(javaDir + 'domain/' + entityName + '.java', 'public class ' + entityName, 'public class ' + entityName + ' extends AbstractAuditingEntity');
+        // extend DTO with AbstractAuditingDTO
+        jsonObj = JSON.parse(fs.readFileSync('.jhipster/' + entityName + '.json', 'utf8'));
+        if(jsonObj.dto == 'mapstruct') {
+          jhipsterFunc.replaceContent(javaDir + 'web/rest/dto/' + entityName + 'DTO.java', 'public class ' + entityName + 'DTO', 'public class ' + entityName + 'DTO extends AbstractAuditingDTO');
+        }
+
         //update liquibase changeset
         var file = glob.sync("src/main/resources/config/liquibase/changelog/*" + entityName + ".xml")[0];
         var columns = "<column name=\"created_by\" type=\"varchar(50)\">\n" +
