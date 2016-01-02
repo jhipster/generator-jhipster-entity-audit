@@ -3,15 +3,21 @@
 
 ## Usage
 
-This is a [JHipster](http://jhipster.github.io/) module, that is meant to be use in a JHipster application.
+This is a [JHipster](http://jhipster.github.io/) module, that is meant to be used in a JHipster application.
 
-The module will extend the existing entities with `AbstractAuditingEntity` class to enable audits hence make sure that your entities doesn't have any superclass.
+You can choose to enable audit for all entities or choose the entities to be audited from a list during generation.
+
+The module will extend the selected entities and its DTOs with `AbstractAuditingEntity` and `AbstractAuditingDTO` class respectively to enable audits, hence make sure that your entities/DTOs doesn't have any super class.
 
 This will also add new columns to the liquibase changeset for the entities, so it is ideal to recreate the tables if you are enabling this for existing entities.
+
+The Audit log page is optional and can be added by choosing the option while running the generator
 
 ### Installation
 
 As this is a [JHipster](http://jhipster.github.io/) module, we expect you have [JHipster and its related tools already installed](http://jhipster.github.io/installation.html).
+
+This module requires Jhipster version greater than 2.26.2 in order to work
 
 ```bash
 npm install -g generator-jhipster-entity-audit
@@ -28,6 +34,7 @@ If you want don't want to answer each question you can use
 ```bash
 yo jhipster-entity-audit default
 ```
+This will enable auditing for all available entities (only ones created by the jhipster:entity generator) and add the audit log page under admin
 
 ## License
 
