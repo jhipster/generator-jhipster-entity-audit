@@ -62,7 +62,6 @@ module.exports = yeoman.generators.Base.extend({
 
   writing: function () {
     if (!this.enableAudit){
-      console.log(this.enableAudit);
       return;
     }
     var done = this.async();

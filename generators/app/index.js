@@ -227,7 +227,8 @@ module.exports = yeoman.generators.Base.extend({
       } catch (err) {
           console.log('\n' + chalk.bold.red('Could not register as a post entity creation hook'));
       }
-  }
+  },
+  
   install: function () {
     var injectDependenciesAndConstants = function () {
       switch (this.frontendBuilder) {
