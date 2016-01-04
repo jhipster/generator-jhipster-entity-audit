@@ -8,7 +8,7 @@
     "generators/app",
     "generators/entity"
   ],
-  "main": "generators/index.js",
+  "main": "generators/app/index.js",
   "keywords": [
     "yeoman-generator",
     "jhipster-module"

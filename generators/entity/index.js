@@ -79,7 +79,7 @@ module.exports = yeoman.generators.Base.extend({
     interpolateRegex = /<%=([\s\S]+?)%>/g; // so that thymeleaf tags in templates do not get mistreated as _ templates
 
     if (this.entityConfig.entityClass) {
-      console.log('\n' + chalk.bold.green('Updating the entity for audit ') + chalk.bold.yellow(this.entityConfig.entityClass));
+      console.log('\n' + chalk.bold.green('I\'m updating the entity for audit ') + chalk.bold.yellow(this.entityConfig.entityClass));
 
       var entityName = this.entityConfig.entityClass;
       // extend entity with AbstractAuditingEntity
@@ -104,10 +104,6 @@ module.exports = yeoman.generators.Base.extend({
     }
 
     done();
-  },
-
-  updateConfig: function () {
-    // body...
   },
 
   end: function () {

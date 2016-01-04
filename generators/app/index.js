@@ -40,7 +40,7 @@ module.exports = yeoman.generators.Base.extend({
 
     checkDBType: function () {
       if (jhipsterVar.databaseType != 'sql') {
-        this.log(chalk.red.bold('ERROR!') + ' Only SQL database is supported...\n');
+        this.log(chalk.red.bold('ERROR!') + ' I support only SQL database...\n');
         process.exit(1);
       }
     },
@@ -48,7 +48,13 @@ module.exports = yeoman.generators.Base.extend({
     getEntitityNames: function () {
       var existingEntities = [],
       existingEntityChoices = [],
-      existingEntityNames = fs.readdirSync('.jhipster');
+      existingEntityNames = [];
+      try{
+        existingEntityNames = fs.readdirSync('.jhipster');
+      } catch(e) {
+        this.log(chalk.red.bold('ERROR!') + ' Could not read entities, you might not have generated any entities yet. I will continue to install audit files, entities will not be updated...\n');
+      }
+
       existingEntityNames.forEach(function(entry) {
         var entityName = entry.replace('.json','');
         existingEntities.push(entityName);
@@ -104,117 +110,138 @@ module.exports = yeoman.generators.Base.extend({
     }
   },
 
-  writing: function () {
-    var done = this.async();
+  writing: {
+    setupGlobalVar : function () {
+      this.baseName = jhipsterVar.baseName;
+      this.packageName = jhipsterVar.packageName;
+      this.angularAppName = jhipsterVar.angularAppName;
+      this.frontendBuilder = jhipsterVar.frontendBuilder;
+      this.changelogDate = jhipsterFunc.dateFormatForLiquibase();
+      this.webappDir = jhipsterVar.webappDir;
+      this.javaTemplateDir = 'src/main/java/package';
+      this.javaDir = jhipsterVar.javaDir;
+      this.resourceDir = jhipsterVar.resourceDir;
+      this.interpolateRegex = /<%=([\s\S]+?)%>/g; // so that thymeleaf tags in templates do not get mistreated as _ templates
+      this.copyFiles = function (files) {
+        files.forEach( function(file) {
+          jhipsterFunc.copyTemplate(file.from, file.to, file.type? file.type: TPL, this, file.interpolate? { 'interpolate': file.interpolate } : undefined);
+        }, this);
+      };
+    },
 
-    this.baseName = jhipsterVar.baseName;
-    this.packageName = jhipsterVar.packageName;
-    this.angularAppName = jhipsterVar.angularAppName;
-    this.frontendBuilder = jhipsterVar.frontendBuilder;
-    this.changelogDate = jhipsterFunc.dateFormatForLiquibase();
+    writeBaseFiles : function () {
+      var done = this.async();
+      // collect files to copy
+      var files = [
+        { from: this.javaTemplateDir + '/config/audit/_AsyncEntityAuditEventWriter.java', to: this.javaDir + 'config/audit/AsyncEntityAuditEventWriter.java'},
+        { from: this.javaTemplateDir + '/config/audit/_EntityAuditEventListener.java', to: this.javaDir + 'config/audit/EntityAuditEventListener.java'},
+        { from: this.javaTemplateDir + '/config/audit/_EntityAuditAction.java', to: this.javaDir + 'config/audit/EntityAuditAction.java'},
+        { from: this.javaTemplateDir + '/config/util/_AutowireHelper.java', to: this.javaDir + 'config/util/AutowireHelper.java'},
+        { from: this.javaTemplateDir + '/config/util/_AutowireHelperConfig.java', to: this.javaDir + 'config/util/AutowireHelperConfig.java'},
+        { from: this.javaTemplateDir + '/domain/_EntityAuditEvent.java', to: this.javaDir + 'domain/EntityAuditEvent.java'},
+        { from: this.javaTemplateDir + '/repository/_EntityAuditEventRepository.java', to: this.javaDir + 'repository/EntityAuditEventRepository.java'},
+        { from: this.javaTemplateDir + '/web/rest/dto/_AbstractAuditingDTO.java', to: this.javaDir + 'web/rest/dto/AbstractAuditingDTO.java'},
+        { from: this.resourceDir + '/config/liquibase/changelog/_EntityAuditEvent.xml',
+                to: this.resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_EntityAuditEvent.xml', interpolate: this.interpolateRegex },
+        { from: this.webappDir + '/scripts/components/interceptor/_entity.audit.interceptor.js', to: this.webappDir + '/scripts/components/interceptor/entity.audit.interceptor.js'}
+      ];
+      this.copyFiles(files);
+      jhipsterFunc.addChangelogToLiquibase(this.changelogDate + '_added_entity_EntityAuditEvent');
 
-    var webappDir = jhipsterVar.webappDir,
-    javaTemplateDir = 'src/main/java/package',
-    javaDir = jhipsterVar.javaDir,
-    resourceDir = jhipsterVar.resourceDir,
-    interpolateRegex = /<%=([\s\S]+?)%>/g; // so that thymeleaf tags in templates do not get mistreated as _ templates
+      jhipsterFunc.addJavaScriptToIndex('components/interceptor/entity.audit.interceptor.js');
+      jhipsterFunc.addAngularJsInterceptor('entityAuditInterceptor');
 
-    // copy the java file templates
-    jhipsterFunc.copyTemplate(javaTemplateDir + '/config/audit/_AsyncEntityAuditEventWriter.java', javaDir + 'config/audit/AsyncEntityAuditEventWriter.java', TPL, this);
-    jhipsterFunc.copyTemplate(javaTemplateDir + '/config/audit/_EntityAuditEventListener.java', javaDir + 'config/audit/EntityAuditEventListener.java', TPL, this);
-    jhipsterFunc.copyTemplate(javaTemplateDir + '/config/audit/_EntityAuditAction.java', javaDir + 'config/audit/EntityAuditAction.java', TPL, this);
-    jhipsterFunc.copyTemplate(javaTemplateDir + '/config/util/_AutowireHelper.java', javaDir + 'config/util/AutowireHelper.java', TPL, this);
-    jhipsterFunc.copyTemplate(javaTemplateDir + '/config/util/_AutowireHelperConfig.java', javaDir + 'config/util/AutowireHelperConfig.java', TPL, this);
-    jhipsterFunc.copyTemplate(javaTemplateDir + '/domain/_EntityAuditEvent.java', javaDir + 'domain/EntityAuditEvent.java', TPL, this);
-    jhipsterFunc.copyTemplate(javaTemplateDir + '/repository/_EntityAuditEventRepository.java', javaDir + 'repository/EntityAuditEventRepository.java', TPL, this);
-    jhipsterFunc.copyTemplate(javaTemplateDir + '/web/rest/dto/_AbstractAuditingDTO.java', javaDir + 'web/rest/dto/AbstractAuditingDTO.java', TPL, this);
-    jhipsterFunc.copyTemplate(resourceDir + '/config/liquibase/changelog/_EntityAuditEvent.xml',
-            resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_EntityAuditEvent.xml', TPL, this, { 'interpolate': interpolateRegex });
+      // add the new Listener to the 'AbstractAuditingEntity' class and add import
+      jhipsterFunc.replaceContent(this.javaDir + 'domain/AbstractAuditingEntity.java', 'AuditingEntityListener.class', '{AuditingEntityListener.class, EntityAuditEventListener.class}');
+      jhipsterFunc.rewriteFile(this.javaDir + 'domain/AbstractAuditingEntity.java',
+        'import org.springframework.data.jpa.domain.support.AuditingEntityListener',
+        'import ' + this.packageName + '.config.audit.EntityAuditEventListener;');
+      // remove the jsonIgnore on the audit fields so that the values can be passed
+      jhipsterFunc.replaceContent(this.javaDir + 'domain/AbstractAuditingEntity.java', '\s*@JsonIgnore', '', true);
+      done();
+    },
 
-    jhipsterFunc.addChangelogToLiquibase(this.changelogDate + '_added_entity_EntityAuditEvent');
-
-    jhipsterFunc.copyTemplate(webappDir + '/scripts/components/interceptor/_entity.audit.interceptor.js', webappDir + '/scripts/components/interceptor/entity.audit.interceptor.js', TPL, this);
-    jhipsterFunc.addJavaScriptToIndex('components/interceptor/entity.audit.interceptor.js');
-    jhipsterFunc.addAngularJsInterceptor('entityAuditInterceptor');
-
-    // add the new Listener to the 'AbstractAuditingEntity' class and add import
-    jhipsterFunc.replaceContent(javaDir + 'domain/AbstractAuditingEntity.java', 'AuditingEntityListener.class', '{AuditingEntityListener.class, EntityAuditEventListener.class}');
-    jhipsterFunc.rewriteFile(javaDir + 'domain/AbstractAuditingEntity.java',
-      'import org.springframework.data.jpa.domain.support.AuditingEntityListener',
-      'import ' + this.packageName + '.config.audit.EntityAuditEventListener;');
-    // remove the jsonIgnore on the audit fields so that the values can be passed
-    jhipsterFunc.replaceContent(javaDir + 'domain/AbstractAuditingEntity.java', '\s*@JsonIgnore', '', true);
-    // Update existing entities to enable audit
-    if (this.updateType == 'all') {
-      this.entitiesToUpdate = this.existingEntities;
-    }
-    if (this.entitiesToUpdate && this.entitiesToUpdate.length > 0 && this.entitiesToUpdate != 'none') {
-      this.log('\n' + chalk.bold.green('Updating selected entities ') + chalk.bold.yellow(this.entitiesToUpdate));
-      this.log('\n' + chalk.bold.yellow('Make sure these classes does not extend any other class to avoid any errors during compilation.'));
-      var jsonObj = null;
-      this.entitiesToUpdate.forEach(function(entityName) {
-        // extend entity with AbstractAuditingEntity
-        jhipsterFunc.replaceContent(javaDir + 'domain/' + entityName + '.java', 'public class ' + entityName, 'public class ' + entityName + ' extends AbstractAuditingEntity');
-        // extend DTO with AbstractAuditingDTO
-        jsonObj = JSON.parse(fs.readFileSync('.jhipster/' + entityName + '.json', 'utf8'));
-        if(jsonObj.dto == 'mapstruct') {
-          jhipsterFunc.replaceContent(javaDir + 'web/rest/dto/' + entityName + 'DTO.java', 'public class ' + entityName + 'DTO', 'public class ' + entityName + 'DTO extends AbstractAuditingDTO');
-        }
-
-        //update liquibase changeset
-        var file = glob.sync("src/main/resources/config/liquibase/changelog/*" + entityName + ".xml")[0];
-        var columns = "<column name=\"created_by\" type=\"varchar(50)\">\n" +
-        "                <constraints nullable=\"false\"/>\n" +
-        "            </column>\n" +
-        "            <column name=\"created_date\" type=\"timestamp\" defaultValueDate=\"${now}\">\n" +
-        "                <constraints nullable=\"false\"/>\n" +
-        "            </column>\n" +
-        "            <column name=\"last_modified_by\" type=\"varchar(50)\"/>\n" +
-        "            <column name=\"last_modified_date\" type=\"timestamp\"/>";
-        jhipsterFunc.addColumnToLiquibaseEntityChangeset(file, columns);
-      }, this);
-    }
-
-    // Create audit log page for entities
-    if (this.auditPage) {
-      jhipsterFunc.copyTemplate(javaTemplateDir + '/web/rest/_EntityAuditResource.java', javaDir + 'web/rest/EntityAuditResource.java', TPL, this);
-      jhipsterFunc.copyTemplate(webappDir + '/scripts/app/admin/entityAudit/_entityAudits.html', webappDir + 'scripts/app/admin/entityAudit/entityAudits.html', STRIP_HTML, this);
-      jhipsterFunc.copyTemplate(webappDir + '/scripts/app/admin/entityAudit/_entityAudit.detail.html', webappDir + 'scripts/app/admin/entityAudit/entityAudit.detail.html', STRIP_HTML, this);
-      jhipsterFunc.copyTemplate(webappDir + '/scripts/app/admin/entityAudit/_entityAudit.js', webappDir + 'scripts/app/admin/entityAudit/entityAudit.js', STRIP_JS, this);
-      jhipsterFunc.copyTemplate(webappDir + '/scripts/app/admin/entityAudit/_entityAudit.controller.js', webappDir + 'scripts/app/admin/entityAudit/entityAudit.controller.js', TPL, this);
-      jhipsterFunc.copyTemplate(webappDir + '/scripts/app/admin/entityAudit/_entityAudit.detail.controller.js', webappDir + 'scripts/app/admin/entityAudit/entityAudit.detail.controller.js', TPL, this);
-      jhipsterFunc.copyTemplate(webappDir + '/scripts/components/admin/_entityAudit.service.js', webappDir + 'scripts/components/admin/entityAudit.service.js', TPL, this);
-
-      // add the scripts to index.html
-      jhipsterFunc.addJavaScriptToIndex('components/admin/entityAudit.service.js');
-      jhipsterFunc.addJavaScriptToIndex('app/admin/entityAudit/entityAudit.js');
-      jhipsterFunc.addJavaScriptToIndex('app/admin/entityAudit/entityAudit.controller.js');
-      jhipsterFunc.addJavaScriptToIndex('app/admin/entityAudit/entityAudit.detail.controller.js');
-      // add bower dependency required
-      jhipsterFunc.addBowerDependency('angular-object-diff', '0.6.1');
-      jhipsterFunc.addAngularJsModule('ds.objectDiff');
-      // add new menu entry
-      jhipsterFunc.addElementToAdminMenu('entityAudit', 'list-alt', jhipsterVar.enableTranslation);
-      jhipsterFunc.addTranslationKeyToAllLanguages('entityAudit', 'Entity Audit', 'addAdminElementTranslationKey', jhipsterVar.enableTranslation);
-    }
-
-    done();
-  },
-
-  register: function () {
-      try {
-          var moduleConfig = {
-              name : "Entity Audit",
-              npmPackageName : "generator-jhipster-entity-audit",
-              description : "Add support for entity audit and audit log page",
-              hookFor : "entity",
-              hookType : "post",
-              generatorCallback : "jhipster-entity-audit:entity"
-          }
-          jhipsterFunc.addModuleConfig(moduleConfig);
-      } catch (err) {
-          this.log('\n' + chalk.bold.red('Could not register as a jhipster post entity creation hook'));
+    updateEntityFiles : function () {
+      var done = this.async();
+      // Update existing entities to enable audit
+      if (this.updateType == 'all') {
+        this.entitiesToUpdate = this.existingEntities;
       }
+      if (this.entitiesToUpdate && this.entitiesToUpdate.length > 0 && this.entitiesToUpdate != 'none') {
+        this.log('\n' + chalk.bold.green('I\'m Updating selected entities ') + chalk.bold.yellow(this.entitiesToUpdate));
+        this.log('\n' + chalk.bold.yellow('Make sure these classes does not extend any other class to avoid any errors during compilation.'));
+        var jsonObj = null;
+        this.entitiesToUpdate.forEach(function(entityName) {
+          // extend entity with AbstractAuditingEntity
+          jhipsterFunc.replaceContent(this.javaDir + 'domain/' + entityName + '.java', 'public class ' + entityName, 'public class ' + entityName + ' extends AbstractAuditingEntity');
+          // extend DTO with AbstractAuditingDTO
+          jsonObj = JSON.parse(fs.readFileSync('.jhipster/' + entityName + '.json', 'utf8'));
+          if(jsonObj.dto == 'mapstruct') {
+            jhipsterFunc.replaceContent(this.javaDir + 'web/rest/dto/' + entityName + 'DTO.java', 'public class ' + entityName + 'DTO', 'public class ' + entityName + 'DTO extends AbstractAuditingDTO');
+          }
+
+          //update liquibase changeset
+          var file = glob.sync(this.resourceDir + "/config/liquibase/changelog/*" + entityName + ".xml")[0];
+          var columns = "<column name=\"created_by\" type=\"varchar(50)\">\n" +
+          "                <constraints nullable=\"false\"/>\n" +
+          "            </column>\n" +
+          "            <column name=\"created_date\" type=\"timestamp\" defaultValueDate=\"${now}\">\n" +
+          "                <constraints nullable=\"false\"/>\n" +
+          "            </column>\n" +
+          "            <column name=\"last_modified_by\" type=\"varchar(50)\"/>\n" +
+          "            <column name=\"last_modified_date\" type=\"timestamp\"/>";
+          jhipsterFunc.addColumnToLiquibaseEntityChangeset(file, columns);
+        }, this);
+      }
+      done();
+    },
+
+    writeAuditPageFiles : function () {
+      var done = this.async();
+      // Create audit log page for entities
+      if (this.auditPage) {
+        var files = [
+          { from: this.javaTemplateDir + '/web/rest/_EntityAuditResource.java', to: this.javaDir + 'web/rest/EntityAuditResource.java'},
+          { from: this.webappDir + '/scripts/app/admin/entityAudit/_entityAudits.html', to: this.webappDir + 'scripts/app/admin/entityAudit/entityAudits.html'},
+          { from: this.webappDir + '/scripts/app/admin/entityAudit/_entityAudit.detail.html', to: this.webappDir + 'scripts/app/admin/entityAudit/entityAudit.detail.html'},
+          { from: this.webappDir + '/scripts/app/admin/entityAudit/_entityAudit.js', to: this.webappDir + 'scripts/app/admin/entityAudit/entityAudit.js'},
+          { from: this.webappDir + '/scripts/app/admin/entityAudit/_entityAudit.controller.js', to: this.webappDir + 'scripts/app/admin/entityAudit/entityAudit.controller.js'},
+          { from: this.webappDir + '/scripts/app/admin/entityAudit/_entityAudit.detail.controller.js', to: this.webappDir + 'scripts/app/admin/entityAudit/entityAudit.detail.controller.js'},
+          { from: this.webappDir + '/scripts/components/admin/_entityAudit.service.js', to: this.webappDir + 'scripts/components/admin/entityAudit.service.js'}
+        ];
+        this.copyFiles(files);
+        // add the scripts to index.html
+        jhipsterFunc.addJavaScriptToIndex('components/admin/entityAudit.service.js');
+        jhipsterFunc.addJavaScriptToIndex('app/admin/entityAudit/entityAudit.js');
+        jhipsterFunc.addJavaScriptToIndex('app/admin/entityAudit/entityAudit.controller.js');
+        jhipsterFunc.addJavaScriptToIndex('app/admin/entityAudit/entityAudit.detail.controller.js');
+        // add bower dependency required
+        jhipsterFunc.addBowerDependency('angular-object-diff', '0.6.1');
+        jhipsterFunc.addAngularJsModule('ds.objectDiff');
+        // add new menu entry
+        jhipsterFunc.addElementToAdminMenu('entityAudit', 'list-alt', jhipsterVar.enableTranslation);
+        jhipsterFunc.addTranslationKeyToAllLanguages('entityAudit', 'Entity Audit', 'addAdminElementTranslationKey', jhipsterVar.enableTranslation);
+      }
+
+      done();
+    },
+
+    registering: function () {
+      try {
+        var moduleConfig = {
+            name : "Entity Audit",
+            npmPackageName : "generator-jhipster-entity-audit",
+            description : "Add support for entity audit and audit log page",
+            hookFor : "entity",
+            hookType : "post",
+            generatorCallback : "jhipster-entity-audit:entity"
+        }
+        jhipsterFunc.registerModule(moduleConfig);
+      } catch (err) {
+        console.log(err);
+        this.log(chalk.red.bold('WARN!') + ' Could not register as a jhipster post entity creation hook...\n');
+      }
+    },
   },
 
   install: function () {
@@ -235,7 +262,9 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   end: function () {
-    //this.log('\n' + chalk.bold.green('Auditing enabled for entities, you will have an option to enable audit while creating new entities as well'));
-    this.log('\n' + chalk.bold.green('Running wiredep now'));
+    this.log('\n' + chalk.bold.green('Auditing enabled for entities, you will have an option to enable audit while creating new entities as well'));
+    this.log('\n' + chalk.bold.green('I\'m running wiredep now'));
   }
+
+
 });
