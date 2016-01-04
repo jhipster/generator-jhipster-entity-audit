@@ -35,12 +35,12 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     displayLogo: function () {
-      console.log(chalk.white('Welcome to the ' + chalk.bold('JHipster Entity Audit') + ' Generator! ' + chalk.yellow('v' + packagejs.version + '\n')));
+      this.log(chalk.white('Welcome to the ' + chalk.bold('JHipster Entity Audit') + ' Generator! ' + chalk.yellow('v' + packagejs.version + '\n')));
     },
 
     checkDBType: function () {
       if (jhipsterVar.databaseType != 'sql') {
-        console.log(chalk.red.bold('ERROR!') + ' Only SQL database is supported...\n');
+        this.log(chalk.red.bold('ERROR!') + ' Only SQL database is supported...\n');
         process.exit(1);
       }
     },
@@ -149,8 +149,8 @@ module.exports = yeoman.generators.Base.extend({
       this.entitiesToUpdate = this.existingEntities;
     }
     if (this.entitiesToUpdate && this.entitiesToUpdate.length > 0 && this.entitiesToUpdate != 'none') {
-      console.log('\n' + chalk.bold.green('Updating selected entities ') + chalk.bold.yellow(this.entitiesToUpdate));
-      console.log('\n' + chalk.bold.yellow('Make sure these classes does not extend any other class to avoid any errors during compilation.'));
+      this.log('\n' + chalk.bold.green('Updating selected entities ') + chalk.bold.yellow(this.entitiesToUpdate));
+      this.log('\n' + chalk.bold.yellow('Make sure these classes does not extend any other class to avoid any errors during compilation.'));
       var jsonObj = null;
       this.entitiesToUpdate.forEach(function(entityName) {
         // extend entity with AbstractAuditingEntity
@@ -203,7 +203,6 @@ module.exports = yeoman.generators.Base.extend({
 
   register: function () {
       try {
-          var modulesJsonFile = jhipsterVar.modulesJsonFile;
           var moduleConfig = {
               name : "Entity Audit",
               npmPackageName : "generator-jhipster-entity-audit",
@@ -212,23 +211,12 @@ module.exports = yeoman.generators.Base.extend({
               hookType : "post",
               generatorCallback : "jhipster-entity-audit:entity"
           }
-          var modules;
-          if (shelljs.test('-f', modulesJsonFile)) {
-              // file is present append to it
-              try {
-                  modules = JSON.parse(fs.readFileSync(modulesJsonFile, 'utf8'));
-              } catch (err) {
-                  console.log(chalk.red('The module configuration file could not be read!'));
-              }
-              modules.push(moduleConfig);
-          } else {
-              console.log(chalk.red('The module configuration file is not found!'));
-          }
+          jhipsterFunc.addModuleConfig(moduleConfig);
       } catch (err) {
-          console.log('\n' + chalk.bold.red('Could not register as a post entity creation hook'));
+          this.log('\n' + chalk.bold.red('Could not register as a jhipster post entity creation hook'));
       }
   },
-  
+
   install: function () {
     var injectDependenciesAndConstants = function () {
       switch (this.frontendBuilder) {
@@ -247,7 +235,7 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   end: function () {
-    //console.log('\n' + chalk.bold.green('Auditing enabled for entities, you will have an option to enable audit while creating new entities as well'));
-    console.log('\n' + chalk.bold.green('Running wiredep now'));
+    //this.log('\n' + chalk.bold.green('Auditing enabled for entities, you will have an option to enable audit while creating new entities as well'));
+    this.log('\n' + chalk.bold.green('Running wiredep now'));
   }
 });
