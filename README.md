@@ -13,6 +13,8 @@ This will also add new columns to the liquibase changeset for the entities, so i
 
 The Audit log page is optional and can be added by choosing the option while running the generator
 
+jhipster-entity-audit module will register itself as a hook for Jhipster and the question to enable audit will available during future entity generation as well
+
 ### Installation
 
 As this is a [JHipster](http://jhipster.github.io/) module, we expect you have [JHipster and its related tools already installed](http://jhipster.github.io/installation.html).
