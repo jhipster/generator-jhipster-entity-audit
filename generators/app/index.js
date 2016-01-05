@@ -130,7 +130,6 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     writeBaseFiles : function () {
-      var done = this.async();
       // collect files to copy
       var files = [
         { from: this.javaTemplateDir + '/config/audit/_AsyncEntityAuditEventWriter.java', to: this.javaDir + 'config/audit/AsyncEntityAuditEventWriter.java'},
@@ -158,11 +157,9 @@ module.exports = yeoman.generators.Base.extend({
         'import ' + this.packageName + '.config.audit.EntityAuditEventListener;');
       // remove the jsonIgnore on the audit fields so that the values can be passed
       jhipsterFunc.replaceContent(this.javaDir + 'domain/AbstractAuditingEntity.java', '\s*@JsonIgnore', '', true);
-      done();
     },
 
     updateEntityFiles : function () {
-      var done = this.async();
       // Update existing entities to enable audit
       if (this.updateType == 'all') {
         this.entitiesToUpdate = this.existingEntities;
@@ -193,11 +190,9 @@ module.exports = yeoman.generators.Base.extend({
           jhipsterFunc.addColumnToLiquibaseEntityChangeset(file, columns);
         }, this);
       }
-      done();
     },
 
     writeAuditPageFiles : function () {
-      var done = this.async();
       // Create audit log page for entities
       if (this.auditPage) {
         var files = [
@@ -223,7 +218,6 @@ module.exports = yeoman.generators.Base.extend({
         jhipsterFunc.addTranslationKeyToAllLanguages('entityAudit', 'Entity Audit', 'addAdminElementTranslationKey', jhipsterVar.enableTranslation);
       }
 
-      done();
     },
 
     registering: function () {
