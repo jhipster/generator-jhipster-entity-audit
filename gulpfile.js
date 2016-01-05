@@ -97,6 +97,6 @@
   gulp.task('default', ['static', 'test']);
   gulp.task('deploy-patch', sequence('test', 'bump-patch', 'git-commit', 'git-push', 'npm'));
   gulp.task('deploy-minor', sequence('test', 'bump-minor', 'git-commit', 'git-push', 'npm'));
-  gulp.task('deploy-major', sequence('test', 'bump-patch', 'git-commit', 'git-push', 'npm'));
+  gulp.task('deploy-major', sequence('test', 'bump-major', 'git-commit', 'git-push', 'npm'));
 
 })();
