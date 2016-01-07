@@ -40,8 +40,7 @@ module.exports = yeoman.generators.Base.extend({
 
     checkDBType: function () {
       if (jhipsterVar.databaseType != 'sql') {
-        this.log(chalk.red.bold('ERROR!') + ' I support only SQL database...\n');
-        process.exit(1);
+        this.env.error(chalk.red.bold('ERROR!') + ' I support only SQL database...\n');
       }
     },
 
@@ -232,7 +231,6 @@ module.exports = yeoman.generators.Base.extend({
         }
         jhipsterFunc.registerModule(moduleConfig);
       } catch (err) {
-        console.log(err);
         this.log(chalk.red.bold('WARN!') + ' Could not register as a jhipster post entity creation hook...\n');
       }
     },

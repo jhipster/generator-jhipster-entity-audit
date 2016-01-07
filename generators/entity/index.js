@@ -33,20 +33,32 @@ module.exports = yeoman.generators.Base.extend({
       });
     },
 
+    checkDBType: function () {
+      if (jhipsterVar.databaseType != 'sql') {
+        // exit if DB type is not SQL
+        this.abort = true;
+      }
+    },
+
     displayLogo: function () {
-      console.log(chalk.white('Running ' + chalk.bold('JHipster Entity Audit') + ' Generator! ' + chalk.yellow('v' + packagejs.version + '\n')));
+      if (this.abort){
+        return;
+      }
+      this.log(chalk.white('Running ' + chalk.bold('JHipster Entity Audit') + ' Generator! ' + chalk.yellow('v' + packagejs.version + '\n')));
     },
 
     validate: function () {
-      // don't prompt if data are imported from a file
+      // this shouldnt be run directly
       if (!this.entityConfig) {
-        this.log(chalk.red.bold('ERROR!') + ' This sub generator should be used only from JHipster and cannot be run directly...\n');
-        process.exit(1);
+        this.env.error(chalk.red.bold('ERROR!') + ' This sub generator should be used only from JHipster and cannot be run directly...\n');
       }
     }
   },
 
   prompting: function () {
+    if (this.abort){
+      return;
+    }
     // don't prompt if data are imported from a file
     if (this.entityConfig.useConfigurationFile == true &&  this.entityConfig.data && this.entityConfig.data.enableEntityAudit) {
       return;
@@ -70,6 +82,9 @@ module.exports = yeoman.generators.Base.extend({
   },
   writing : {
     updateFiles: function () {
+      if (this.abort){
+        return;
+      }
       if (!this.enableAudit){
         return;
       }
@@ -87,7 +102,7 @@ module.exports = yeoman.generators.Base.extend({
       interpolateRegex = /<%=([\s\S]+?)%>/g; // so that thymeleaf tags in templates do not get mistreated as _ templates
 
       if (this.entityConfig.entityClass) {
-        console.log('\n' + chalk.bold.green('I\'m updating the entity for audit ') + chalk.bold.yellow(this.entityConfig.entityClass));
+        this.log('\n' + chalk.bold.green('I\'m updating the entity for audit ') + chalk.bold.yellow(this.entityConfig.entityClass));
 
         var entityName = this.entityConfig.entityClass;
         // extend entity with AbstractAuditingEntity
@@ -112,12 +127,22 @@ module.exports = yeoman.generators.Base.extend({
       }
     },
     updateConfig : function() {
+      if (this.abort){
+        return;
+      }
+      if (!this.enableAudit){
+        return;
+      }
       jhipsterFunc.updateEntityConfig(this.entityConfig.filename, 'enableEntityAudit', true);
     }
   },
 
   end: function () {
-    //console.log('\n' + chalk.bold.green('Auditing enabled for entities, you will have an option to enable audit while creating new entities as well'));
-    console.log('\n' + chalk.bold.green('End of entity-audit'));
+    if (this.abort){
+      return;
+    }
+    if (this.enableAudit){
+      this.log('\n' + chalk.bold.green('Entity audit enabled'));
+    }
   }
 });
