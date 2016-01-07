@@ -171,22 +171,24 @@ module.exports = yeoman.generators.Base.extend({
           // extend entity with AbstractAuditingEntity
           jhipsterFunc.replaceContent(this.javaDir + 'domain/' + entityName + '.java', 'public class ' + entityName, 'public class ' + entityName + ' extends AbstractAuditingEntity');
           // extend DTO with AbstractAuditingDTO
-          jsonObj = JSON.parse(fs.readFileSync('.jhipster/' + entityName + '.json', 'utf8'));
+          jsonObj = this.fs.readJSON('.jhipster/' + entityName + '.json')
           if(jsonObj.dto == 'mapstruct') {
             jhipsterFunc.replaceContent(this.javaDir + 'web/rest/dto/' + entityName + 'DTO.java', 'public class ' + entityName + 'DTO', 'public class ' + entityName + 'DTO extends AbstractAuditingDTO');
           }
 
           //update liquibase changeset
           var file = glob.sync(this.resourceDir + "/config/liquibase/changelog/*" + entityName + ".xml")[0];
-          var columns = "<column name=\"created_by\" type=\"varchar(50)\">\n" +
-          "                <constraints nullable=\"false\"/>\n" +
-          "            </column>\n" +
-          "            <column name=\"created_date\" type=\"timestamp\" defaultValueDate=\"${now}\">\n" +
-          "                <constraints nullable=\"false\"/>\n" +
-          "            </column>\n" +
-          "            <column name=\"last_modified_by\" type=\"varchar(50)\"/>\n" +
-          "            <column name=\"last_modified_date\" type=\"timestamp\"/>";
-          jhipsterFunc.addColumnToLiquibaseEntityChangeset(file, columns);
+          if(file) {
+            var columns = "<column name=\"created_by\" type=\"varchar(50)\">\n" +
+            "                <constraints nullable=\"false\"/>\n" +
+            "            </column>\n" +
+            "            <column name=\"created_date\" type=\"timestamp\" defaultValueDate=\"${now}\">\n" +
+            "                <constraints nullable=\"false\"/>\n" +
+            "            </column>\n" +
+            "            <column name=\"last_modified_by\" type=\"varchar(50)\"/>\n" +
+            "            <column name=\"last_modified_date\" type=\"timestamp\"/>";
+            jhipsterFunc.addColumnToLiquibaseEntityChangeset(file, columns);
+          }
         }, this);
       }
     },
