@@ -223,15 +223,7 @@ module.exports = yeoman.generators.Base.extend({
 
     registering: function () {
       try {
-        var moduleConfig = {
-            name : "Entity Audit",
-            npmPackageName : "generator-jhipster-entity-audit",
-            description : "Add support for entity audit and audit log page",
-            hookFor : "entity",
-            hookType : "post",
-            generatorCallback : "jhipster-entity-audit:entity"
-        }
-        jhipsterFunc.registerModule(moduleConfig);
+        jhipsterFunc.registerModule("generator-jhipster-entity-audit", "entity", "post", "entity", "Add support for entity audit and audit log page");
       } catch (err) {
         this.log(chalk.red.bold('WARN!') + ' Could not register as a jhipster post entity creation hook...\n');
       }

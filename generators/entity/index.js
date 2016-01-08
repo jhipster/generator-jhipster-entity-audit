@@ -60,7 +60,8 @@ module.exports = yeoman.generators.Base.extend({
       return;
     }
     // don't prompt if data are imported from a file
-    if (this.entityConfig.useConfigurationFile == true &&  this.entityConfig.data && this.entityConfig.data.enableEntityAudit) {
+    if (this.entityConfig.useConfigurationFile == true &&  this.entityConfig.data && typeof this.entityConfig.data.enableEntityAudit !== 'undefined') {
+      this.enableAudit = this.entityConfig.data.enableEntityAudit;
       return;
     }
     var done = this.async();
@@ -130,10 +131,7 @@ module.exports = yeoman.generators.Base.extend({
       if (this.abort){
         return;
       }
-      if (!this.enableAudit){
-        return;
-      }
-      jhipsterFunc.updateEntityConfig(this.entityConfig.filename, 'enableEntityAudit', true);
+      jhipsterFunc.updateEntityConfig(this.entityConfig.filename, 'enableEntityAudit', this.enableAudit);
     }
   },
 
