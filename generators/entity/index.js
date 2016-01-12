@@ -34,7 +34,7 @@ module.exports = yeoman.generators.Base.extend({
     },
 
     checkDBType: function () {
-      if (jhipsterVar.databaseType != 'sql') {
+      if (jhipsterVar.databaseType != 'sql' && jhipsterVar.databaseType != 'mongodb') {
         // exit if DB type is not SQL
         this.abort = true;
       }
