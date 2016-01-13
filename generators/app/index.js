@@ -185,10 +185,15 @@ module.exports = yeoman.generators.Base.extend({
 
       } else {
 
+        var files = [
+          { from: this.javaTemplateDir + '/config/audit/_JaversAuthorProvider.java', to: this.javaDir + 'config/audit/JaversAuthorProvider.java'}
+        ];
+
+        this.copyFiles(files);
         //add required third party dependencies
         if (this.buildTool === 'maven') {
 
-          if (this.databaseType === 'sql') {
+          if (this.databaseType === 'mongodb') {
              jhipsterFunc.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', '1.4.1', '<scope>compile</scope>');
              jhipsterFunc.addMavenDependency('org.mongodb', 'mongo-java-driver', '3.0.4', '<scope>compile</scope>');
           }
@@ -236,10 +241,10 @@ module.exports = yeoman.generators.Base.extend({
               "            <column name=\"last_modified_by\" type=\"varchar(50)\"/>\n" +
               "            <column name=\"last_modified_date\" type=\"timestamp\"/>";
               jhipsterFunc.addColumnToLiquibaseEntityChangeset(file, columns);
-            } else {
-              //javers annotations must be added here to repositories
             }
-
+          } else {
+            // add javers annotations to repository
+            jhipsterFunc.replaceContent(this.javaDir + 'repository/' + entityName + 'Repository.java', 'public interface ' + entityName + 'Repository', '@JaversSpringDataAuditable\npublic interface ' + entityName + 'Repository');
           }
         }, this);
       }
