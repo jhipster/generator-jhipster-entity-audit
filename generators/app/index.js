@@ -29,6 +29,7 @@ module.exports = yeoman.generators.Base.extend({
           jhipsterFunc: jhipsterFunc
         }
       });
+
       if (args == 'default') {
         this.defaultAudit = true;
       }
@@ -55,9 +56,11 @@ module.exports = yeoman.generators.Base.extend({
       }
 
       existingEntityNames.forEach(function(entry) {
-        var entityName = entry.replace('.json','');
-        existingEntities.push(entityName);
-        existingEntityChoices.push({name: entityName, value: entityName});
+        if(entry.indexOf('.json') !== -1){
+          var entityName = entry.replace('.json','');
+          existingEntities.push(entityName);
+          existingEntityChoices.push({name: entityName, value: entityName});
+        }
       });
       this.existingEntities = existingEntities;
       this.existingEntityChoices = existingEntityChoices;
