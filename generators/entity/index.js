@@ -64,6 +64,11 @@ module.exports = yeoman.generators.Base.extend({
       this.enableAudit = this.entityConfig.data.enableEntityAudit;
       return;
     }
+
+    if (this.entityConfig.useConfigurationFile == true &&  this.entityConfig.data && typeof this.entityConfig.data.auditFramework !== 'undefined') {
+      this.auditFramework = this.entityConfig.data.auditFramework;
+    }
+
     var done = this.async();
     var prompts = [
       {
@@ -132,6 +137,7 @@ module.exports = yeoman.generators.Base.extend({
         return;
       }
       jhipsterFunc.updateEntityConfig(this.entityConfig.filename, 'enableEntityAudit', this.enableAudit);
+      jhipsterFunc.updateEntityConfig(this.entityConfig.filename, 'auditFramework', this.auditFramework);
     }
   },
 

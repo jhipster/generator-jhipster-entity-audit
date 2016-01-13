@@ -138,6 +138,7 @@ module.exports = yeoman.generators.Base.extend({
       this.packageName = jhipsterVar.packageName;
       this.angularAppName = jhipsterVar.angularAppName;
       this.frontendBuilder = jhipsterVar.frontendBuilder;
+      this.buildTool = jhipsterVar.buildTool;
       this.changelogDate = jhipsterFunc.dateFormatForLiquibase();
       this.webappDir = jhipsterVar.webappDir;
       this.javaTemplateDir = 'src/main/java/package';
@@ -181,10 +182,26 @@ module.exports = yeoman.generators.Base.extend({
           'import ' + this.packageName + '.config.audit.EntityAuditEventListener;');
         // remove the jsonIgnore on the audit fields so that the values can be passed
         jhipsterFunc.replaceContent(this.javaDir + 'domain/AbstractAuditingEntity.java', '\s*@JsonIgnore', '', true);
+
       } else {
 
-      }
+        //add required third party dependencies
+        if (this.buildTool === 'maven') {
 
+          if (this.databaseType === 'sql') {
+             jhipsterFunc.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', '1.4.1', '<scope>compile</scope>');
+             jhipsterFunc.addMavenDependency('org.mongodb', 'mongo-java-driver', '3.0.4', '<scope>compile</scope>');
+          }
+
+        } else if (this.buildTool === 'gradle') {
+
+          if (this.databaseType === 'mongodb') {
+            jhipsterFunc.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-mongo', '1.4.1');
+            jhipsterFunc.addGradleDependency('compile', 'org.mongodb', 'mongo-java-driver', '3.0.4');
+          }
+
+        }
+      }
     },
 
     updateEntityFiles : function () {
