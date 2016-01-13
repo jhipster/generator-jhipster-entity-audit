@@ -139,6 +139,7 @@ module.exports = yeoman.generators.Base.extend({
       this.angularAppName = jhipsterVar.angularAppName;
       this.frontendBuilder = jhipsterVar.frontendBuilder;
       this.buildTool = jhipsterVar.buildTool;
+      this.databaseType = jhipsterVar.databaseType;
       this.changelogDate = jhipsterFunc.dateFormatForLiquibase();
       this.webappDir = jhipsterVar.webappDir;
       this.javaTemplateDir = 'src/main/java/package';
