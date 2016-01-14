@@ -133,6 +133,14 @@ module.exports = yeoman.generators.Base.extend({
   },
 
   writing: {
+    updateYeomanConfig : function() {
+      var enityGeneratorConfig = {
+        auditFramework: this.auditFramework
+      }
+
+      this.config.set('auditFramework', this.auditFramework);
+    },
+
     setupGlobalVar : function () {
       this.baseName = jhipsterVar.baseName;
       this.packageName = jhipsterVar.packageName;
@@ -246,6 +254,7 @@ module.exports = yeoman.generators.Base.extend({
           } else {
             // add javers annotations to repository
             jhipsterFunc.replaceContent(this.javaDir + 'repository/' + entityName + 'Repository.java', 'public interface ' + entityName + 'Repository', '@JaversSpringDataAuditable\npublic interface ' + entityName + 'Repository');
+            jhipsterFunc.replaceContent(this.javaDir + 'repository/' + entityName + 'Repository.java', 'domain.' + entityName + ';', 'domain.' + entityName + ';\nimport org.javers.spring.annotation.JaversSpringDataAuditable;');
           }
         }, this);
       }
