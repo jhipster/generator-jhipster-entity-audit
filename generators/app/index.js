@@ -163,7 +163,7 @@ module.exports = yeoman.generators.Base.extend({
 
     writeBaseFiles : function () {
 
-      if (this.auditFramework === 'default') {
+      if (this.auditFramework === 'custom') {
         // collect files to copy
         var files = [
           { from: this.javaTemplateDir + '/config/audit/_AsyncEntityAuditEventWriter.java', to: this.javaDir + 'config/audit/AsyncEntityAuditEventWriter.java'},
