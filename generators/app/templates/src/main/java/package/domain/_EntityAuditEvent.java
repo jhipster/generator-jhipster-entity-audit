@@ -1,24 +1,27 @@
 package <%=packageName%>.domain;
 
+<% if (databaseType == 'sql' && auditFramework === 'custom') { %>
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CacheConcurrencyStrategy;<% }%>
 import java.time.ZonedDateTime;
-
+<% if (databaseType == 'sql' && auditFramework === 'custom') { %>
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Size;<% } else if (databaseType === 'mongodb' && auditFramework === 'javers')%>
+import org.javers.core.commit.CommitMetadata;
+import org.javers.core.diff.Change;<% }%>
 import java.io.Serializable;
 import java.util.Objects;
 
-
+<% if (databaseType == 'sql' && auditFramework === 'custom') { %>
 @Entity
 @Table(name = "jhi_entity_audit_event")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
 public class EntityAuditEvent implements Serializable{
 
     private static final long serialVersionUID = 1L;
-
-	  @Id
+    <if (databaseType === 'sql' && auditFramework === 'custom') { %>
+  	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
@@ -49,6 +52,23 @@ public class EntityAuditEvent implements Serializable{
     @NotNull
     @Column(name = "modified_date", nullable = false)
     private ZonedDateTime modifiedDate;
+    <% } else if (databaseType === 'mongodb' && auditFramework === 'javaers') { %>
+      private Long id;
+
+      private Long entityId;
+
+      private String entityType;
+
+      private String action;
+
+      private String entityValue;
+
+      private Integer commitVersion;
+
+      private String modifiedBy;
+
+      private ZonedDateTime modifiedDate;
+    <% } %>
 
     public Long getId() {
         return id;
@@ -144,5 +164,26 @@ public class EntityAuditEvent implements Serializable{
             ", modifiedDate='" + modifiedDate + "'" +
             '}';
     }
+
+    <% if (databaseType === 'mongodb' && auditFramework === 'javaers') { %>
+    public static entityAuditEvent fromJaversChange(Change change) {
+      EntityAuditEvent entityAuditEvent = new EntityAuditEvent();
+
+      String action = "";
+
+      if (change instanceof NewObject) {
+        action = "CREATE";
+      } else {
+        action = "UPDATE";
+      }
+
+      if (change.getcommitMetadata().isPresent()) {
+        CommitMetadata commitMetadata = change.getCommitMetadata().get();
+        entityAuditEvent.setModifiedBy(commitMetadata.getAuthor());
+        // Convert Joda date from commit to ZonedDateTime of java8
+        // Use commitversion and id
+      }
+
+    }<% }%>
 
 }

@@ -195,7 +195,9 @@ module.exports = yeoman.generators.Base.extend({
       } else {
 
         var files = [
-          { from: this.javaTemplateDir + '/config/audit/_JaversAuthorProvider.java', to: this.javaDir + 'config/audit/JaversAuthorProvider.java'}
+          { from: this.javaTemplateDir + '/config/audit/_JaversAuthorProvider.java', to: this.javaDir + 'config/audit/JaversAuthorProvider.java'},
+          { from: this.javaTemplateDir + '/config/audit/_EntityAuditAction.java', to: this.javaDir + 'config/audit/EntityAuditAction.java'},
+          { from: this.javaTemplateDir + '/web/rest/_JaversAEntityAuditResource.java', to: this.javaDir + 'web/rest/JaversEntityAuditResource.java'}
         ];
 
         this.copyFiles(files);
