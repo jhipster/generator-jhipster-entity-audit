@@ -7,7 +7,7 @@ import java.time.ZonedDateTime;
 <% if (databaseType == 'sql' && auditFramework === 'custom') { %>
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;<% } else if (databaseType === 'mongodb' && auditFramework === 'javers')%>
+import javax.validation.constraints.Size;<% } else if (databaseType === 'mongodb' && auditFramework === 'javers') {%>
 import org.javers.core.commit.CommitMetadata;
 import org.javers.core.diff.Change;<% }%>
 import java.io.Serializable;
@@ -20,7 +20,7 @@ import java.util.Objects;
 public class EntityAuditEvent implements Serializable{
 
     private static final long serialVersionUID = 1L;
-    <if (databaseType === 'sql' && auditFramework === 'custom') { %>
+    <% if (databaseType == 'sql' && auditFramework === 'custom') { %>
   	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -53,21 +53,21 @@ public class EntityAuditEvent implements Serializable{
     @Column(name = "modified_date", nullable = false)
     private ZonedDateTime modifiedDate;
     <% } else if (databaseType === 'mongodb' && auditFramework === 'javaers') { %>
-      private Long id;
+    private Long id;
 
-      private Long entityId;
+    private Long entityId;
 
-      private String entityType;
+    private String entityType;
 
-      private String action;
+    private String action;
 
-      private String entityValue;
+    private String entityValue;
 
-      private Integer commitVersion;
+    private Integer commitVersion;
 
-      private String modifiedBy;
+    private String modifiedBy;
 
-      private ZonedDateTime modifiedDate;
+    private ZonedDateTime modifiedDate;
     <% } %>
 
     public Long getId() {
@@ -165,7 +165,7 @@ public class EntityAuditEvent implements Serializable{
             '}';
     }
 
-    <% if (databaseType === 'mongodb' && auditFramework === 'javaers') { %>
+    <% if (databaseType === 'mongodb' && auditFramework === 'javers') { %>
     public static entityAuditEvent fromJaversChange(Change change) {
       EntityAuditEvent entityAuditEvent = new EntityAuditEvent();
 
