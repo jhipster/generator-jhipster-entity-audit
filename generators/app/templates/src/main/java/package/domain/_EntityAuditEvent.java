@@ -52,10 +52,10 @@ public class EntityAuditEvent implements Serializable{
     @NotNull
     @Column(name = "modified_date", nullable = false)
     private ZonedDateTime modifiedDate;
-    <% } else if (databaseType === 'mongodb' && auditFramework === 'javaers') { %>
-    private Long id;
+    <% } else if (databaseType === 'mongodb' && auditFramework === 'javers') { %>
+    private String id;
 
-    private Long entityId;
+    private String entityId;
 
     private String entityType;
 
@@ -68,8 +68,24 @@ public class EntityAuditEvent implements Serializable{
     private String modifiedBy;
 
     private ZonedDateTime modifiedDate;
-    <% } %>
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getEntityId() {
+        return entityId;
+    }
+
+    public void setEntityId(String entityId) {
+        this.entityId = entityId;
+    }<% } %>
+
+    <% if (databaseType === 'sql' && auditFramework === 'custom') { %>
     public Long getId() {
         return id;
     }
@@ -84,8 +100,8 @@ public class EntityAuditEvent implements Serializable{
 
     public void setEntityId(Long entityId) {
         this.entityId = entityId;
-    }
-
+    }<% } %>
+    
     public String getEntityType() {
         return entityType;
     }
@@ -172,17 +188,30 @@ public class EntityAuditEvent implements Serializable{
       String action = "";
 
       if (change instanceof NewObject) {
-        action = "CREATE";
-      } else {
-        action = "UPDATE";
-      }
+           action = EntityAuditAction.CREATE.value();
+       } else if (change instanceof ValueChange){
+           action = EntityAuditAction.UPDATE.value();
+           ValueChange pc = (ValueChange) change;
+           entityAuditEvent.setEntityValue(pc.getPropertyName());
+       } else if (change instanceof ObjectRemoved) {
+           action = EntityAuditAction.DELETE.value();
+       }
+
+      entityAuditEvent.setAction(action);
+      entityAuditEvent.setEntityId(change.getAffectedGlobalId().value());
+      entityAuditEvent.setId(change.getAffectedGlobalId().toString());
 
       if (change.getcommitMetadata().isPresent()) {
         CommitMetadata commitMetadata = change.getCommitMetadata().get();
-        entityAuditEvent.setModifiedBy(commitMetadata.getAuthor());
+            entityAuditEvent.setModifiedBy(commitMetadata.getAuthor());
+            int version = (int)Math.round(commitMetadata.getId().getMajorId());
+            entityAuditEvent.setCommitVersion(version);
         // Convert Joda date from commit to ZonedDateTime of java8
         // Use commitversion and id
       }
+
+
+     return entityAuditEvent;
 
     }<% }%>
 

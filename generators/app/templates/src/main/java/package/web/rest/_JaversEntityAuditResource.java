@@ -3,6 +3,9 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.domain.EntityAuditEvent;
 import <%=packageName%>.repository.EntityAuditEventRepository;
 import <%=packageName%>.web.rest.util.PaginationUtil;
+import org.javers.core.Javers;
+import org.javers.core.diff.Change;
+import org.javers.repository.jql.QueryBuilder;
 import <%=packageName%>.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,21 +78,27 @@ public class JaversEntityAuditResource {
         log.debug("REST request to get a page of EntityAuditEvents");
         Pageable pageRequest = createPageRequest(limit);
 
-        //Get the class by name!!
+        Class entityTypeToFetch = Class.forName("%=packageName%>.domain" + entityType);
         QueryBuilder jqlQuery = QueryBuilder.byClass(Book.class)
                                             .limit(limit)
                                             .withNewObjectChanges(true).;
 
         List<Change> changes = javers.findChanges(jqlQuery.build());
 
+        List<EntityAuditEvent> auditEvents = new ArrayList<>();
+
+       changes.forEach(change -> {
+           EntityAuditEvent event = EntityAuditEvent.fromJaversChange(change);
+           event.setEntityType(entityType);
+           auditEvents.add(event);
+       });
+
+        Page<EntityAuditEvent> page = new PageImpl<>(auditEvents);
+
         // Convert each javers event to EntityAuditEvent required by jhipster web gui
         HttpHeaders header = PaginationUtil.generatePaginationHttpHeaders(page, "/api/audits/entity/changes");
 
-        return javers.getJsonConverter().toJson(changes);
-
-        //Page<EntityAuditEvent> page = entityAuditEventRepository.findAllByEntityType(entityType, pageRequest);
-        //HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/audits/entity/changes");
-        //return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
 
     }
 
