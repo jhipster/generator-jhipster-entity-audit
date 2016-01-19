@@ -17,7 +17,7 @@
     "yeoman-generator": "0.22.4",
     "chalk": "1.1.1",
     "glob": "^6.0.3",
-    "generator-jhipster": ">=2.26.2"
+    "generator-jhipster": ">2.26.2"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
