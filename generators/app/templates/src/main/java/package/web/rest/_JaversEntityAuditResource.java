@@ -54,9 +54,7 @@ public class JaversEntityAuditResource {
     @Secured(AuthoritiesConstants.ADMIN)
     public List<String> getAuditedEntities() {
 
-      return Arrays.asList(
-          // jhipster-entity-audit-needle-add-audited-entity
-      );
+      return Arrays.asList();
     }
 
     /**
