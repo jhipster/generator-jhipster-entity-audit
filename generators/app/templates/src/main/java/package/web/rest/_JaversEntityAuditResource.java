@@ -1,7 +1,6 @@
 package <%=packageName%>.web.rest;
 
 import <%=packageName%>.domain.EntityAuditEvent;
-import <%=packageName%>.repository.EntityAuditEventRepository;
 import <%=packageName%>.web.rest.util.PaginationUtil;
 import org.javers.core.Javers;
 import org.javers.core.metamodel.object.CdoSnapshot;
@@ -79,7 +78,7 @@ public class JaversEntityAuditResource {
         Class entityTypeToFetch = Class.forName("%=packageName%>.domain" + entityType);
         QueryBuilder jqlQuery = QueryBuilder.byClass(entityTypeToFetch)
                                             .limit(limit)
-                                            .withNewObjectChanges(true).;
+                                            .withNewObjectChanges(true);
 
         List<CdoSnapshot> snapshots =  javers.findSnapshots(jqlQuery.build());
 

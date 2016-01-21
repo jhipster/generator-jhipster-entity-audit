@@ -142,12 +142,19 @@ module.exports = yeoman.generators.Base.extend({
           jhipsterFunc.addColumnToLiquibaseEntityChangeset(file, columns);
 
         } else if (this.auditFramework === 'javers') {
-          // add javers annotations to repository
-          jhipsterFunc.replaceContent(this.javaDir + 'repository/' + entityName + 'Repository.java', 'public interface ' + entityName + 'Repository', '@JaversSpringDataAuditable\npublic interface ' + entityName + 'Repository');
-          jhipsterFunc.replaceContent(this.javaDir + 'repository/' + entityName + 'Repository.java', 'domain.' + entityName + ';', 'domain.' + entityName + ';\nimport org.javers.spring.annotation.JaversSpringDataAuditable;');
+
+          // check if repositories are already annotated
+          var auditTableAnnotation = '@JaversSpringDataAuditable';
+          var pattern = new RegExp(auditTableAnnotation, 'g')
+          var content = fs.readFileSync(this.javaDir + 'repository/' + entityName + 'Repository.java', 'utf8');
+
+          if (!pattern.test(content)) {
+            // add javers annotations to repository
+            jhipsterFunc.replaceContent(this.javaDir + 'repository/' + entityName + 'Repository.java', 'public interface ' + entityName + 'Repository', '@JaversSpringDataAuditable\npublic interface ' + entityName + 'Repository');
+            jhipsterFunc.replaceContent(this.javaDir + 'repository/' + entityName + 'Repository.java', 'domain.' + entityName + ';', 'domain.' + entityName + ';\nimport org.javers.spring.annotation.JaversSpringDataAuditable;');
+          }
+
         }
-
-
       }
     },
     updateConfig : function() {
