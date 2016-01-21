@@ -79,23 +79,22 @@ public class JaversEntityAuditResource {
         Pageable pageRequest = createPageRequest(limit);
 
         Class entityTypeToFetch = Class.forName("%=packageName%>.domain" + entityType);
-        QueryBuilder jqlQuery = QueryBuilder.byClass(Book.class)
+        QueryBuilder jqlQuery = QueryBuilder.byClass(entityTypeToFetch)
                                             .limit(limit)
                                             .withNewObjectChanges(true).;
 
-        List<Change> changes = javers.findChanges(jqlQuery.build());
+        List<CdoSnapshot> snapshots =  javers.findSnapshots(jqlQuery.build());
 
         List<EntityAuditEvent> auditEvents = new ArrayList<>();
 
-       changes.forEach(change -> {
-           EntityAuditEvent event = EntityAuditEvent.fromJaversChange(change);
+       snapshots.forEach(snapshots -> {
+           EntityAuditEvent event = EntityAuditEvent.fromJaversSnapshot(snapshot);
            event.setEntityType(entityType);
            auditEvents.add(event);
        });
 
         Page<EntityAuditEvent> page = new PageImpl<>(auditEvents);
 
-        // Convert each javers event to EntityAuditEvent required by jhipster web gui
         HttpHeaders header = PaginationUtil.generatePaginationHttpHeaders(page, "/api/audits/entity/changes");
 
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -113,13 +112,13 @@ public class JaversEntityAuditResource {
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<EntityAuditEvent> getPrevVersion(@RequestParam(value = "qualifiedName") String qualifiedName,
-                                                           @RequestParam(value = "entityId") Long entityId,
+                                                           @RequestParam(value = "entityId") String entityId,
                                                            @RequestParam(value = "commitVersion") Integer commitVersion)
         throws URISyntaxException {
 
-          // Get class by name!
-          // Is it possible to filter on commit id or do I need to fetch all?
-          QueryBuilder jqlQuery = QueryBuilder.byInstanceId(entityId, Book.class)
+        Class entityTypeToFetch = Class.forName("%=packageName%>.domain" + entityType);
+
+        QueryBuilder jqlQuery = QueryBuilder.byInstanceId(entityId, entityTypeToFetch)
                                               .limit(1)
                                               .withNewObjectChanges(true);
 

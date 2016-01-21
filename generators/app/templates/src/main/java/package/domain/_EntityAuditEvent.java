@@ -8,8 +8,7 @@ import java.time.ZonedDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;<% } else if (databaseType === 'mongodb' && auditFramework === 'javers') {%>
-import org.javers.core.commit.CommitMetadata;
-import org.javers.core.diff.Change;<% }%>
+import org.javers.core.metamodel.object.CdoSnapshot;<% }%>
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -101,7 +100,7 @@ public class EntityAuditEvent implements Serializable{
     public void setEntityId(Long entityId) {
         this.entityId = entityId;
     }<% } %>
-    
+
     public String getEntityType() {
         return entityType;
     }
@@ -182,36 +181,44 @@ public class EntityAuditEvent implements Serializable{
     }
 
     <% if (databaseType === 'mongodb' && auditFramework === 'javers') { %>
-    public static entityAuditEvent fromJaversChange(Change change) {
-      EntityAuditEvent entityAuditEvent = new EntityAuditEvent();
+    public static entityAuditEvent fromJaversSnapshot(CdoSnapshot snapshot) {
+        EntityAuditEvent entityAuditEvent = new EntityAuditEvent();
 
-      String action = "";
+        switch (snapshot.getType()) {
+            case INITIAL:
+                entityAuditEvent.setAction("CREATE");
+                break;
+            case UPDATE:
+                entityAuditEvent.setAction("UPDATE");
+                break;
+            case TERMINAL:
+                entityAuditEvent.setAction("DELETE");
+                break;
+        }
 
-      if (change instanceof NewObject) {
-           action = EntityAuditAction.CREATE.value();
-       } else if (change instanceof ValueChange){
-           action = EntityAuditAction.UPDATE.value();
-           ValueChange pc = (ValueChange) change;
-           entityAuditEvent.setEntityValue(pc.getPropertyName());
-       } else if (change instanceof ObjectRemoved) {
-           action = EntityAuditAction.DELETE.value();
-       }
+        entityAuditEvent.setCommitVersion(Math.round(snapshot.getVersion()));
+        entityAuditEvent.setEntityType(snapshot.getManagedType().getName());
+        entityAuditEvent.setEntityId(snapshot.getGlobalId().value().split("/")[1]);
+        entityAuditEvent.setModifiedBy(snapshot.getCommitMetadata().getAuthor());
 
-      entityAuditEvent.setAction(action);
-      entityAuditEvent.setEntityId(change.getAffectedGlobalId().value());
-      entityAuditEvent.setId(change.getAffectedGlobalId().toString());
+        if (snapshot.getChanged().size() > 0) {
+            int count = 0;
+            StringBuilder sb = new StringBuilder("{");
 
-      if (change.getcommitMetadata().isPresent()) {
-        CommitMetadata commitMetadata = change.getCommitMetadata().get();
-            entityAuditEvent.setModifiedBy(commitMetadata.getAuthor());
-            int version = (int)Math.round(commitMetadata.getId().getMajorId());
-            entityAuditEvent.setCommitVersion(version);
-        // Convert Joda date from commit to ZonedDateTime of java8
-        // Use commitversion and id
-      }
+            for (String s:snapshot.getChanged()) {
+                count++;
+                Object propertyValue = snapshot.getPropertyValue(s);
+                sb.append("\"" + s + "\": \"" + propertyValue + "\"");
+                if (count < snapshot.getChanged().size()) {
+                    sb.append(",");
+                }
+            }
+            sb.append("}");
+            entityAuditEvent.setEntityValue(sb.toString());
+        }
 
 
-     return entityAuditEvent;
+        return entityAuditEvent;
 
     }<% }%>
 
