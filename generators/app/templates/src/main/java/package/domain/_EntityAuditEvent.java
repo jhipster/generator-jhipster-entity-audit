@@ -8,7 +8,10 @@ import java.time.ZonedDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;<% } else if (databaseType === 'mongodb' && auditFramework === 'javers') {%>
-import org.javers.core.metamodel.object.CdoSnapshot;<% }%>
+import org.javers.core.metamodel.object.CdoSnapshot;
+import org.joda.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;<% }%>
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -181,7 +184,7 @@ public class EntityAuditEvent implements Serializable{
     }
 
     <% if (databaseType === 'mongodb' && auditFramework === 'javers') { %>
-    public static entityAuditEvent fromJaversSnapshot(CdoSnapshot snapshot) {
+    public static EntityAuditEvent fromJaversSnapshot(CdoSnapshot snapshot) {
         EntityAuditEvent entityAuditEvent = new EntityAuditEvent();
 
         switch (snapshot.getType()) {

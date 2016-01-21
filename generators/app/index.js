@@ -76,7 +76,7 @@ module.exports = yeoman.generators.Base.extend({
         message: 'Choose which audit framework you would like to use.',
         choices: [
           {name: 'Custom JHipster auditing (works with SQL)', value: 'custom'},
-          {name: 'Javers auditing framework (works with MongoDB)', value: 'javers'}
+          {name: '[BETA] Javers auditing framework (works with MongoDB)', value: 'javers'}
         ],
         default: 'custom'
       },

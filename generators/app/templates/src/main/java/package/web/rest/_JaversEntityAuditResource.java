@@ -4,12 +4,13 @@ import <%=packageName%>.domain.EntityAuditEvent;
 import <%=packageName%>.repository.EntityAuditEventRepository;
 import <%=packageName%>.web.rest.util.PaginationUtil;
 import org.javers.core.Javers;
-import org.javers.core.diff.Change;
+import org.javers.core.metamodel.object.CdoSnapshot;
 import org.javers.repository.jql.QueryBuilder;
 import <%=packageName%>.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -26,6 +27,8 @@ import com.codahale.metrics.annotation.Timed;
 import javax.inject.Inject;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * REST controller for getting the audit events for entity
@@ -52,14 +55,9 @@ public class JaversEntityAuditResource {
     @Secured(AuthoritiesConstants.ADMIN)
     public List<String> getAuditedEntities() {
 
-      //TODO this must come from configuration maybe or something else
-      QueryBuilder jqlQuery = QueryBuilder.byClass(Book.class)
-                                          .withNewObjectChanges(true).;
-
-      List<Change> changes = javers.findChanges(jqlQuery.build());
-
-      return javers.getJsonConverter().toJson(changes);
-      //return entityAuditEventRepository.findAllEntityTypes();
+      return Arrays.asList(
+          // jhipster-entity-audit-needle-add-audited-entity
+      );
     }
 
     /**
@@ -74,7 +72,7 @@ public class JaversEntityAuditResource {
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<List<EntityAuditEvent>> getChanges(@RequestParam(value = "entityType") String entityType,
                                                              @RequestParam(value = "limit") int limit)
-        throws URISyntaxException {
+        throws URISyntaxException, ClassNotFoundException {
         log.debug("REST request to get a page of EntityAuditEvents");
         Pageable pageRequest = createPageRequest(limit);
 
@@ -87,7 +85,7 @@ public class JaversEntityAuditResource {
 
         List<EntityAuditEvent> auditEvents = new ArrayList<>();
 
-       snapshots.forEach(snapshots -> {
+       snapshots.forEach(snapshot -> {
            EntityAuditEvent event = EntityAuditEvent.fromJaversSnapshot(snapshot);
            event.setEntityType(entityType);
            auditEvents.add(event);
@@ -95,7 +93,7 @@ public class JaversEntityAuditResource {
 
         Page<EntityAuditEvent> page = new PageImpl<>(auditEvents);
 
-        HttpHeaders header = PaginationUtil.generatePaginationHttpHeaders(page, "/api/audits/entity/changes");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/audits/entity/changes");
 
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
 
@@ -114,15 +112,16 @@ public class JaversEntityAuditResource {
     public ResponseEntity<EntityAuditEvent> getPrevVersion(@RequestParam(value = "qualifiedName") String qualifiedName,
                                                            @RequestParam(value = "entityId") String entityId,
                                                            @RequestParam(value = "commitVersion") Integer commitVersion)
-        throws URISyntaxException {
+        throws URISyntaxException, ClassNotFoundException {
 
-        Class entityTypeToFetch = Class.forName("%=packageName%>.domain" + entityType);
+        Class entityTypeToFetch = Class.forName("%=packageName%>.domain" + qualifiedName);
 
         QueryBuilder jqlQuery = QueryBuilder.byInstanceId(entityId, entityTypeToFetch)
-                                              .limit(1)
-                                              .withNewObjectChanges(true);
+                                           .limit(1)
+                                           .withNewObjectChanges(true);
 
-        EntityAuditEvent prev = entityAuditEventRepository.findOneByEntityTypeAndEntityIdAndCommitVersion(qualifiedName, entityId, commitVersion);
+        EntityAuditEvent prev = EntityAuditEvent.fromJaversSnapshot(javers.findSnapshots(jqlQuery.build()).get(0));
+
         return new ResponseEntity<>(prev, HttpStatus.OK);
 
     }
