@@ -196,6 +196,7 @@ public class EntityAuditEvent implements Serializable{
                 break;
         }
 
+        entityAuditEvent.setId(snapshot.getCommitId().toString());
         entityAuditEvent.setCommitVersion(Math.round(snapshot.getVersion()));
         entityAuditEvent.setEntityType(snapshot.getManagedType().getName());
         entityAuditEvent.setEntityId(snapshot.getGlobalId().value().split("/")[1]);
@@ -217,6 +218,18 @@ public class EntityAuditEvent implements Serializable{
             entityAuditEvent.setEntityValue(sb.toString());
         }
 
+        LocalDateTime localTime = snapshot.getCommitMetadata().getCommitDate();
+
+        ZonedDateTime modifyDate = ZonedDateTime.of(localTime.getYear(),
+          localTime.getMonthOfYear(),
+          localTime.getDayOfMonth(),
+          localTime.getHourOfDay(),
+          localTime.getMinuteOfHour(),
+          localTime.getSecondOfMinute(),
+          localTime.getMillisOfSecond(),
+          ZoneId.systemDefault());
+
+        entityAuditEvent.setModifiedDate(modifyDate);
 
         return entityAuditEvent;
 
