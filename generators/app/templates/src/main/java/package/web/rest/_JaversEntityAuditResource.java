@@ -54,7 +54,7 @@ public class JaversEntityAuditResource {
     @Secured(AuthoritiesConstants.ADMIN)
     public List<String> getAuditedEntities() {
 
-      return Arrays.asList();
+      return Arrays.asList(<%- auditedEntities %>);
     }
 
     /**

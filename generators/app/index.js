@@ -229,8 +229,10 @@ module.exports = yeoman.generators.Base.extend({
         this.log('\n' + chalk.bold.green('I\'m Updating selected entities ') + chalk.bold.yellow(this.entitiesToUpdate));
         this.log('\n' + chalk.bold.yellow('Make sure these classes does not extend any other class to avoid any errors during compilation.'));
         var jsonObj = null;
-        this.entitiesToUpdate.forEach(function(entityName) {
+        this.auditedEntities = [];
 
+        this.entitiesToUpdate.forEach(function(entityName) {
+          this.auditedEntities.push("\"" + entityName + "\"")
           if (this.auditFramework === 'custom') {
             // extend entity with AbstractAuditingEntity
             jhipsterFunc.replaceContent(this.javaDir + 'domain/' + entityName + '.java', 'public class ' + entityName, 'public class ' + entityName + ' extends AbstractAuditingEntity');
@@ -266,6 +268,7 @@ module.exports = yeoman.generators.Base.extend({
               jhipsterFunc.replaceContent(this.javaDir + 'repository/' + entityName + 'Repository.java', 'domain.' + entityName + ';', 'domain.' + entityName + ';\nimport org.javers.spring.annotation.JaversSpringDataAuditable;');
             }
           }
+          this.log(this.auditedEntities);
         }, this);
       }
     },
