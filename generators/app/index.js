@@ -115,7 +115,7 @@ module.exports = yeoman.generators.Base.extend({
       this.prompt(prompts, function (props) {
 
         // Check if an invalid database, auditFramework is selected
-        if (props.auditFramework === 'default' && jhipsterVar.databaseType === 'mongodb') {
+        if (props.auditFramework === 'custom' && jhipsterVar.databaseType === 'mongodb') {
           this.env.error(chalk.red.bold('ERROR!') + ' The JHipster audit framework supports SQL databases only...\n');
         } else if (props.auditFramework === 'javers' && jhipsterVar.databaseType === 'sql') {
           this.env.error(chalk.red.bold('ERROR!') + ' The Javers audit framework supports MongoDB databases only...\n');
@@ -134,10 +134,6 @@ module.exports = yeoman.generators.Base.extend({
 
   writing: {
     updateYeomanConfig : function() {
-      var enityGeneratorConfig = {
-        auditFramework: this.auditFramework
-      }
-
       this.config.set('auditFramework', this.auditFramework);
     },
 
@@ -268,7 +264,6 @@ module.exports = yeoman.generators.Base.extend({
               jhipsterFunc.replaceContent(this.javaDir + 'repository/' + entityName + 'Repository.java', 'domain.' + entityName + ';', 'domain.' + entityName + ';\nimport org.javers.spring.annotation.JaversSpringDataAuditable;');
             }
           }
-          this.log(this.auditedEntities);
         }, this);
       }
     },

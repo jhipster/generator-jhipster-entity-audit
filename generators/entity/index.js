@@ -63,7 +63,7 @@ module.exports = yeoman.generators.Base.extend({
     if (this.entityConfig.useConfigurationFile == true &&  this.entityConfig.data && typeof this.entityConfig.data.enableEntityAudit !== 'undefined') {
       this.enableAudit = this.entityConfig.data.enableEntityAudit;
 
-      if (ypeof this.entityConfig.data.auditFramework !== 'undefined') {
+      if (typeof this.entityConfig.data.auditFramework !== 'undefined') {
         this.auditFramework = this.entityConfig.data.auditFramework;
       } else {
         this.auditFramework = 'custom';
