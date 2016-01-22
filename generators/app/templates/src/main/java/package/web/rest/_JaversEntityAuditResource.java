@@ -82,11 +82,11 @@ public class JaversEntityAuditResource {
 
         List<EntityAuditEvent> auditEvents = new ArrayList<>();
 
-       snapshots.forEach(snapshot -> {
+        snapshots.forEach(snapshot -> {
            EntityAuditEvent event = EntityAuditEvent.fromJaversSnapshot(snapshot);
            event.setEntityType(entityType);
            auditEvents.add(event);
-       });
+        });
 
         Page<EntityAuditEvent> page = new PageImpl<>(auditEvents);
 

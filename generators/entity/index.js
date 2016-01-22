@@ -60,21 +60,10 @@ module.exports = yeoman.generators.Base.extend({
       return;
     }
     // don't prompt if data are imported from a file
-    if (this.entityConfig.useConfigurationFile == true &&  this.entityConfig.data && typeof this.entityConfig.data.enableEntityAudit !== 'undefined') {
+    if (this.entityConfig.useConfigurationFile == true &&  this.entityConfig.data) {
       this.enableAudit = this.entityConfig.data.enableEntityAudit;
-
-      if (typeof this.entityConfig.data.auditFramework !== 'undefined') {
-        this.auditFramework = this.entityConfig.data.auditFramework;
-      } else {
-        this.auditFramework = 'custom';
-      }
+      this.auditFramework = this.config.get('auditFramework')
       return;
-    }
-
-    if (this.entityConfig.useConfigurationFile == true &&  this.entityConfig.data && typeof this.entityConfig.data.auditFramework !== 'undefined') {
-      this.enableAudit = true;
-      this.auditFramework = this.entityConfig.data.auditFramework;
-      return
     }
 
     var done = this.async();
@@ -146,7 +135,7 @@ module.exports = yeoman.generators.Base.extend({
           // check if repositories are already annotated
           var auditTableAnnotation = '@JaversSpringDataAuditable';
           var pattern = new RegExp(auditTableAnnotation, 'g')
-          var content = fs.readFileSync(this.javaDir + 'repository/' + entityName + 'Repository.java', 'utf8');
+          var content = this.fs.read(this.javaDir + 'repository/' + entityName + 'Repository.java', 'utf8');
 
           if (!pattern.test(content)) {
             // add javers annotations to repository
@@ -162,7 +151,6 @@ module.exports = yeoman.generators.Base.extend({
         return;
       }
       jhipsterFunc.updateEntityConfig(this.entityConfig.filename, 'enableEntityAudit', this.enableAudit);
-      jhipsterFunc.updateEntityConfig(this.entityConfig.filename, 'auditFramework', this.auditFramework);
     }
   },
 

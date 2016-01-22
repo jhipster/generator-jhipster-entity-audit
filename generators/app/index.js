@@ -256,7 +256,7 @@ module.exports = yeoman.generators.Base.extend({
             // check if repositories are already annotated
             var auditTableAnnotation = '@JaversSpringDataAuditable';
             var pattern = new RegExp(auditTableAnnotation, 'g')
-            var content = fs.readFileSync(this.javaDir + 'repository/' + entityName + 'Repository.java', 'utf8');
+            var content = this.fs.read(this.javaDir + 'repository/' + entityName + 'Repository.java', 'utf8');
 
             if (!pattern.test(content)) {
               // add javers annotations to repository
