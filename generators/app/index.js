@@ -215,7 +215,7 @@ module.exports = yeoman.generators.Base.extend({
         jhipsterFunc.addJavaScriptToIndex('app/admin/entityAudit/entityAudit.controller.js');
         jhipsterFunc.addJavaScriptToIndex('app/admin/entityAudit/entityAudit.detail.controller.js');
         // add bower dependency required
-        jhipsterFunc.addBowerDependency('angular-object-diff', '0.6.1');
+        jhipsterFunc.addBowerDependency('angular-object-diff', '1.0.1');
         jhipsterFunc.addAngularJsModule('ds.objectDiff');
         // add new menu entry
         jhipsterFunc.addElementToAdminMenu('entityAudit', 'list-alt', jhipsterVar.enableTranslation);

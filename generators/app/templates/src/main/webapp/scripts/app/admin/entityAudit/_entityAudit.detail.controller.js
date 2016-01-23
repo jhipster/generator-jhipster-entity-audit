@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('AuditDetailModalCtrl', function ($scope, $uibModalInstance, $sce, ObjectDiff, diff, audit) {
+    .controller('AuditDetailModalCtrl', function ($scope, $uibModalInstance, ObjectDiff, diff, audit) {
 
-        $scope.diffValue = $sce.trustAsHtml(ObjectDiff.toJsonView(diff));
-        $scope.diffValueChanges = $sce.trustAsHtml(ObjectDiff.toJsonDiffView(diff));
+        $scope.diffValue = ObjectDiff.toJsonView(diff);
+        $scope.diffValueChanges = ObjectDiff.toJsonDiffView(diff);
         $scope.audit = audit;
         $scope.cancel = function () {
             $uibModalInstance.dismiss('cancel');

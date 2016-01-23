@@ -63,7 +63,7 @@
   });
 
   gulp.task('git-push', function(cb) {
-    var v = version();
+    var v = 'v' + version();
     git.push('origin', 'master', function(err) {
       if (err) return cb(err);
       git.tag(v, v, function(err) {

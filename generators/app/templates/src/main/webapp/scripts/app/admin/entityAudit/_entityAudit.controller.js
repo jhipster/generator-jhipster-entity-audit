@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('EntityAuditController', function ($scope, $filter, $uibModal, $sce, EntityAuditService, AlertService, ObjectDiff) {
+    .controller('EntityAuditController', function ($scope, $filter, $uibModal, EntityAuditService, AlertService, ObjectDiff) {
 
         $scope.entities = [];
         $scope.audits = [];
@@ -37,7 +37,7 @@ angular.module('<%=angularAppName%>')
 
         $scope.format = function(val){
             if(val)
-                return $sce.trustAsHtml(ObjectDiff.objToJsonView(val));
+                return ObjectDiff.objToJsonView(val);
             else return '';
         };
 
