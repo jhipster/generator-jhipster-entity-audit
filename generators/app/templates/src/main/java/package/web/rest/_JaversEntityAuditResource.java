@@ -73,7 +73,7 @@ public class JaversEntityAuditResource {
         log.debug("REST request to get a page of EntityAuditEvents");
         Pageable pageRequest = createPageRequest(limit);
 
-        Class entityTypeToFetch = Class.forName("%=packageName%>.domain" + entityType);
+        Class entityTypeToFetch = Class.forName("<%=packageName%>.domain." + entityType);
         QueryBuilder jqlQuery = QueryBuilder.byClass(entityTypeToFetch)
                                             .limit(limit)
                                             .withNewObjectChanges(true);
@@ -111,10 +111,11 @@ public class JaversEntityAuditResource {
                                                            @RequestParam(value = "commitVersion") Integer commitVersion)
         throws URISyntaxException, ClassNotFoundException {
 
-        Class entityTypeToFetch = Class.forName("%=packageName%>.domain" + qualifiedName);
+        Class entityTypeToFetch = Class.forName("<%=packageName%>.domain." + qualifiedName);
 
-        QueryBuilder jqlQuery = QueryBuilder.byInstanceId(entityId, entityTypeToFetch)
+        QueryBuilder jqlQuery = QueryBuilder.byInstanceId(entityTypeToFetch)
                                            .limit(1)
+                                           .withCommitId(new BigDecimal(commitVersion))
                                            .withNewObjectChanges(true);
 
         EntityAuditEvent prev = EntityAuditEvent.fromJaversSnapshot(javers.findSnapshots(jqlQuery.build()).get(0));

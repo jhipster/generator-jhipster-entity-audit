@@ -201,14 +201,14 @@ module.exports = yeoman.generators.Base.extend({
         if (this.buildTool === 'maven') {
 
           if (this.databaseType === 'mongodb') {
-             jhipsterFunc.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', '1.4.4', '<scope>compile</scope>');
+             jhipsterFunc.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', '1.4.5', '<scope>compile</scope>');
              jhipsterFunc.addMavenDependency('org.mongodb', 'mongo-java-driver', '3.0.4', '<scope>compile</scope>');
           }
 
         } else if (this.buildTool === 'gradle') {
 
           if (this.databaseType === 'mongodb') {
-            jhipsterFunc.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-mongo', '1.4.4');
+            jhipsterFunc.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-mongo', '1.4.5');
             jhipsterFunc.addGradleDependency('compile', 'org.mongodb', 'mongo-java-driver', '3.0.4');
           }
 
