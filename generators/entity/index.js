@@ -60,10 +60,21 @@ module.exports = yeoman.generators.Base.extend({
       return;
     }
     // don't prompt if data are imported from a file
-    if (this.entityConfig.useConfigurationFile == true &&  this.entityConfig.data) {
+    if (this.entityConfig.useConfigurationFile == true &&  this.entityConfig.data && typeof this.entityConfig.data.enableEntityAudit !== 'undefined') {
       this.enableAudit = this.entityConfig.data.enableEntityAudit;
-      this.auditFramework = this.config.get('auditFramework')
+
+      if (ypeof this.entityConfig.data.auditFramework !== 'undefined') {
+        this.auditFramework = this.entityConfig.data.auditFramework;
+      } else {
+        this.auditFramework = 'custom';
+      }
       return;
+    }
+
+    if (this.entityConfig.useConfigurationFile == true &&  this.entityConfig.data && typeof this.entityConfig.data.auditFramework !== 'undefined') {
+      this.enableAudit = true;
+      this.auditFramework = this.entityConfig.data.auditFramework;
+      return
     }
 
     var done = this.async();
@@ -131,53 +142,12 @@ module.exports = yeoman.generators.Base.extend({
           jhipsterFunc.addColumnToLiquibaseEntityChangeset(file, columns);
 
         } else if (this.auditFramework === 'javers') {
-
-
-          // check if repositories are already annotated
-          if (this.fs.exists(javaDir + 'repository/' + entityName + 'Repository.java')) {
-            var auditTableAnnotation = '@JaversSpringDataAuditable';
-            var pattern = new RegExp(auditTableAnnotation, 'g')
-            var content = this.fs.read.javaDir + 'repository/' + entityName + 'Repository.java', 'utf8');
-
-            if (!pattern.test(content)) {
-              // add javers annotations to repository
-              jhipsterFunc.replaceContent(javaDir + 'repository/' + entityName + 'Repository.java', 'public interface ' + entityName + 'Repository', '@JaversSpringDataAuditable\npublic interface ' + entityName + 'Repository');
-              jhipsterFunc.replaceContent(javaDir + 'repository/' + entityName + 'Repository.java', 'domain.' + entityName + ';', 'domain.' + entityName + ';\nimport org.javers.spring.annotation.JaversSpringDataAuditable;');
-            }
-          }
-
-
-          // check if the rest resource for ui is existing and add the new audited entity
-          if (this.fs.exists(javaDir + 'web/rest/JaversEntityAuditResource.java')) {
-            this.auditedEntities = [];
-
-            var existingEntities = [];
-            try {
-              existingEntities = fs.readdirSync('.jhipster');
-            } catch (e) {
-              this.log(chalk.red.bold('ERROR!') + ' Could not read entities, you might not have generated any entities yet.\n');
-            }
-
-            existingEntities.forEach(function(entry) {
-              if (entry.indexOf('.json') !== -1) {
-                var entityConfig = this.fs.readJSON('.jhipster/' + entry);
-                var entityName = entry.replace('.json','');
-                var enableEntityAudit = entityConfig.data.enableEntityAudit;
-
-                if (entityConfig.enableEntityAudit) {
-                  this.auditedEntities.push("\"" + entityName + "\"")
-                }
-              }
-            });
-
-            this.auditedEntities.push("\"" + entityName + "\"")
-
-            var files = [
-              { from: this.javaTemplateDir + '/web/rest/_JaversEntityAuditResource.java', to: this.javaDir + 'web/rest/JaversEntityAuditResource.java'}
-            ];
-            this.copyFiles(files);
-          }
+          // add javers annotations to repository
+          jhipsterFunc.replaceContent(this.javaDir + 'repository/' + entityName + 'Repository.java', 'public interface ' + entityName + 'Repository', '@JaversSpringDataAuditable\npublic interface ' + entityName + 'Repository');
+          jhipsterFunc.replaceContent(this.javaDir + 'repository/' + entityName + 'Repository.java', 'domain.' + entityName + ';', 'domain.' + entityName + ';\nimport org.javers.spring.annotation.JaversSpringDataAuditable;');
         }
+
+
       }
     },
     updateConfig : function() {
