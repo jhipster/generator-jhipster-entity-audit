@@ -63,18 +63,12 @@ module.exports = yeoman.generators.Base.extend({
     if (this.entityConfig.useConfigurationFile == true &&  this.entityConfig.data && typeof this.entityConfig.data.enableEntityAudit !== 'undefined') {
       this.enableAudit = this.entityConfig.data.enableEntityAudit;
 
-      if (ypeof this.entityConfig.data.auditFramework !== 'undefined') {
-        this.auditFramework = this.entityConfig.data.auditFramework;
+      if (typeof this.config.get('auditFramework'); !== 'undefined') {
+        this.auditFramework = this.config.get('auditFramework');
       } else {
         this.auditFramework = 'custom';
       }
       return;
-    }
-
-    if (this.entityConfig.useConfigurationFile == true &&  this.entityConfig.data && typeof this.entityConfig.data.auditFramework !== 'undefined') {
-      this.enableAudit = true;
-      this.auditFramework = this.entityConfig.data.auditFramework;
-      return
     }
 
     var done = this.async();
