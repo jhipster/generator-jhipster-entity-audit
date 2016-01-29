@@ -113,7 +113,7 @@ public class JaversEntityAuditResource {
 
         Class entityTypeToFetch = Class.forName("<%=packageName%>.domain." + qualifiedName);
 
-        QueryBuilder jqlQuery = QueryBuilder.byInstanceId(entityTypeToFetch)
+        QueryBuilder jqlQuery = QueryBuilder.byInstanceId(entityId, entityTypeToFetch)
                                            .limit(1)
                                            .withVersion(commitVersion - 1)
                                            .withNewObjectChanges(true);
