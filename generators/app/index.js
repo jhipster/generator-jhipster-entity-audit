@@ -33,6 +33,9 @@ module.exports = yeoman.generators.Base.extend({
       if (args == 'default') {
         this.defaultAudit = true;
       }
+      if (args === 'javers') {
+        this.javersAudit = true;
+      }
     },
 
     displayLogo: function () {
@@ -108,6 +111,11 @@ module.exports = yeoman.generators.Base.extend({
 
     if (this.defaultAudit) {
       this.auditFramework = 'custom'
+      this.updateType = 'all';
+      this.auditPage = true;
+      done();
+    } else if(this.javersAudit) {
+      this.auditFramework = 'javers'
       this.updateType = 'all';
       this.auditPage = true;
       done();
@@ -201,14 +209,14 @@ module.exports = yeoman.generators.Base.extend({
         if (this.buildTool === 'maven') {
 
           if (this.databaseType === 'mongodb') {
-             jhipsterFunc.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', '1.4.5', '<scope>compile</scope>');
+             jhipsterFunc.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', '1.4.7', '<scope>compile</scope>');
              jhipsterFunc.addMavenDependency('org.mongodb', 'mongo-java-driver', '3.0.4', '<scope>compile</scope>');
           }
 
         } else if (this.buildTool === 'gradle') {
 
           if (this.databaseType === 'mongodb') {
-            jhipsterFunc.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-mongo', '1.4.5');
+            jhipsterFunc.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-mongo', '1.4.7');
             jhipsterFunc.addGradleDependency('compile', 'org.mongodb', 'mongo-java-driver', '3.0.4');
           }
 

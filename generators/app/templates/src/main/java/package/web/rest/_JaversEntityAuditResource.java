@@ -108,14 +108,14 @@ public class JaversEntityAuditResource {
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<EntityAuditEvent> getPrevVersion(@RequestParam(value = "qualifiedName") String qualifiedName,
                                                            @RequestParam(value = "entityId") String entityId,
-                                                           @RequestParam(value = "commitVersion") Integer commitVersion)
+                                                           @RequestParam(value = "commitVersion") Long commitVersion)
         throws URISyntaxException, ClassNotFoundException {
 
         Class entityTypeToFetch = Class.forName("<%=packageName%>.domain." + qualifiedName);
 
         QueryBuilder jqlQuery = QueryBuilder.byInstanceId(entityTypeToFetch)
                                            .limit(1)
-                                           .withCommitId(new BigDecimal(commitVersion))
+                                           .withVersion(commitVersion - 1)
                                            .withNewObjectChanges(true);
 
         EntityAuditEvent prev = EntityAuditEvent.fromJaversSnapshot(javers.findSnapshots(jqlQuery.build()).get(0));
