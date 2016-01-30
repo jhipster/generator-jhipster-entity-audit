@@ -11,7 +11,12 @@
   "main": "generators/app/index.js",
   "keywords": [
     "yeoman-generator",
-    "jhipster-module"
+    "jhipster-module",
+    "Jhipster",
+    "Audit",
+    "Entity",
+    "Entity Audit",
+    "Javers"
   ],
   "dependencies": {
     "yeoman-generator": "0.22.4",
