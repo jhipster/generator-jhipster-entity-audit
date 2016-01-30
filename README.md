@@ -15,6 +15,14 @@ The Audit log page is optional and can be added by choosing the option while run
 
 jhipster-entity-audit module will register itself as a hook for Jhipster and the question to enable audit will available during future entity generation as well
 
+### [BETA] Javers integration
+
+When using mongodb you can use [Javers](http://javers.org/) for entity auditing.
+
+> **BETA Notice** Javers integration is still in beta state. Expect some rough edges!
+
+The module will add [spring-boot integration for javers](http://javers.org/documentation/spring-boot-integration/). Each repository is annotated with the required ``@JaversSpringDataAuditable`` annotation. The new class ``JaversAuthorProvider`` provides javers with the correct user modifying an entity.
+
 ### Installation
 
 As this is a [JHipster](http://jhipster.github.io/) module, we expect you have [JHipster and its related tools already installed](http://jhipster.github.io/installation.html).
