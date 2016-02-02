@@ -3,9 +3,9 @@
 angular.module('<%=angularAppName%>')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('entityAudit', {
+            .state('entity-audit', {
                 parent: 'admin',
-                url: '/entityAudits',
+                url: '/entity-audits',
                 data: {
                     roles: ['ROLE_ADMIN'],
                     pageTitle: 'Audits'

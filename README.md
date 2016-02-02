@@ -27,7 +27,7 @@ The module will add [spring-boot integration for javers](http://javers.org/docum
 
 As this is a [JHipster](http://jhipster.github.io/) module, we expect you have [JHipster and its related tools already installed](http://jhipster.github.io/installation.html).
 
-This module requires Jhipster version greater than 2.26.2 in order to work
+This module requires Jhipster version greater than 3.0 in order to work
 
 ```bash
 npm install -g generator-jhipster-entity-audit

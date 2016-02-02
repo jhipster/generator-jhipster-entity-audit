@@ -160,7 +160,7 @@ module.exports = yeoman.generators.Base.extend({
           jhipsterFunc.replaceContent(this.javaDir + 'repository/' + entityName + 'Repository.java', 'domain.' + entityName + ';', 'domain.' + entityName + ';\nimport org.javers.spring.annotation.JaversSpringDataAuditable;');
 
           //update the list of audited entities if audit page is available
-          if (this.fs.exists(this.javaDir + 'web/rest/EntityAuditResource.java')) {
+          if (this.fs.exists(this.javaDir + 'web/rest/JaversEntityAuditResource.java')) {
             this.existingEntities.push(entityName);
             this.auditedEntities = [];
 

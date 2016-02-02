@@ -2,7 +2,7 @@
   "name": "generator-jhipster-entity-audit",
   "version": "1.0.7",
   "description": "JHipster module to enable entity audit and audit log page",
-  "homepage": "https://github.com/deepu105/generator-jhipster-entity-audit",
+  "homepage": "https://github.com/hipster-labs/generator-jhipster-entity-audit",
   "author": "Deepu KS <d4udts@gmail.com> (http://deepu105.github.io)",
   "files": [
     "generators/app",
@@ -41,10 +41,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deepu105/generator-jhipster-entity-audit.git"
+    "url": "git+https://github.com/hipster-labs/generator-jhipster-entity-audit.git"
   },
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/deepu105/generator-jhipster-entity-audit/issues"
+    "url": "https://github.com/hipster-labs/generator-jhipster-entity-audit/issues"
   }
 }

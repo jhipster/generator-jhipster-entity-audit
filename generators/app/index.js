@@ -180,12 +180,12 @@ module.exports = yeoman.generators.Base.extend({
           { from: this.javaTemplateDir + '/web/rest/dto/_AbstractAuditingDTO.java', to: this.javaDir + 'web/rest/dto/AbstractAuditingDTO.java'},
           { from: this.resourceDir + '/config/liquibase/changelog/_EntityAuditEvent.xml',
                   to: this.resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_EntityAuditEvent.xml', interpolate: this.interpolateRegex },
-          { from: this.webappDir + '/scripts/components/interceptor/_entity.audit.interceptor.js', to: this.webappDir + '/scripts/components/interceptor/entity.audit.interceptor.js'}
+          { from: this.webappDir + '/app/components/interceptor/_entity-audit.interceptor.js', to: this.webappDir + '/app/components/interceptor/entity-audit.interceptor.js'}
         ];
         this.copyFiles(files);
         jhipsterFunc.addChangelogToLiquibase(this.changelogDate + '_added_entity_EntityAuditEvent');
 
-        jhipsterFunc.addJavaScriptToIndex('components/interceptor/entity.audit.interceptor.js');
+        jhipsterFunc.addJavaScriptToIndex('components/interceptor/entity-audit.interceptor.js');
         jhipsterFunc.addAngularJsInterceptor('entityAuditInterceptor');
 
         // add the new Listener to the 'AbstractAuditingEntity' class and add import
@@ -279,39 +279,34 @@ module.exports = yeoman.generators.Base.extend({
     writeAuditPageFiles : function () {
       // Create audit log page for entities
       if (this.auditPage) {
+        var files = [
+          { from: this.webappDir + '/app/admin/entity-audit/_entity-audits.html', to: this.webappDir + 'app/admin/entity-audit/entity-audit.html'},
+          { from: this.webappDir + '/app/admin/entity-audit/_entity-audit.detail.html', to: this.webappDir + 'app/admin/entity-audit/entity-audit.detail.html'},
+          { from: this.webappDir + '/app/admin/entity-audit/_entity-audit.js', to: this.webappDir + 'app/admin/entity-audit/entity-audit.js'},
+          { from: this.webappDir + '/app/admin/entity-audit/_entity-audit.controller.js', to: this.webappDir + 'app/admin/entity-audit/entity-audit.controller.js'},
+          { from: this.webappDir + '/app/admin/entity-audit/_entity-audit.detail.controller.js', to: this.webappDir + 'app/admin/entity-audit/entity-audit.detail.controller.js'},
+          { from: this.webappDir + '/app/admin/entity-audit/_entity-audit.service.js', to: this.webappDir + 'app/admin/entity-audit/entity-audit.service.js'}
+        ];
         if (this.auditFramework === 'custom') {
-          var files = [
-            { from: this.javaTemplateDir + '/web/rest/_EntityAuditResource.java', to: this.javaDir + 'web/rest/EntityAuditResource.java'},
-            { from: this.webappDir + '/scripts/app/admin/entityAudit/_entityAudits.html', to: this.webappDir + 'scripts/app/admin/entityAudit/entityAudits.html'},
-            { from: this.webappDir + '/scripts/app/admin/entityAudit/_entityAudit.detail.html', to: this.webappDir + 'scripts/app/admin/entityAudit/entityAudit.detail.html'},
-            { from: this.webappDir + '/scripts/app/admin/entityAudit/_entityAudit.js', to: this.webappDir + 'scripts/app/admin/entityAudit/entityAudit.js'},
-            { from: this.webappDir + '/scripts/app/admin/entityAudit/_entityAudit.controller.js', to: this.webappDir + 'scripts/app/admin/entityAudit/entityAudit.controller.js'},
-            { from: this.webappDir + '/scripts/app/admin/entityAudit/_entityAudit.detail.controller.js', to: this.webappDir + 'scripts/app/admin/entityAudit/entityAudit.detail.controller.js'},
-            { from: this.webappDir + '/scripts/components/admin/_entityAudit.service.js', to: this.webappDir + 'scripts/components/admin/entityAudit.service.js'}
-          ];
-          this.copyFiles(files);
+          files.push(
+            { from: this.javaTemplateDir + '/web/rest/_EntityAuditResource.java', to: this.javaDir + 'web/rest/EntityAuditResource.java'}
+          );
         } else {
-          var files = [
-            { from: this.javaTemplateDir + '/web/rest/_JaversEntityAuditResource.java', to: this.javaDir + 'web/rest/JaversEntityAuditResource.java'},
-            { from: this.webappDir + '/scripts/app/admin/entityAudit/_entityAudits.html', to: this.webappDir + 'scripts/app/admin/entityAudit/entityAudits.html'},
-            { from: this.webappDir + '/scripts/app/admin/entityAudit/_entityAudit.detail.html', to: this.webappDir + 'scripts/app/admin/entityAudit/entityAudit.detail.html'},
-            { from: this.webappDir + '/scripts/app/admin/entityAudit/_entityAudit.js', to: this.webappDir + 'scripts/app/admin/entityAudit/entityAudit.js'},
-            { from: this.webappDir + '/scripts/app/admin/entityAudit/_entityAudit.controller.js', to: this.webappDir + 'scripts/app/admin/entityAudit/entityAudit.controller.js'},
-            { from: this.webappDir + '/scripts/app/admin/entityAudit/_entityAudit.detail.controller.js', to: this.webappDir + 'scripts/app/admin/entityAudit/entityAudit.detail.controller.js'},
-            { from: this.webappDir + '/scripts/components/admin/_entityAudit.service.js', to: this.webappDir + 'scripts/components/admin/entityAudit.service.js'}
-          ];
-          this.copyFiles(files);
+          files.push(
+            { from: this.javaTemplateDir + '/web/rest/_JaversEntityAuditResource.java', to: this.javaDir + 'web/rest/JaversEntityAuditResource.java'}
+          );
         }
+        this.copyFiles(files);
         // add the scripts to index.html
-        jhipsterFunc.addJavaScriptToIndex('components/admin/entityAudit.service.js');
-        jhipsterFunc.addJavaScriptToIndex('app/admin/entityAudit/entityAudit.js');
-        jhipsterFunc.addJavaScriptToIndex('app/admin/entityAudit/entityAudit.controller.js');
-        jhipsterFunc.addJavaScriptToIndex('app/admin/entityAudit/entityAudit.detail.controller.js');
+        jhipsterFunc.addJavaScriptToIndex('admin/entity-audit/entity-audit.service.js');
+        jhipsterFunc.addJavaScriptToIndex('admin/entity-audit/entity-audit.js');
+        jhipsterFunc.addJavaScriptToIndex('admin/entity-audit/entity-audit.controller.js');
+        jhipsterFunc.addJavaScriptToIndex('admin/entity-audit/entity-audit.detail.controller.js');
         // add bower dependency required
         jhipsterFunc.addBowerDependency('angular-object-diff', '1.0.1');
         jhipsterFunc.addAngularJsModule('ds.objectDiff');
         // add new menu entry
-        jhipsterFunc.addElementToAdminMenu('entityAudit', 'list-alt', jhipsterVar.enableTranslation);
+        jhipsterFunc.addElementToAdminMenu('entity-audit', 'list-alt', jhipsterVar.enableTranslation);
         jhipsterFunc.addTranslationKeyToAllLanguages('entityAudit', 'Entity Audit', 'addAdminElementTranslationKey', jhipsterVar.enableTranslation);
 
       }
@@ -329,14 +324,7 @@ module.exports = yeoman.generators.Base.extend({
 
   install: function () {
     var injectDependenciesAndConstants = function () {
-      switch (this.frontendBuilder) {
-        case 'gulp':
-          this.spawnCommand('gulp', ['ngconstant:dev', 'wiredep:test', 'wiredep:app']);
-          break;
-        case 'grunt':
-        default:
-          this.spawnCommand('grunt', ['ngconstant:dev', 'wiredep']);
-      }
+        this.spawnCommand('gulp', ['ngconstant:dev', 'wiredep:test', 'wiredep:app']);
     };
 
     this.installDependencies({
