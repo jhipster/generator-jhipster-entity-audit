@@ -1,24 +1,29 @@
 package <%=packageName%>.domain;
 
+<% if (databaseType == 'sql' && auditFramework === 'custom') { %>
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CacheConcurrencyStrategy;<% }%>
 import java.time.ZonedDateTime;
-
+<% if (databaseType == 'sql' && auditFramework === 'custom') { %>
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Size;<% } else if (databaseType === 'mongodb' && auditFramework === 'javers') {%>
+import org.javers.core.metamodel.object.CdoSnapshot;
+import org.joda.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;<% }%>
 import java.io.Serializable;
 import java.util.Objects;
 
-
+<% if (databaseType == 'sql' && auditFramework === 'custom') { %>
 @Entity
 @Table(name = "jhi_entity_audit_event")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
 public class EntityAuditEvent implements Serializable{
 
     private static final long serialVersionUID = 1L;
-
-	  @Id
+    <% if (databaseType == 'sql' && auditFramework === 'custom') { %>
+  	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
@@ -49,7 +54,40 @@ public class EntityAuditEvent implements Serializable{
     @NotNull
     @Column(name = "modified_date", nullable = false)
     private ZonedDateTime modifiedDate;
+    <% } else if (databaseType === 'mongodb' && auditFramework === 'javers') { %>
+    private String id;
 
+    private String entityId;
+
+    private String entityType;
+
+    private String action;
+
+    private String entityValue;
+
+    private Integer commitVersion;
+
+    private String modifiedBy;
+
+    private ZonedDateTime modifiedDate;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getEntityId() {
+        return entityId;
+    }
+
+    public void setEntityId(String entityId) {
+        this.entityId = entityId;
+    }<% } %>
+
+    <% if (databaseType === 'sql' && auditFramework === 'custom') { %>
     public Long getId() {
         return id;
     }
@@ -64,7 +102,7 @@ public class EntityAuditEvent implements Serializable{
 
     public void setEntityId(Long entityId) {
         this.entityId = entityId;
-    }
+    }<% } %>
 
     public String getEntityType() {
         return entityType;
@@ -144,5 +182,60 @@ public class EntityAuditEvent implements Serializable{
             ", modifiedDate='" + modifiedDate + "'" +
             '}';
     }
+
+    <% if (databaseType === 'mongodb' && auditFramework === 'javers') { %>
+    public static EntityAuditEvent fromJaversSnapshot(CdoSnapshot snapshot) {
+        EntityAuditEvent entityAuditEvent = new EntityAuditEvent();
+
+        switch (snapshot.getType()) {
+            case INITIAL:
+                entityAuditEvent.setAction("CREATE");
+                break;
+            case UPDATE:
+                entityAuditEvent.setAction("UPDATE");
+                break;
+            case TERMINAL:
+                entityAuditEvent.setAction("DELETE");
+                break;
+        }
+
+        entityAuditEvent.setId(snapshot.getCommitId().toString());
+        entityAuditEvent.setCommitVersion(Math.round(snapshot.getVersion()));
+        entityAuditEvent.setEntityType(snapshot.getManagedType().getName());
+        entityAuditEvent.setEntityId(snapshot.getGlobalId().value().split("/")[1]);
+        entityAuditEvent.setModifiedBy(snapshot.getCommitMetadata().getAuthor());
+
+        if (snapshot.getState().getProperties().size() > 0) {
+            int count = 0;
+            StringBuilder sb = new StringBuilder("{");
+
+            for (String s:snapshot.getState().getProperties()) {
+                count++;
+                Object propertyValue = snapshot.getPropertyValue(s);
+                sb.append("\"" + s + "\": \"" + propertyValue + "\"");
+                if (count < snapshot.getState().getProperties().size()) {
+                  sb.append(",");
+                }
+             }
+
+             sb.append("}");
+             entityAuditEvent.setEntityValue(sb.toString());
+        }
+        LocalDateTime localTime = snapshot.getCommitMetadata().getCommitDate();
+
+        ZonedDateTime modifyDate = ZonedDateTime.of(localTime.getYear(),
+          localTime.getMonthOfYear(),
+          localTime.getDayOfMonth(),
+          localTime.getHourOfDay(),
+          localTime.getMinuteOfHour(),
+          localTime.getSecondOfMinute(),
+          localTime.getMillisOfSecond(),
+          ZoneId.systemDefault());
+
+        entityAuditEvent.setModifiedDate(modifyDate);
+
+        return entityAuditEvent;
+
+    }<% }%>
 
 }
