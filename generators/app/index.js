@@ -19,7 +19,7 @@ var STRIP_HTML = 'stripHtml',
     COPY = 'copy',
     TPL = 'template'
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
 
   initializing: {
     compose: function (args) {
@@ -328,6 +328,8 @@ module.exports = yeoman.generators.Base.extend({
     };
 
     this.installDependencies({
+      bower: true,
+      npm: false,
       callback: injectDependenciesAndConstants.bind(this)
     });
   },

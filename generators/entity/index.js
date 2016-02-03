@@ -19,7 +19,7 @@ STRIP_JS = 'stripJs',
 COPY = 'copy',
 TPL = 'template'
 
-module.exports = yeoman.generators.Base.extend({
+module.exports = yeoman.Base.extend({
 
   initializing: {
 
