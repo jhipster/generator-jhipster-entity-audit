@@ -63,7 +63,7 @@ angular.module('<%=angularAppName%>')
                     var diff = ObjectDiff.diffOwnProperties(previousVersion, currentVersion);
 
                     $uibModal.open({
-                        templateUrl: 'scripts/app/admin/entityAudit/entityAudit.detail.html',
+                        templateUrl: 'app/admin/entity-audit/entity-audit.detail.html',
                         controller: 'AuditDetailModalCtrl',
                         size: 'lg',
                         resolve: {
