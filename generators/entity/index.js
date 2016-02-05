@@ -166,7 +166,7 @@ module.exports = yeoman.Base.extend({
 
             this.existingEntities.forEach(function(entityName) {
                 this.auditedEntities.push("\"" + entityName + "\"")
-            }
+            }, this);
 
             var files = [
               { from: this.javaTemplateDir + '/web/rest/_JaversEntityAuditResource.java', to: this.javaDir + 'web/rest/JaversEntityAuditResource.java'}

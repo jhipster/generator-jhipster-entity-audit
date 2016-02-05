@@ -324,7 +324,7 @@ module.exports = yeoman.Base.extend({
 
   install: function () {
     var injectDependenciesAndConstants = function () {
-        this.spawnCommand('gulp', ['ngconstant:dev', 'wiredep:test', 'wiredep:app']);
+        this.spawnCommand('gulp', ['install']);
     };
 
     this.installDependencies({
