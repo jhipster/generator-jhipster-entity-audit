@@ -280,7 +280,7 @@ module.exports = yeoman.Base.extend({
       // Create audit log page for entities
       if (this.auditPage) {
         var files = [
-          { from: this.webappDir + '/app/admin/entity-audit/_entity-audits.html', to: this.webappDir + 'app/admin/entity-audit/entity-audit.html'},
+          { from: this.webappDir + '/app/admin/entity-audit/_entity-audits.html', to: this.webappDir + 'app/admin/entity-audit/entity-audits.html'},
           { from: this.webappDir + '/app/admin/entity-audit/_entity-audit.detail.html', to: this.webappDir + 'app/admin/entity-audit/entity-audit.detail.html'},
           { from: this.webappDir + '/app/admin/entity-audit/_entity-audit.js', to: this.webappDir + 'app/admin/entity-audit/entity-audit.js'},
           { from: this.webappDir + '/app/admin/entity-audit/_entity-audit.controller.js', to: this.webappDir + 'app/admin/entity-audit/entity-audit.controller.js'},
