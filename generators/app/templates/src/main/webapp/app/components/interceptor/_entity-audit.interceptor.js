@@ -10,7 +10,7 @@ angular.module('<%=angularAppName%>')
                 var obj = config.data;
                 var Principal = $injector.get('Principal');
                 Principal.identity().then(function(identity) {
-                    if (obj !== undefined && obj !== null && !(typeof obj === 'string' || obj instanceof String)) {
+                    if (obj !== undefined && obj !== null && identity !== null && !(typeof obj === 'string' || obj instanceof String)) {
                         if (config.method === 'POST') {
                             obj['createdBy'] = identity.login;
                         } else {
