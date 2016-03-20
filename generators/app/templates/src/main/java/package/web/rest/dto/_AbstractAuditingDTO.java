@@ -1,8 +1,8 @@
 package <%=packageName%>.web.rest.dto;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import org.springframework.data.annotation.ReadOnlyProperty;
 
 /**
  * Base abstract class for DTO which will hold definitions for created, last modified by and created,
@@ -12,10 +12,10 @@ public abstract class AbstractAuditingDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull
+    @ReadOnlyProperty
     private String createdBy;
 
-    @NotNull
+    @ReadOnlyProperty
     private ZonedDateTime createdDate = ZonedDateTime.now();
 
     private String lastModifiedBy;
