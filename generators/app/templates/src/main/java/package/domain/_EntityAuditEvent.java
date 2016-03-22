@@ -23,7 +23,7 @@ public class EntityAuditEvent implements Serializable{
 
     private static final long serialVersionUID = 1L;
     <% if (databaseType == 'sql' && auditFramework === 'custom') { %>
-  	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
@@ -41,6 +41,7 @@ public class EntityAuditEvent implements Serializable{
     @Column(name = "action", length = 20, nullable = false)
     private String action;
 
+    @Lob
     @Column(name = "entity_value")
     private String entityValue;
 
