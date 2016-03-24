@@ -173,26 +173,26 @@ module.exports = yeoman.Base.extend({
           { from: this.javaTemplateDir + '/config/audit/_AsyncEntityAuditEventWriter.java', to: this.javaDir + 'config/audit/AsyncEntityAuditEventWriter.java'},
           { from: this.javaTemplateDir + '/config/audit/_EntityAuditEventListener.java', to: this.javaDir + 'config/audit/EntityAuditEventListener.java'},
           { from: this.javaTemplateDir + '/config/audit/_EntityAuditAction.java', to: this.javaDir + 'config/audit/EntityAuditAction.java'},
-          { from: this.javaTemplateDir + '/config/util/_AutowireHelper.java', to: this.javaDir + 'config/util/AutowireHelper.java'},
-          { from: this.javaTemplateDir + '/config/util/_AutowireHelperConfig.java', to: this.javaDir + 'config/util/AutowireHelperConfig.java'},
+          { from: this.javaTemplateDir + '/config/audit/_EntityAuditEventConfig.java', to: this.javaDir + 'config/audit/EntityAuditEventConfig.java'},
           { from: this.javaTemplateDir + '/domain/_EntityAuditEvent.java', to: this.javaDir + 'domain/EntityAuditEvent.java'},
           { from: this.javaTemplateDir + '/repository/_EntityAuditEventRepository.java', to: this.javaDir + 'repository/EntityAuditEventRepository.java'},
           { from: this.javaTemplateDir + '/web/rest/dto/_AbstractAuditingDTO.java', to: this.javaDir + 'web/rest/dto/AbstractAuditingDTO.java'},
           { from: this.resourceDir + '/config/liquibase/changelog/_EntityAuditEvent.xml',
                   to: this.resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_EntityAuditEvent.xml', interpolate: this.interpolateRegex },
-          { from: this.webappDir + '/app/components/interceptor/_entity-audit.interceptor.js', to: this.webappDir + '/app/components/interceptor/entity-audit.interceptor.js'}
+          { from: this.webappDir + 'app/blocks/interceptor/_entity-audit.interceptor.js', to: this.webappDir + 'app/blocks/interceptor/entity-audit.interceptor.js'}
         ];
         this.copyFiles(files);
         jhipsterFunc.addChangelogToLiquibase(this.changelogDate + '_added_entity_EntityAuditEvent');
 
-        jhipsterFunc.addJavaScriptToIndex('components/interceptor/entity-audit.interceptor.js');
         jhipsterFunc.addAngularJsInterceptor('entityAuditInterceptor');
 
         // add the new Listener to the 'AbstractAuditingEntity' class and add import
-        jhipsterFunc.replaceContent(this.javaDir + 'domain/AbstractAuditingEntity.java', 'AuditingEntityListener.class', '{AuditingEntityListener.class, EntityAuditEventListener.class}');
-        jhipsterFunc.rewriteFile(this.javaDir + 'domain/AbstractAuditingEntity.java',
-          'import org.springframework.data.jpa.domain.support.AuditingEntityListener',
-          'import ' + this.packageName + '.config.audit.EntityAuditEventListener;');
+        if(!this.fs.read(this.javaDir + 'domain/AbstractAuditingEntity.java', {defaults: ''}).includes('EntityAuditEventListener.class')) {
+          jhipsterFunc.replaceContent(this.javaDir + 'domain/AbstractAuditingEntity.java', 'AuditingEntityListener.class', '{AuditingEntityListener.class, EntityAuditEventListener.class}');
+          jhipsterFunc.rewriteFile(this.javaDir + 'domain/AbstractAuditingEntity.java',
+            'import org.springframework.data.jpa.domain.support.AuditingEntityListener',
+            'import ' + this.packageName + '.config.audit.EntityAuditEventListener;');
+        }
         // remove the jsonIgnore on the audit fields so that the values can be passed
         jhipsterFunc.replaceContent(this.javaDir + 'domain/AbstractAuditingEntity.java', '\s*@JsonIgnore', '', true);
 
@@ -239,15 +239,20 @@ module.exports = yeoman.Base.extend({
           this.auditedEntities.push("\"" + entityName + "\"")
           if (this.auditFramework === 'custom') {
             // extend entity with AbstractAuditingEntity
-            jhipsterFunc.replaceContent(this.javaDir + 'domain/' + entityName + '.java', 'public class ' + entityName, 'public class ' + entityName + ' extends AbstractAuditingEntity');
+            if(!this.fs.read(this.javaDir + 'domain/' + entityName + '.java', {defaults: ''}).includes('extends AbstractAuditingEntity')) {
+              jhipsterFunc.replaceContent(this.javaDir + 'domain/' + entityName + '.java', 'public class ' + entityName, 'public class ' + entityName + ' extends AbstractAuditingEntity');
+            }
+
             // extend DTO with AbstractAuditingDTO
             jsonObj = this.fs.readJSON('.jhipster/' + entityName + '.json')
             if(jsonObj.dto == 'mapstruct') {
-              jhipsterFunc.replaceContent(this.javaDir + 'web/rest/dto/' + entityName + 'DTO.java', 'public class ' + entityName + 'DTO', 'public class ' + entityName + 'DTO extends AbstractAuditingDTO');
+              if(!this.fs.read(this.javaDir + 'web/rest/dto/' + entityName + 'DTO.java', {defaults: ''}).includes('extends AbstractAuditingDTO')) {
+                jhipsterFunc.replaceContent(this.javaDir + 'web/rest/dto/' + entityName + 'DTO.java', 'public class ' + entityName + 'DTO', 'public class ' + entityName + 'DTO extends AbstractAuditingDTO');
+              }
             }
 
             //update liquibase changeset
-            var file = glob.sync(this.resourceDir + "/config/liquibase/changelog/*" + entityName + ".xml")[0];
+            var file = glob.sync(this.resourceDir + "/config/liquibase/changelog/*_added_entity_" + entityName + ".xml")[0];
             if(file) {
               var columns = "<column name=\"created_by\" type=\"varchar(50)\">\n" +
               "                <constraints nullable=\"false\"/>\n" +
@@ -280,12 +285,12 @@ module.exports = yeoman.Base.extend({
       // Create audit log page for entities
       if (this.auditPage) {
         var files = [
-          { from: this.webappDir + '/app/admin/entity-audit/_entity-audits.html', to: this.webappDir + 'app/admin/entity-audit/entity-audits.html'},
-          { from: this.webappDir + '/app/admin/entity-audit/_entity-audit.detail.html', to: this.webappDir + 'app/admin/entity-audit/entity-audit.detail.html'},
-          { from: this.webappDir + '/app/admin/entity-audit/_entity-audit.js', to: this.webappDir + 'app/admin/entity-audit/entity-audit.js'},
-          { from: this.webappDir + '/app/admin/entity-audit/_entity-audit.controller.js', to: this.webappDir + 'app/admin/entity-audit/entity-audit.controller.js'},
-          { from: this.webappDir + '/app/admin/entity-audit/_entity-audit.detail.controller.js', to: this.webappDir + 'app/admin/entity-audit/entity-audit.detail.controller.js'},
-          { from: this.webappDir + '/app/admin/entity-audit/_entity-audit.service.js', to: this.webappDir + 'app/admin/entity-audit/entity-audit.service.js'}
+          { from: this.webappDir + 'app/admin/entity-audit/_entity-audits.html', to: this.webappDir + 'app/admin/entity-audit/entity-audits.html'},
+          { from: this.webappDir + 'app/admin/entity-audit/_entity-audit.detail.html', to: this.webappDir + 'app/admin/entity-audit/entity-audit.detail.html'},
+          { from: this.webappDir + 'app/admin/entity-audit/_entity-audit.state.js', to: this.webappDir + 'app/admin/entity-audit/entity-audit.state.js'},
+          { from: this.webappDir + 'app/admin/entity-audit/_entity-audit.controller.js', to: this.webappDir + 'app/admin/entity-audit/entity-audit.controller.js'},
+          { from: this.webappDir + 'app/admin/entity-audit/_entity-audit.detail.controller.js', to: this.webappDir + 'app/admin/entity-audit/entity-audit.detail.controller.js'},
+          { from: this.webappDir + 'app/admin/entity-audit/_entity-audit.service.js', to: this.webappDir + 'app/admin/entity-audit/entity-audit.service.js'}
         ];
         if (this.auditFramework === 'custom') {
           files.push(
@@ -297,17 +302,12 @@ module.exports = yeoman.Base.extend({
           );
         }
         this.copyFiles(files);
-        // add the scripts to index.html
-        jhipsterFunc.addJavaScriptToIndex('admin/entity-audit/entity-audit.service.js');
-        jhipsterFunc.addJavaScriptToIndex('admin/entity-audit/entity-audit.js');
-        jhipsterFunc.addJavaScriptToIndex('admin/entity-audit/entity-audit.controller.js');
-        jhipsterFunc.addJavaScriptToIndex('admin/entity-audit/entity-audit.detail.controller.js');
         // add bower dependency required
-        jhipsterFunc.addBowerDependency('angular-object-diff', '1.0.1');
+        jhipsterFunc.addBowerDependency('angular-object-diff', '1.0.3');
         jhipsterFunc.addAngularJsModule('ds.objectDiff');
         // add new menu entry
         jhipsterFunc.addElementToAdminMenu('entity-audit', 'list-alt', jhipsterVar.enableTranslation);
-        jhipsterFunc.addTranslationKeyToAllLanguages('entityAudit', 'Entity Audit', 'addAdminElementTranslationKey', jhipsterVar.enableTranslation);
+        jhipsterFunc.addTranslationKeyToAllLanguages('entity-audit', 'Entity Audit', 'addAdminElementTranslationKey', jhipsterVar.enableTranslation);
 
       }
 
@@ -336,7 +336,7 @@ module.exports = yeoman.Base.extend({
 
   end: function () {
     this.log('\n' + chalk.bold.green('Auditing enabled for entities, you will have an option to enable audit while creating new entities as well'));
-    this.log('\n' + chalk.bold.green('I\'m running wiredep now'));
+    this.log('\n' + chalk.bold.green('I\'m running gulp install now'));
   }
 
 

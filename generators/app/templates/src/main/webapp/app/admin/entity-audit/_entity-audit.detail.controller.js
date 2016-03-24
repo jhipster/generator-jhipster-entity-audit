@@ -1,12 +1,22 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('AuditDetailModalCtrl', function ($scope, $uibModalInstance, ObjectDiff, diff, audit) {
+    angular
+        .module('<%=angularAppName%>')
+        .controller('AuditDetailModalCtrl', AuditDetailModalCtrl);
 
-        $scope.diffValue = ObjectDiff.toJsonView(diff);
-        $scope.diffValueChanges = ObjectDiff.toJsonDiffView(diff);
-        $scope.audit = audit;
-        $scope.cancel = function () {
+    AuditDetailModalCtrl.$inject = ['$scope', '$uibModalInstance', 'ObjectDiff', 'diff', 'audit'];
+
+    function AuditDetailModalCtrl($scope, $uibModalInstance, ObjectDiff, diff, audit) {
+        var vm = this;
+        
+        vm.diffValue = ObjectDiff.toJsonView(diff);
+        vm.diffValueChanges = ObjectDiff.toJsonDiffView(diff);
+        vm.audit = audit;
+        vm.cancel = cancel;
+
+        function cancel() {
             $uibModalInstance.dismiss('cancel');
         };
-    });
+    };
+})();

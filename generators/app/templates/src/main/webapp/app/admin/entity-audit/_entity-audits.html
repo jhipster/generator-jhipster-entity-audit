@@ -12,8 +12,8 @@
                     <div class="col-md-8 form-group">
                         <label>Entity/Table</label>
                         <select class="input-sm form-control" name="qualifiedName" id="qualifiedName" required
-                                ng-options="getEntityName(entity) for entity in entities"
-                                ng-model="qualifiedName"></select>
+                                ng-options="vm.getEntityName(entity) for entity in vm.entities"
+                                ng-model="vm.qualifiedName"></select>
                         <div ng-show="auditForm.qualifiedName.$invalid">
                             <p class="help-block" ng-show="auditForm.qualifiedName.$error.required">
                                 This field is required
@@ -23,22 +23,22 @@
                     <div class="col-md-4 form-group">
                         <label>Limit to</label>
                         <select class="input-sm form-control" name="limit" id="limit" required
-                                ng-options="option for option in limits"
-                                ng-model="limit"></select>
+                                ng-options="option for option in vm.limits"
+                                ng-model="vm.limit"></select>
                     </div>
                 </div>
                 <div class="row pad">
                     <button ng-disabled="auditForm.$invalid"
-                            class="btn btn-primary pull-right" ng-click="loadChanges()"><i
+                            class="btn btn-primary pull-right" ng-click="vm.loadChanges()"><i
                         class="glyphicon glyphicon-import"></i>&nbsp;Load Change List
                     </button>
                 </div>
             </form>
         </div>
     </div>
-    <div ng-show="!loading" >
-        <div class="table-responsive" ng-if="audits.length > 0">
-            <p ng-if="qualifiedName">Last <strong>{{limit}}</strong> Changes for <strong>{{getEntityName(qualifiedName)}}</strong></p>
+    <div ng-show="!vm.loading" >
+        <div class="table-responsive" ng-if="vm.audits.length > 0">
+            <p ng-if="vm.qualifiedName">Last <strong>{{vm.limit}}</strong> Changes for <strong>{{vm.getEntityName(vm.qualifiedName)}}</strong></p>
             <form class="form-inline">
               <div class="form-group">
                 <label for="searchField">Filter:</label>
@@ -61,11 +61,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="audit in audits | filter:filter">
+                <tr ng-repeat="audit in vm.audits | filter:filter">
                     <td>{{audit.entityId}}</td>
                     <td>{{audit.action}}</td>
                     <td>{{audit.commitVersion}}</td>
-                    <td><pre class="audit-obj" ng-bind-html="format(audit.entityValue)"></pre></td>
+                    <td><pre class="audit-obj" ng-bind-html="vm.format(audit.entityValue)"></pre></td>
                     <!-- comment above line and uncomment below to have Table view of value -->
                     <!--td class="no-pad">
                         <div class="audit-obj">
@@ -74,11 +74,11 @@
                                     <th>Field</th>
                                     <th>Value</th>
                                 </tr>
-                                <tr ng-repeat="(k,v) in audit.entityValue" ng-if="!isObject(v)">
+                                <tr ng-repeat="(k,v) in audit.entityValue" ng-if="!vm.isObject(v)">
                                     <td>{{k}}</td>
                                     <td>
-                                        <span ng-if="isDate(k)">{{v | date:'medium'}}</span>
-                                        <span ng-if="!isDate(k)">{{v}}</span>
+                                        <span ng-if="vm.isDate(k)">{{v | date:'medium'}}</span>
+                                        <span ng-if="!vm.isDate(k)">{{v}}</span>
                                     </td>
                                 </tr>
                             </table>
@@ -87,7 +87,7 @@
                     <td>{{audit.modifiedDate | date:'medium'}}</td>
                     <td>{{audit.modifiedBy}}</td>
                     <td>
-                        <button type="button" ng-click="openChange(audit)"
+                        <button type="button" ng-click="vm.openChange(audit)"
                                 uib-tooltip="View Audit Change Details" uib-tooltip-placement="auto"
                                 class="btn btn-info btn-xs">
                             <i class="glyphicon glyphicon-eye-open"></i>
@@ -97,6 +97,6 @@
                 </tbody>
             </table>
         </div>
-        <p ng-if="displayedChanges.length == 0">No Data found for the filters</p>
+        <p ng-if="vm.displayedChanges.length == 0">No Data found for the filters</p>
     </div>
 </div>

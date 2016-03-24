@@ -1,33 +1,51 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('EntityAuditController', function ($scope, $filter, $uibModal, EntityAuditService, AlertService, ObjectDiff) {
+    angular
+        .module('<%=angularAppName%>')
+        .controller('EntityAuditController', EntityAuditController);
 
-        $scope.entities = [];
-        $scope.audits = [];
-        $scope.limits = [25, 50, 100, 200];
-        $scope.limit = 25;
+    EntityAuditController.$inject = ['$scope', '$filter', '$uibModal', 'EntityAuditService', 'AlertService', 'ObjectDiff'];
 
-        EntityAuditService.findAllAudited().then(function (data) {
-            $scope.entities = data;
-        });
+    function EntityAuditController ($scope, $filter, $uibModal, EntityAuditService, AlertService, ObjectDiff) {
+        var vm = this;
 
-        $scope.loading = false;
-        $scope.loadChanges = function () {
-            $scope.loading = true;
-            var entityType = $scope.qualifiedName;
-            EntityAuditService.findByEntity(entityType, $scope.limit).then(function (data) {
-                $scope.audits = data.map(function(it){
+        vm.entities = [];
+        vm.audits = [];
+        vm.limits = [25, 50, 100, 200];
+        vm.limit = 25;
+        vm.loading = false;
+        vm.loadChanges = loadChanges;
+        vm.findAllAudited = findAllAudited;
+        vm.getEntityName = getEntityName;
+        vm.format = format;
+        vm.isObject = isObject;
+        vm.isDate = isDate;
+        vm.openChange = openChange;
+
+        vm.findAllAudited();
+
+        function findAllAudited() {
+            EntityAuditService.findAllAudited().then(function (data) {
+                vm.entities = data;
+            });
+        }
+
+        function loadChanges() {
+            vm.loading = true;
+            var entityType = vm.qualifiedName;
+            EntityAuditService.findByEntity(entityType, vm.limit).then(function (data) {
+                vm.audits = data.map(function(it){
                     it.entityValue = JSON.parse(it.entityValue);
                     return it;
                 });
-                $scope.loading = false;
+                vm.loading = false;
             }, function(){
-                $scope.loading = false;
+                vm.loading = false;
             });
         };
 
-        $scope.getEntityName = function (qualifiedName) {
+        function getEntityName(qualifiedName) {
             if (qualifiedName) {
                 var splits = qualifiedName.split(".");
                 return splits[splits.length - 1];
@@ -35,20 +53,21 @@ angular.module('<%=angularAppName%>')
             else return null;
         };
 
-        $scope.format = function(val){
+        function format(val){
             if(val)
                 return ObjectDiff.objToJsonView(val);
             else return '';
         };
 
-        $scope.isObject = function(val){
+        function isObject(val){
             return (val && (typeof val) == 'object');
         };
-        $scope.isDate = function(key){
+
+        function isDate(key){
             return (key && key.indexOf("Date") != -1);
         };
 
-        $scope.openChange = function(audit){
+        function openChange(audit){
 
             if(audit.commitVersion < 2){
                 AlertService.warning("There is no previous version available for this entry.\nThis is the first" +
@@ -65,6 +84,7 @@ angular.module('<%=angularAppName%>')
                     $uibModal.open({
                         templateUrl: 'app/admin/entity-audit/entity-audit.detail.html',
                         controller: 'AuditDetailModalCtrl',
+                        controllerAs: 'vm',
                         size: 'lg',
                         resolve: {
                             diff: function () {
@@ -90,4 +110,5 @@ angular.module('<%=angularAppName%>')
             return obj;
         }
 
-    });
+    }
+})();
