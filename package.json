@@ -3,7 +3,11 @@
   "version": "2.0.2",
   "description": "JHipster module to enable entity audit and audit log page",
   "homepage": "https://github.com/hipster-labs/generator-jhipster-entity-audit",
-  "author": "Deepu KS <d4udts@gmail.com> (http://deepu105.github.io)",
+  "author": {
+    "name": "Deepu KS",
+    "email": "d4udts@gmail.com",
+    "url": "http://deepu105.github.io"
+  },
   "files": [
     "generators/app",
     "generators/entity"
