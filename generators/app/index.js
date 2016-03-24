@@ -3,7 +3,6 @@ var path = require('path'),
     util = require('util'),
     yeoman = require('yeoman-generator'),
     chalk = require('chalk'),
-    jhipster = require('generator-jhipster'),
     packagejs = require(__dirname + '/../../package.json'),
     fs = require('fs'),
     glob = require("glob");
