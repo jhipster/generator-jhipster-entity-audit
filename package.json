@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster-entity-audit",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "JHipster module to enable entity audit and audit log page",
   "homepage": "https://github.com/hipster-labs/generator-jhipster-entity-audit",
   "author": "Deepu KS <d4udts@gmail.com> (http://deepu105.github.io)",
@@ -19,23 +19,23 @@
     "Javers"
   ],
   "dependencies": {
-    "yeoman-generator": "0.22.4",
+    "yeoman-generator": "0.22.5",
     "chalk": "1.1.1",
-    "glob": "^6.0.3",
+    "glob": "^7.0.3",
     "generator-jhipster": "^3.0.0"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
-    "gulp-bump": "1.0.0",
-    "gulp-eslint": "1.0.0",
+    "gulp-bump": "2.0.1",
+    "gulp-eslint": "2.0.0",
     "gulp-exclude-gitignore": "1.0.0",
-    "gulp-git": "1.6.1",
+    "gulp-git": "1.7.0",
     "gulp-istanbul": "0.10.3",
     "gulp-mocha": "2.2.0",
-    "gulp-nsp": "2.3.0",
-    "gulp-plumber": "1.0.1",
+    "gulp-nsp": "2.3.1",
+    "gulp-plumber": "1.1.0",
     "gulp-rename": "^1.2.0",
-    "gulp-sequence": "0.4.4",
+    "gulp-sequence": "0.4.5",
     "gulp-shell": "^0.5.1",
     "yeoman-assert": "2.1.1"
   },
