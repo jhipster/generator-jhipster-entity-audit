@@ -182,8 +182,6 @@ module.exports = yeoman.Base.extend({
         this.copyFiles(files);
         jhipsterFunc.addChangelogToLiquibase(this.changelogDate + '_added_entity_EntityAuditEvent');
 
-        jhipsterFunc.addAngularJsInterceptor('entityAuditInterceptor');
-
         // add the new Listener to the 'AbstractAuditingEntity' class and add import
         if(!this.fs.read(this.javaDir + 'domain/AbstractAuditingEntity.java', {defaults: ''}).includes('EntityAuditEventListener.class')) {
           jhipsterFunc.replaceContent(this.javaDir + 'domain/AbstractAuditingEntity.java', 'AuditingEntityListener.class', '{AuditingEntityListener.class, EntityAuditEventListener.class}');
