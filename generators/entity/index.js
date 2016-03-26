@@ -135,14 +135,18 @@ module.exports = yeoman.Base.extend({
 
         if (this.auditFramework === 'custom') {
           // extend entity with AbstractAuditingEntity
-          jhipsterFunc.replaceContent(javaDir + 'domain/' + entityName + '.java', 'public class ' + entityName, 'public class ' + entityName + ' extends AbstractAuditingEntity');
+          if(!this.fs.read(javaDir + 'domain/' + entityName + '.java', {defaults: ''}).includes('extends AbstractAuditingEntity')) {
+            jhipsterFunc.replaceContent(javaDir + 'domain/' + entityName + '.java', 'public class ' + entityName, 'public class ' + entityName + ' extends AbstractAuditingEntity');
+          }
           // extend DTO with AbstractAuditingDTO
           if(this.entityConfig.data.dto == 'mapstruct') {
-            jhipsterFunc.replaceContent(javaDir + 'web/rest/dto/' + entityName + 'DTO.java', 'public class ' + entityName + 'DTO', 'public class ' + entityName + 'DTO extends AbstractAuditingDTO');
+            if(!this.fs.read(javaDir + 'web/rest/dto/' + entityName + 'DTO.java', {defaults: ''}).includes('extends AbstractAuditingDTO')) {
+              jhipsterFunc.replaceContent(javaDir + 'web/rest/dto/' + entityName + 'DTO.java', 'public class ' + entityName + 'DTO', 'public class ' + entityName + 'DTO extends AbstractAuditingDTO');
+            }
           }
 
           //update liquibase changeset
-          var file = glob.sync("src/main/resources/config/liquibase/changelog/*" + entityName + ".xml")[0];
+          var file = glob.sync("src/main/resources/config/liquibase/changelog/*_added_entity_" + entityName + ".xml")[0];
           var columns = "<column name=\"created_by\" type=\"varchar(50)\">\n" +
           "                <constraints nullable=\"false\"/>\n" +
           "            </column>\n" +
@@ -155,9 +159,10 @@ module.exports = yeoman.Base.extend({
 
         } else if (this.auditFramework === 'javers') {
           // add javers annotations to repository
-          jhipsterFunc.replaceContent(this.javaDir + 'repository/' + entityName + 'Repository.java', 'public interface ' + entityName + 'Repository', '@JaversSpringDataAuditable\npublic interface ' + entityName + 'Repository');
-          jhipsterFunc.replaceContent(this.javaDir + 'repository/' + entityName + 'Repository.java', 'domain.' + entityName + ';', 'domain.' + entityName + ';\nimport org.javers.spring.annotation.JaversSpringDataAuditable;');
-
+          if(!this.fs.read(this.javaDir + 'repository/' + entityName + 'Repository.java', {defaults: ''}).includes('@JaversSpringDataAuditable')) {
+            jhipsterFunc.replaceContent(this.javaDir + 'repository/' + entityName + 'Repository.java', 'public interface ' + entityName + 'Repository', '@JaversSpringDataAuditable\npublic interface ' + entityName + 'Repository');
+            jhipsterFunc.replaceContent(this.javaDir + 'repository/' + entityName + 'Repository.java', 'domain.' + entityName + ';', 'domain.' + entityName + ';\nimport org.javers.spring.annotation.JaversSpringDataAuditable;');
+          }
           //update the list of audited entities if audit page is available
           if (this.fs.exists(this.javaDir + 'web/rest/JaversEntityAuditResource.java')) {
             this.existingEntities.push(entityName);
