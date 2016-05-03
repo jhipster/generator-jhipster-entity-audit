@@ -151,6 +151,7 @@ module.exports = yeoman.Base.extend({
       this.frontendBuilder = jhipsterVar.frontendBuilder;
       this.buildTool = jhipsterVar.buildTool;
       this.databaseType = jhipsterVar.databaseType;
+      this.enableTranslation = jhipsterVar.enableTranslation;
       this.changelogDate = jhipsterFunc.dateFormatForLiquibase();
       this.webappDir = jhipsterVar.webappDir;
       this.javaTemplateDir = 'src/main/java/package';
@@ -304,8 +305,8 @@ module.exports = yeoman.Base.extend({
         jhipsterFunc.addBowerDependency('angular-object-diff', '1.0.3');
         jhipsterFunc.addAngularJsModule('ds.objectDiff');
         // add new menu entry
-        jhipsterFunc.addElementToAdminMenu('entity-audit', 'list-alt', jhipsterVar.enableTranslation);
-        jhipsterFunc.addTranslationKeyToAllLanguages('entity-audit', 'Entity Audit', 'addAdminElementTranslationKey', jhipsterVar.enableTranslation);
+        jhipsterFunc.addElementToAdminMenu('entity-audit', 'list-alt', this.enableTranslation);
+        jhipsterFunc.addTranslationKeyToAllLanguages('entity-audit', 'Entity Audit', 'addAdminElementTranslationKey', this.enableTranslation);
 
       }
 

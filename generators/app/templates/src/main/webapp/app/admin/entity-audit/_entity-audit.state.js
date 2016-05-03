@@ -21,8 +21,13 @@
                     controller: 'EntityAuditController',
                     controllerAs: 'vm'
                 }
-            },
-            resolve: { }
+            }<% if (enableTranslation) { %>,
+            resolve: {
+                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                    $translatePartialLoader.addPart('global');
+                    return $translate.refresh();
+                }]
+            }<% } %>
         });
     }
 })();
