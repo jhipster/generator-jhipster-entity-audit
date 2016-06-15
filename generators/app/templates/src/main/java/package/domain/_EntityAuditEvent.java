@@ -1,13 +1,12 @@
 package <%=packageName%>.domain;
 
-<% if (databaseType == 'sql' && auditFramework === 'custom') { %>
+<% if (databaseType == 'sql' && (auditFramework === 'custom' || auditFramework === 'javers')) { %>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% }%>
 import java.time.ZonedDateTime;
-<% if (databaseType == 'sql' && auditFramework === 'custom') { %>
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;<% } else if (databaseType === 'mongodb' && auditFramework === 'javers') {%>
+import javax.validation.constraints.Size;<% if (auditFramework === 'javers') {%>
 import org.javers.core.metamodel.object.CdoSnapshot;
 import org.joda.time.LocalDateTime;
 import java.time.ZoneId;
@@ -15,21 +14,29 @@ import java.time.ZonedDateTime;<% }%>
 import java.io.Serializable;
 import java.util.Objects;
 
-<% if (databaseType == 'sql' && auditFramework === 'custom') { %>
+<% if (databaseType == 'sql' && (auditFramework === 'custom' || auditFramework === 'javers')) { %>
 @Entity
 @Table(name = "jhi_entity_audit_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
 public class EntityAuditEvent implements Serializable{
 
     private static final long serialVersionUID = 1L;
-    <% if (databaseType == 'sql' && auditFramework === 'custom') { %>
+    <% if (databaseType == 'sql' && (auditFramework === 'custom' || auditFramework === 'javers')) { %>
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
+    <% if (auditFramework === 'javers') { %>
+    @NotNull
+    @Column(name = "commit_id", length = 255, nullable = false)
+    private String commitId;<% } %>
+    <% if (auditFramework === 'custom') { %>
     @NotNull
     @Column(name = "entity_id", nullable = false)
-    private Long entityId;
+    private Long entityId; <% } else if (auditFramework === 'javers') { %>
+    @NotNull
+    @Column(name = "entity_id", length = 255, nullable = false)
+    private String entityId;
+    <% } %>
 
     @NotNull
     @Size(max = 255)
@@ -105,6 +112,23 @@ public class EntityAuditEvent implements Serializable{
         this.entityId = entityId;
     }<% } %>
 
+    <% if (databaseType === 'sql' && auditFramework === 'javers') { %>
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEntityId() {
+        return entityId;
+    }
+
+    public void setEntityId(String entityId) {
+        this.entityId = entityId;
+    }<% } %>
+
     public String getEntityType() {
         return entityType;
     }
@@ -152,6 +176,14 @@ public class EntityAuditEvent implements Serializable{
     public void setModifiedDate(ZonedDateTime modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
+    <% if (auditFramework === 'javers') { %>
+    public String getCommitId() {
+      return commitId;
+    }
+
+    public void setCommitId(String commitId) {
+      this.commitId = commitId;
+    }<% }%>
 
     @Override
     public boolean equals(Object o) {
@@ -184,7 +216,7 @@ public class EntityAuditEvent implements Serializable{
             '}';
     }
 
-    <% if (databaseType === 'mongodb' && auditFramework === 'javers') { %>
+    <% if (auditFramework === 'javers') { %>
     public static EntityAuditEvent fromJaversSnapshot(CdoSnapshot snapshot) {
         EntityAuditEvent entityAuditEvent = new EntityAuditEvent();
 
@@ -199,8 +231,9 @@ public class EntityAuditEvent implements Serializable{
                 entityAuditEvent.setAction("DELETE");
                 break;
         }
-
-        entityAuditEvent.setId(snapshot.getCommitId().toString());
+        <% if (databaseType === 'mongodb') { %>
+        entityAuditEvent.setId(snapshot.getCommitId().toString());<% } else { %>
+        entityAuditEvent.setCommitId(snapshot.getCommitId().toString());<% } %>
         entityAuditEvent.setCommitVersion(Math.round(snapshot.getVersion()));
         entityAuditEvent.setEntityType(snapshot.getManagedType().getName());
         entityAuditEvent.setEntityId(snapshot.getGlobalId().value().split("/")[1]);
