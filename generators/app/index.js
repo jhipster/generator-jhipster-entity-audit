@@ -78,7 +78,7 @@ module.exports = yeoman.Base.extend({
         message: 'Choose which audit framework you would like to use.',
         choices: [
           {name: 'Custom JHipster auditing (works with SQL)', value: 'custom'},
-          {name: '[BETA] Javers auditing framework (works with MongoDB)', value: 'javers'}
+          {name: '[BETA] Javers auditing framework (works with SQL and MongoDB)', value: 'javers'}
         ],
         default: 'custom'
       },
@@ -124,8 +124,8 @@ module.exports = yeoman.Base.extend({
         // Check if an invalid database, auditFramework is selected
         if (props.auditFramework === 'custom' && jhipsterVar.databaseType === 'mongodb') {
           this.env.error(chalk.red.bold('ERROR!') + ' The JHipster audit framework supports SQL databases only...\n');
-        } else if (props.auditFramework === 'javers' && jhipsterVar.databaseType === 'sql') {
-          this.env.error(chalk.red.bold('ERROR!') + ' The Javers audit framework supports MongoDB databases only...\n');
+        } else if (props.auditFramework === 'javers' && jhipsterVar.databaseType != 'sql' && jhipsterVar.databaseType != 'mongodb'){
+          this.env.error(chalk.red.bold('ERROR!') + ' The Javers audit framework supports only SQL or MongoDB databases...\n');
         }
 
         this.props = props;
@@ -198,7 +198,9 @@ module.exports = yeoman.Base.extend({
         var files = [
           { from: this.javaTemplateDir + '/config/audit/_JaversAuthorProvider.java', to: this.javaDir + 'config/audit/JaversAuthorProvider.java'},
           { from: this.javaTemplateDir + '/config/audit/_EntityAuditAction.java', to: this.javaDir + 'config/audit/EntityAuditAction.java'},
-          { from: this.javaTemplateDir + '/domain/_EntityAuditEvent.java', to: this.javaDir + 'domain/EntityAuditEvent.java'}
+          { from: this.javaTemplateDir + '/domain/_EntityAuditEvent.java', to: this.javaDir + 'domain/EntityAuditEvent.java'},
+          { from: this.resourceDir + '/config/liquibase/changelog/_EntityAuditEvent.xml',
+                  to: this.resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_EntityAuditEvent.xml', interpolate: this.interpolateRegex }
         ];
 
         this.copyFiles(files);
@@ -206,15 +208,19 @@ module.exports = yeoman.Base.extend({
         if (this.buildTool === 'maven') {
 
           if (this.databaseType === 'mongodb') {
-             jhipsterFunc.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', '1.4.7', '<scope>compile</scope>');
-             jhipsterFunc.addMavenDependency('org.mongodb', 'mongo-java-driver', '3.0.4', '<scope>compile</scope>');
+             jhipsterFunc.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', '2.0.0', '<scope>compile</scope>');
+             jhipsterFunc.addMavenDependency('org.mongodb', 'mongo-java-driver', '3.2.2', '<scope>compile</scope>');
+          } else if (this.databaseType === 'sql') {
+             jhipsterFunc.addMavenDependency('org.javers', 'javers-spring-boot-starter-sql', '2.0.0', '<scope>compile</scope>');
           }
 
         } else if (this.buildTool === 'gradle') {
 
           if (this.databaseType === 'mongodb') {
-            jhipsterFunc.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-mongo', '1.4.7');
-            jhipsterFunc.addGradleDependency('compile', 'org.mongodb', 'mongo-java-driver', '3.0.4');
+            jhipsterFunc.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-mongo', '2.0.0');
+            jhipsterFunc.addGradleDependency('compile', 'org.mongodb', 'mongo-java-driver', '3.2.2');
+          } else if (this.databaseType === 'sql') {
+            jhipsterFunc.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-sql', '2.0.0');
           }
 
         }
