@@ -17,7 +17,7 @@ jhipster-entity-audit module will register itself as a hook for Jhipster and the
 
 ### [BETA] Javers integration
 
-When using mongodb you can use [Javers](http://javers.org/) for entity auditing.
+When using sql or mongodb you can use [Javers](http://javers.org/) for entity auditing.
 
 > **BETA Notice** Javers integration is still in beta state. Expect some rough edges!
 
