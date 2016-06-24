@@ -79,8 +79,14 @@ public class AsyncEntityAuditEventWriter {
             auditedEntity.setModifiedDate(abstractAuditEntity.getCreatedDate());
             auditedEntity.setCommitVersion(1);
         } else {
-            auditedEntity.setModifiedBy(abstractAuditEntity.getLastModifiedBy());
-            auditedEntity.setModifiedDate(abstractAuditEntity.getLastModifiedDate());
+            if (abstractAuditEntity.getLastModifiedBy() != null &&
+              abstractAuditEntity.getLastModifiedDate() != null) {
+                auditedEntity.setModifiedBy(abstractAuditEntity.getLastModifiedBy());
+                auditedEntity.setModifiedDate(abstractAuditEntity.getLastModifiedDate());
+            } else {
+                auditedEntity.setModifiedBy(abstractAuditEntity.getCreatedBy());
+                auditedEntity.setModifiedDate(abstractAuditEntity.getCreatedDate());
+            }
             calculateVersion(auditedEntity);
         }
         log.trace("Audit Entity --> {} ", auditedEntity.toString());
