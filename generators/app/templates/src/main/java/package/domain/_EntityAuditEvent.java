@@ -2,8 +2,7 @@ package <%=packageName%>.domain;
 
 <% if (databaseType === 'sql' && auditFramework === 'custom') { %>
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;<% if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { %>
-import org.hibernate.annotations.Type;<% } %>
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import java.time.ZonedDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -40,8 +39,7 @@ public class EntityAuditEvent implements Serializable{
     @Column(name = "action", length = 20, nullable = false)
     private String action;
 
-    @Lob<% if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { %>
-    @Type(type = "text")<% } %>
+    @Lob
     @Column(name = "entity_value")
     private String entityValue;
 
