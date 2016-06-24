@@ -39,7 +39,8 @@ public class EntityAuditEvent implements Serializable{
     @Column(name = "action", length = 20, nullable = false)
     private String action;
 
-    @Lob
+    @Lob<% if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { %>
+    @Type(type = "text")<% } %>
     @Column(name = "entity_value")
     private String entityValue;
 
