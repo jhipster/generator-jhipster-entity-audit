@@ -2,7 +2,8 @@ package <%=packageName%>.domain;
 
 <% if (databaseType === 'sql' && auditFramework === 'custom') { %>
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CacheConcurrencyStrategy;<% if (devDatabaseType === 'postgresql' || prodDatabaseType === 'postgresql') { %>
+import org.hibernate.annotations.Type;<% } %>
 import java.time.ZonedDateTime;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
