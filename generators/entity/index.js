@@ -46,10 +46,17 @@ module.exports = yeoman.Base.extend({
       this.log(chalk.white('Running ' + chalk.bold('JHipster Entity Audit') + ' Generator! ' + chalk.yellow('v' + packagejs.version + '\n')));
     },
 
+    validate: function () {
+      // this shouldnt be run directly
+      if (!this.entityConfig) {
+        this.env.error(chalk.red.bold('ERROR!') + ' This sub generator should be used only from JHipster and cannot be run directly...\n');
+      }
+    },
+
     getEntitityNames: function () {
       var existingEntities = [],
       existingEntityNames = [];
-      try{
+      try {
         existingEntityNames = fs.readdirSync('.jhipster');
       } catch(e) {
         this.log(chalk.red.bold('ERROR!') + ' Could not read entities, you might not have generated any entities yet. I will continue to install audit files, entities will not be updated...\n');
@@ -62,13 +69,6 @@ module.exports = yeoman.Base.extend({
         }
       });
       this.existingEntities = existingEntities;
-    },
-
-    validate: function () {
-      // this shouldnt be run directly
-      if (!this.entityConfig) {
-        this.env.error(chalk.red.bold('ERROR!') + ' This sub generator should be used only from JHipster and cannot be run directly...\n');
-      }
     }
   },
 

@@ -36,7 +36,7 @@
       .pipe(istanbul.hookRequire());
   });
 
-  gulp.task('test', ['pre-test'], function (cb) {
+  gulp.task('test', function (cb) {
     var mochaErr;
 
     gulp.src('test/**/*.js')
