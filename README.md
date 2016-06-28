@@ -46,6 +46,40 @@ yo jhipster-entity-audit default
 ```
 This will enable auditing for all available entities (only ones created by the jhipster:entity generator) and add the audit log page under admin
 
+## Using it with JHipster Microservice Architecture
+
+If you choose to use microservice architecture on your project and you still want to get the advantages using _jhipster-entity-audit_ you just need to run the module on the service (not on the gateway!).
+
+To generate the entity audit log page, just answer yes and don't worry with the bower.json and gulpfile errors, it happens because in the service you don't have those files (because it does not have a front-end, the fron-end is in the gateway).
+
+Copy the log page generated files on src/webapp to the same place on your gateway.
+
+You will need to do some minor ajdustments:
+
+1. On the navbar, you will need to include a link to log page (just before jhipster-needle)
+
+    ```html
+    <li ui-sref-active="active">
+      <a ui-sref="entity-audit" ng-click="vm.collapseNavbar()">
+        <span class="glyphicon glyphicon-tasks"></span>&nbsp;
+        <span>Entity Audit</span>
+      </a>
+    </li>
+    <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
+    ```
+
+2. On the entity-audit.service.js replace:
+
+    ```js
+    api/audits/entity/
+    ```
+
+    by
+
+    ```js
+    <your_service>/api/audits/entity/
+    ```
+
 ## License
 
 Apache-2.0 © [Deepu KS](http://deepu105.github.io/)
