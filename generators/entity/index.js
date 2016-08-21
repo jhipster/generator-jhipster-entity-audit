@@ -90,11 +90,12 @@ module.exports = yeoman.Base.extend({
     }
 
     var done = this.async();
+    var entityName = this.entityConfig.entityClass;
     var prompts = [
       {
         type: 'confirm',
         name: 'enableAudit',
-        message: 'Do you want to enable audit for this entity?',
+        message: `Do you want to enable audit for this entity(${entityName})?`,
         default: true
       }
     ];
