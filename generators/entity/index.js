@@ -141,8 +141,8 @@ module.exports = yeoman.Base.extend({
           }
           // extend DTO with AbstractAuditingDTO
           if(this.entityConfig.data.dto == 'mapstruct') {
-            if(!this.fs.read(javaDir + 'web/rest/dto/' + entityName + 'DTO.java', {defaults: ''}).includes('extends AbstractAuditingDTO')) {
-              jhipsterFunc.replaceContent(javaDir + 'web/rest/dto/' + entityName + 'DTO.java', 'public class ' + entityName + 'DTO', 'public class ' + entityName + 'DTO extends AbstractAuditingDTO');
+            if(!this.fs.read(javaDir + 'service/dto/' + entityName + 'DTO.java', {defaults: ''}).includes('extends AbstractAuditingDTO')) {
+              jhipsterFunc.replaceContent(javaDir + 'service/dto/' + entityName + 'DTO.java', 'public class ' + entityName + 'DTO', 'public class ' + entityName + 'DTO extends AbstractAuditingDTO');
             }
           }
 

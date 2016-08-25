@@ -1,4 +1,4 @@
-package <%=packageName%>.web.rest.dto;
+package <%=packageName%>.service.dto;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
