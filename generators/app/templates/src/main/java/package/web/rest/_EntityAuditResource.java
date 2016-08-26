@@ -23,12 +23,14 @@ import com.codahale.metrics.annotation.Timed;
 import javax.inject.Inject;
 import java.net.URISyntaxException;
 import java.util.List;
+import javax.transaction.Transactional;
 
 /**
  * REST controller for getting the audit events for entity
  */
 @RestController
 @RequestMapping("/api")
+@Transactional
 public class EntityAuditResource {
 
     private final Logger log = LoggerFactory.getLogger(EntityAuditResource.class);
