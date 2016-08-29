@@ -5,6 +5,7 @@ var path = require('path'),
     chalk = require('chalk'),
     packagejs = require(__dirname + '/../../package.json'),
     fs = require('fs'),
+    semver = require('semver'),
     glob = require("glob");
 
 // Stores JHipster variables
