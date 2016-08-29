@@ -178,7 +178,7 @@ module.exports = yeoman.Base.extend({
           { from: this.javaTemplateDir + '/config/audit/_EntityAuditEventConfig.java', to: this.javaDir + 'config/audit/EntityAuditEventConfig.java'},
           { from: this.javaTemplateDir + '/domain/_EntityAuditEvent.java', to: this.javaDir + 'domain/EntityAuditEvent.java'},
           { from: this.javaTemplateDir + '/repository/_EntityAuditEventRepository.java', to: this.javaDir + 'repository/EntityAuditEventRepository.java'},
-          { from: this.javaTemplateDir + '/web/rest/dto/_AbstractAuditingDTO.java', to: this.javaDir + 'web/rest/dto/AbstractAuditingDTO.java'},
+          { from: this.javaTemplateDir + '/service/dto/_AbstractAuditingDTO.java', to: this.javaDir + 'service/dto/AbstractAuditingDTO.java'},
           { from: this.resourceDir + '/config/liquibase/changelog/_EntityAuditEvent.xml',
                   to: this.resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_EntityAuditEvent.xml', interpolate: this.interpolateRegex }
         ];
@@ -249,8 +249,8 @@ module.exports = yeoman.Base.extend({
             // extend DTO with AbstractAuditingDTO
             jsonObj = this.fs.readJSON('.jhipster/' + entityName + '.json')
             if(jsonObj.dto == 'mapstruct') {
-              if(!this.fs.read(this.javaDir + 'web/rest/dto/' + entityName + 'DTO.java', {defaults: ''}).includes('extends AbstractAuditingDTO')) {
-                jhipsterFunc.replaceContent(this.javaDir + 'web/rest/dto/' + entityName + 'DTO.java', 'public class ' + entityName + 'DTO', 'public class ' + entityName + 'DTO extends AbstractAuditingDTO');
+              if(!this.fs.read(this.javaDir + 'service/dto/' + entityName + 'DTO.java', {defaults: ''}).includes('extends AbstractAuditingDTO')) {
+                jhipsterFunc.replaceContent(this.javaDir + 'service/dto/' + entityName + 'DTO.java', 'public class ' + entityName + 'DTO', 'public class ' + entityName + 'DTO extends AbstractAuditingDTO');
               }
             }
 
