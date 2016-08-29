@@ -1,13 +1,16 @@
 #!/bin/bash
 set -ev
 #-------------------------------------------------------------------------------
+# Force no insight
+#-------------------------------------------------------------------------------
+mkdir -p "$HOME"/.config/configstore/
+mv "$JHIPSTER_TRAVIS"/configstore/*.json "$HOME"/.config/configstore/
+
+#-------------------------------------------------------------------------------
 # Generate the project with yo jhipster
 #-------------------------------------------------------------------------------
-mv -f $JHIPSTER_SAMPLES/$JHIPSTER $HOME/
-cd $HOME/$JHIPSTER
-rm -Rf $HOME/$JHIPSTER/node_modules/*gulp*
-npm link generator-jhipster
+mkdir -p "$HOME"/app
+mv -f "$JHIPSTER_SAMPLES"/"$JHIPSTER"/.yo-rc.json "$HOME"/app/
+cd "$HOME"/app
 yo jhipster --force --no-insight
-ls -al $HOME/$JHIPSTER
-ls -al $HOME/$JHIPSTER/node_modules/generator-jhipster/
-ls -al $HOME/$JHIPSTER/node_modules/generator-jhipster/entity/
+ls -al "$HOME"/app

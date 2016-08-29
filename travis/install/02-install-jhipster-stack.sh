@@ -1,16 +1,19 @@
 #!/bin/bash
 set -ev
 #-------------------------------------------------------------------------------
-# Install yeoman, bower, grunt and gulp
+# Update npm
+#-------------------------------------------------------------------------------
+npm install -g npm
+#-------------------------------------------------------------------------------
+# Install yeoman, bower and gulp
 #-------------------------------------------------------------------------------
 npm install -g yo
 npm install -g bower
-npm install -g grunt-cli
-npm install -g gulp
+npm install -g gulp-cli
 npm install -g generator-jhipster
 #-------------------------------------------------------------------------------
-# Install the latest version of generator-jhipster-entity-audit
+# Install the latest version of JHipster
 #-------------------------------------------------------------------------------
-cd $TRAVIS_BUILD_DIR/
+cd "$TRAVIS_BUILD_DIR"/
 npm install
 npm link
