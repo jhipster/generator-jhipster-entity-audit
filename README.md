@@ -52,7 +52,7 @@ Apache-2.0 © [Deepu KS](http://deepu105.github.io/)
 
 [npm-image]: https://badge.fury.io/js/generator-jhipster-entity-audit.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster-entity-audit
-[travis-image]: https://travis-ci.org/deepu105/generator-jhipster-entity-audit.svg?branch=master
-[travis-url]: https://travis-ci.org/deepu105/generator-jhipster-entity-audit
+[travis-image]: https://travis-ci.org/hipster-labs/generator-jhipster-entity-audit.svg?branch=master
+[travis-url]: https://travis-ci.org/hipster-labs/generator-jhipster-entity-audit
 [daviddm-image]: https://david-dm.org/hipster-labs/generator-jhipster-entity-audit.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/hipster-labs/generator-jhipster-entity-audit
