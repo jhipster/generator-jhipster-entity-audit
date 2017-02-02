@@ -164,6 +164,11 @@ module.exports = yeoman.Base.extend({
       this.prodDatabaseType = jhipsterVar.prodDatabaseType;
       this.enableTranslation = jhipsterVar.enableTranslation;
       this.changelogDate = jhipsterFunc.dateFormatForLiquibase();
+      // if changelogDate for entity audit already exists then use this existing changelogDate
+      var liguibaseFileName = glob.sync(jhipsterVar.resourceDir + '/config/liquibase/changelog/*_added_entity_EntityAuditEvent.xml')[0];
+      if (liguibaseFileName) {
+        this.changelogDate = new RegExp('/config/liquibase/changelog/(.*)_added_entity_EntityAuditEvent.xml').exec(liguibaseFileName)[1];
+      }
       this.webappDir = jhipsterVar.webappDir;
       this.javaTemplateDir = 'src/main/java/package';
       this.javaDir = jhipsterVar.javaDir;
