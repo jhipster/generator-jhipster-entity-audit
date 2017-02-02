@@ -174,6 +174,7 @@ module.exports = yeoman.Base.extend({
           jhipsterFunc.copyTemplate(file.from, file.to, file.type? file.type: TPL, this, file.interpolate? { 'interpolate': file.interpolate } : undefined);
         }, this);
       };
+      this.clientFramework = jhipsterVar.clientFramework;
     },
 
     writeBaseFiles : function () {
@@ -320,7 +321,7 @@ module.exports = yeoman.Base.extend({
         jhipsterFunc.addBowerDependency('angular-object-diff', '1.0.3');
         jhipsterFunc.addAngularJsModule('ds.objectDiff');
         // add new menu entry
-        jhipsterFunc.addElementToAdminMenu('entity-audit', 'list-alt', this.enableTranslation);
+        jhipsterFunc.addElementToAdminMenu('entity-audit', 'list-alt', this.enableTranslation, this.clientFramework);
         jhipsterFunc.addTranslationKeyToAllLanguages('entity-audit', 'Entity Audit', 'addAdminElementTranslationKey', this.enableTranslation);
 
       }
