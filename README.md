@@ -1,6 +1,8 @@
 # generator-jhipster-entity-audit [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
 > JHipster module to enable entity auditing and to add audit log page
 
+**Note:** This module does not support Angular 2+ yet and hence will not work if you are using JHipster 4 with Angular2.
+
 ## Usage
 
 This is a [JHipster](http://jhipster.github.io/) module, that is meant to be used in a JHipster application.
