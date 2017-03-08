@@ -223,19 +223,19 @@ module.exports = yeoman.Base.extend({
         if (this.buildTool === 'maven') {
 
           if (this.databaseType === 'mongodb') {
-             jhipsterFunc.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', '2.3.0', '<scope>compile</scope>');
-             jhipsterFunc.addMavenDependency('org.mongodb', 'mongo-java-driver', '3.2.2', '<scope>compile</scope>');
+             jhipsterFunc.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', '3.0.3', '<scope>compile</scope>');
+             jhipsterFunc.addMavenDependency('org.mongodb', 'mongo-java-driver', '3.4.2', '<scope>compile</scope>');
           } else if (this.databaseType === 'sql') {
-             jhipsterFunc.addMavenDependency('org.javers', 'javers-spring-boot-starter-sql', '2.3.0', '<scope>compile</scope>');
+             jhipsterFunc.addMavenDependency('org.javers', 'javers-spring-boot-starter-sql', '3.0.3', '<scope>compile</scope>');
           }
 
         } else if (this.buildTool === 'gradle') {
 
           if (this.databaseType === 'mongodb') {
-            jhipsterFunc.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-mongo', '2.3.0');
-            jhipsterFunc.addGradleDependency('compile', 'org.mongodb', 'mongo-java-driver', '3.2.2');
+            jhipsterFunc.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-mongo', '3.0.3');
+            jhipsterFunc.addGradleDependency('compile', 'org.mongodb', 'mongo-java-driver', '3.4.2');
           } else if (this.databaseType === 'sql') {
-            jhipsterFunc.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-sql', '2.3.0');
+            jhipsterFunc.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-sql', '3.0.3');
           }
 
         }
