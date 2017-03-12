@@ -30,6 +30,7 @@
     "generator-jhipster": ">3.6.0"
   },
   "devDependencies": {
+    "eslint": "3.17.1",
     "gulp": "^3.9.0",
     "gulp-bump": "2.0.1",
     "gulp-eslint": "2.0.0",
@@ -51,5 +52,14 @@
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/hipster-labs/generator-jhipster-entity-audit/issues"
+  },
+  "engines": {
+    "node": ">=6.9.0",
+    "npm": ">=2.14.2"
+  },
+  "scripts": {
+    "prepublish": "eslint .",
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix"
   }
 }

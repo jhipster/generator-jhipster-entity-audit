@@ -16,4 +16,5 @@ npm install -g generator-jhipster
 #-------------------------------------------------------------------------------
 cd "$TRAVIS_BUILD_DIR"/
 npm install
+npm run lint
 npm link

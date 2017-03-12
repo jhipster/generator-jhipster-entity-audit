@@ -191,7 +191,7 @@ module.exports = yeoman.Base.extend({
           { from: this.javaTemplateDir + '/repository/_EntityAuditEventRepository.java', to: this.javaDir + 'repository/EntityAuditEventRepository.java'},
           { from: this.javaTemplateDir + '/service/dto/_AbstractAuditingDTO.java', to: this.javaDir + 'service/dto/AbstractAuditingDTO.java'},
           { from: this.resourceDir + '/config/liquibase/changelog/_EntityAuditEvent.xml',
-                  to: this.resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_EntityAuditEvent.xml', interpolate: this.interpolateRegex }
+            to: this.resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_EntityAuditEvent.xml', interpolate: this.interpolateRegex }
         ];
         this.copyFiles(files);
         jhipsterFunc.addChangelogToLiquibase(this.changelogDate + '_added_entity_EntityAuditEvent');
@@ -339,7 +339,9 @@ module.exports = yeoman.Base.extend({
             var menuText = 'Entity Audit';
             try {
               menuText = JSON.parse(fs.readFileSync(this.templatePath() + '/src/main/webapp/i18n/' + language + '/global.json', 'utf8')).global.menu.admin['entity-audit'];
-            } catch (e) {}
+            } catch (e) {
+              this.log('Cannot parse file');
+            }
             jhipsterFunc.addAdminElementTranslationKey('entity-audit', menuText, language);
           }, this);
         }
