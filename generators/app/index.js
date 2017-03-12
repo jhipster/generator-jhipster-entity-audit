@@ -1,12 +1,10 @@
 'use strict';
-var path = require('path'),
-    util = require('util'),
-    yeoman = require('yeoman-generator'),
-    chalk = require('chalk'),
-    packagejs = require(__dirname + '/../../package.json'),
-    fs = require('fs'),
-    semver = require('semver'),
-    glob = require("glob");
+var yeoman = require('yeoman-generator'),
+  chalk = require('chalk'),
+  packagejs = require(__dirname + '/../../package.json'),
+  fs = require('fs'),
+  semver = require('semver'),
+  glob = require('glob');
 
 // Stores JHipster variables
 var jhipsterVar = {moduleName: 'entity-audit'};
@@ -14,10 +12,7 @@ var jhipsterVar = {moduleName: 'entity-audit'};
 // Stores JHipster functions
 var jhipsterFunc = {};
 
-var STRIP_HTML = 'stripHtml',
-    STRIP_JS = 'stripJs',
-    COPY = 'copy',
-    TPL = 'template'
+const TPL = 'template';
 
 module.exports = yeoman.Base.extend({
 
@@ -30,7 +25,7 @@ module.exports = yeoman.Base.extend({
         }
       });
 
-      if (args == 'default') {
+      if (args === 'default') {
         this.defaultAudit = true;
       }
       if (args === 'javers') {
@@ -45,21 +40,21 @@ module.exports = yeoman.Base.extend({
     checkJHVersion: function () {
       var supportedJHVersion = packagejs.dependencies['generator-jhipster'];
       if (jhipsterVar.jhipsterVersion && !semver.satisfies(jhipsterVar.jhipsterVersion, supportedJHVersion)) {
-        this.env.error(chalk.red.bold('ERROR!') + ` I support only JHipster versions greater than ${supportedJHVersion}...
+        this.env.error(`${chalk.red.bold('ERROR!')}  I support only JHipster versions greater than ${supportedJHVersion}...
           If you want to use Entity Audit with an older JHipster version, download a previous version that supports the required JHipster version.`);
       }
     },
 
     checkDBType: function () {
-      if (jhipsterVar.databaseType != 'sql' && jhipsterVar.databaseType != 'mongodb') {
+      if (jhipsterVar.databaseType !== 'sql' && jhipsterVar.databaseType !== 'mongodb') {
         this.env.error(chalk.red.bold('ERROR!') + ' I support only SQL or MongoDB databases...\n');
       }
     },
 
     getEntitityNames: function () {
       var existingEntities = [],
-      existingEntityChoices = [],
-      existingEntityNames = [];
+        existingEntityChoices = [],
+        existingEntityNames = [];
       try{
         existingEntityNames = fs.readdirSync('.jhipster');
       } catch(e) {
@@ -102,7 +97,7 @@ module.exports = yeoman.Base.extend({
         default: 'all'
       },{
         when: function (response) {
-          return response.updateType != 'all';
+          return response.updateType !== 'all';
         },
         type: 'checkbox',
         name: 'entitiesToUpdate',
@@ -118,12 +113,12 @@ module.exports = yeoman.Base.extend({
     ];
 
     if (this.defaultAudit) {
-      this.auditFramework = 'custom'
+      this.auditFramework = 'custom';
       this.updateType = 'all';
       this.auditPage = true;
       done();
     } else if(this.javersAudit) {
-      this.auditFramework = 'javers'
+      this.auditFramework = 'javers';
       this.updateType = 'all';
       this.auditPage = true;
       done();
@@ -133,7 +128,7 @@ module.exports = yeoman.Base.extend({
         // Check if an invalid database, auditFramework is selected
         if (props.auditFramework === 'custom' && jhipsterVar.databaseType === 'mongodb') {
           this.env.error(chalk.red.bold('ERROR!') + ' The JHipster audit framework supports SQL databases only...\n');
-        } else if (props.auditFramework === 'javers' && jhipsterVar.databaseType != 'sql' && jhipsterVar.databaseType != 'mongodb'){
+        } else if (props.auditFramework === 'javers' && jhipsterVar.databaseType !== 'sql' && jhipsterVar.databaseType !== 'mongodb'){
           this.env.error(chalk.red.bold('ERROR!') + ' The Javers audit framework supports only SQL or MongoDB databases...\n');
         }
 
@@ -183,10 +178,10 @@ module.exports = yeoman.Base.extend({
     },
 
     writeBaseFiles : function () {
-
+      var files;
       if (this.auditFramework === 'custom') {
         // collect files to copy
-        var files = [
+        files = [
           { from: this.javaTemplateDir + '/config/audit/_AsyncEntityAuditEventWriter.java', to: this.javaDir + 'config/audit/AsyncEntityAuditEventWriter.java'},
           { from: this.javaTemplateDir + '/config/audit/_EntityAuditEventListener.java', to: this.javaDir + 'config/audit/EntityAuditEventListener.java'},
           { from: this.javaTemplateDir + '/config/audit/_EntityAuditAction.java', to: this.javaDir + 'config/audit/EntityAuditAction.java'},
@@ -212,7 +207,7 @@ module.exports = yeoman.Base.extend({
 
       } else {
 
-        var files = [
+        files = [
           { from: this.javaTemplateDir + '/config/audit/_JaversAuthorProvider.java', to: this.javaDir + 'config/audit/JaversAuthorProvider.java'},
           { from: this.javaTemplateDir + '/config/audit/_EntityAuditAction.java', to: this.javaDir + 'config/audit/EntityAuditAction.java'},
           { from: this.javaTemplateDir + '/domain/_EntityAuditEvent.java', to: this.javaDir + 'domain/EntityAuditEvent.java'}
@@ -223,10 +218,10 @@ module.exports = yeoman.Base.extend({
         if (this.buildTool === 'maven') {
 
           if (this.databaseType === 'mongodb') {
-             jhipsterFunc.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', '2.3.0', '<scope>compile</scope>');
-             jhipsterFunc.addMavenDependency('org.mongodb', 'mongo-java-driver', '3.2.2', '<scope>compile</scope>');
+            jhipsterFunc.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', '2.3.0', '<scope>compile</scope>');
+            jhipsterFunc.addMavenDependency('org.mongodb', 'mongo-java-driver', '3.2.2', '<scope>compile</scope>');
           } else if (this.databaseType === 'sql') {
-             jhipsterFunc.addMavenDependency('org.javers', 'javers-spring-boot-starter-sql', '2.3.0', '<scope>compile</scope>');
+            jhipsterFunc.addMavenDependency('org.javers', 'javers-spring-boot-starter-sql', '2.3.0', '<scope>compile</scope>');
           }
 
         } else if (this.buildTool === 'gradle') {
@@ -244,17 +239,17 @@ module.exports = yeoman.Base.extend({
 
     updateEntityFiles : function () {
       // Update existing entities to enable audit
-      if (this.updateType == 'all') {
+      if (this.updateType === 'all') {
         this.entitiesToUpdate = this.existingEntities;
       }
-      if (this.entitiesToUpdate && this.entitiesToUpdate.length > 0 && this.entitiesToUpdate != 'none') {
+      if (this.entitiesToUpdate && this.entitiesToUpdate.length > 0 && this.entitiesToUpdate !== 'none') {
         this.log('\n' + chalk.bold.green('I\'m Updating selected entities ') + chalk.bold.yellow(this.entitiesToUpdate));
         this.log('\n' + chalk.bold.yellow('Make sure these classes does not extend any other class to avoid any errors during compilation.'));
         var jsonObj = null;
         this.auditedEntities = [];
 
         this.entitiesToUpdate.forEach(function(entityName) {
-          this.auditedEntities.push("\"" + entityName + "\"")
+          this.auditedEntities.push('\'' + entityName + '\'');
           if (this.auditFramework === 'custom') {
             // extend entity with AbstractAuditingEntity
             if(!this.fs.read(this.javaDir + 'domain/' + entityName + '.java', {defaults: ''}).includes('extends AbstractAuditingEntity')) {
@@ -262,31 +257,31 @@ module.exports = yeoman.Base.extend({
             }
 
             // extend DTO with AbstractAuditingDTO
-            jsonObj = this.fs.readJSON('.jhipster/' + entityName + '.json')
-            if(jsonObj.dto == 'mapstruct') {
+            jsonObj = this.fs.readJSON('.jhipster/' + entityName + '.json');
+            if(jsonObj.dto === 'mapstruct') {
               if(!this.fs.read(this.javaDir + 'service/dto/' + entityName + 'DTO.java', {defaults: ''}).includes('extends AbstractAuditingDTO')) {
                 jhipsterFunc.replaceContent(this.javaDir + 'service/dto/' + entityName + 'DTO.java', 'public class ' + entityName + 'DTO', 'public class ' + entityName + 'DTO extends AbstractAuditingDTO');
               }
             }
 
             //update liquibase changeset
-            var file = glob.sync(this.resourceDir + "/config/liquibase/changelog/*_added_entity_" + entityName + ".xml")[0];
+            var file = glob.sync(this.resourceDir + '/config/liquibase/changelog/*_added_entity_' + entityName + '.xml')[0];
             if(file) {
-              var columns = "<column name=\"created_by\" type=\"varchar(50)\">\n" +
-              "                <constraints nullable=\"false\"/>\n" +
-              "            </column>\n" +
-              "            <column name=\"created_date\" type=\"timestamp\" defaultValueDate=\"${now}\">\n" +
-              "                <constraints nullable=\"false\"/>\n" +
-              "            </column>\n" +
-              "            <column name=\"last_modified_by\" type=\"varchar(50)\"/>\n" +
-              "            <column name=\"last_modified_date\" type=\"timestamp\"/>";
+              var columns = '<column name=\'created_by\' type=\'varchar(50)\'>\n' +
+              '                <constraints nullable=\'false\'/>\n' +
+              '            </column>\n' +
+              '            <column name=\'created_date\' type=\'timestamp\' defaultValueDate=\'${now}\'>\n' +
+              '                <constraints nullable=\'false\'/>\n' +
+              '            </column>\n' +
+              '            <column name=\'last_modified_by\' type=\'varchar(50)\'/>\n' +
+              '            <column name=\'last_modified_date\' type=\'timestamp\'/>';
               jhipsterFunc.addColumnToLiquibaseEntityChangeset(file, columns);
             }
           } else {
 
             // check if repositories are already annotated
             var auditTableAnnotation = '@JaversSpringDataAuditable';
-            var pattern = new RegExp(auditTableAnnotation, 'g')
+            var pattern = new RegExp(auditTableAnnotation, 'g');
             var content = this.fs.read(this.javaDir + 'repository/' + entityName + 'Repository.java', 'utf8');
 
             if (!pattern.test(content)) {
@@ -335,16 +330,16 @@ module.exports = yeoman.Base.extend({
 
     registering: function () {
       try {
-        jhipsterFunc.registerModule("generator-jhipster-entity-audit", "entity", "post", "entity", "Add support for entity audit and audit log page");
+        jhipsterFunc.registerModule('generator-jhipster-entity-audit', 'entity', 'post', 'entity', 'Add support for entity audit and audit log page');
       } catch (err) {
         this.log(chalk.red.bold('WARN!') + ' Could not register as a jhipster post entity creation hook...\n');
       }
-    },
+    }
   },
 
   install: function () {
     var injectDependenciesAndConstants = function () {
-        this.spawnCommand('gulp', ['install']);
+      this.spawnCommand('gulp', ['install']);
     };
 
     this.installDependencies({

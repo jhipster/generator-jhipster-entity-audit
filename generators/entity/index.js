@@ -1,11 +1,9 @@
 'use strict';
-var path = require('path'),
-    util = require('util'),
-    yeoman = require('yeoman-generator'),
-    chalk = require('chalk'),
-    packagejs = require(__dirname + '/../../package.json'),
-    fs = require('fs'),
-    glob = require("glob");
+var yeoman = require('yeoman-generator'),
+  chalk = require('chalk'),
+  packagejs = require(__dirname + '/../../package.json'),
+  fs = require('fs'),
+  glob = require('glob');
 
 // Stores JHipster variables
 var jhipsterVar = {moduleName: 'entity-audit'};
@@ -13,16 +11,12 @@ var jhipsterVar = {moduleName: 'entity-audit'};
 // Stores JHipster functions
 var jhipsterFunc = {};
 
-var STRIP_HTML = 'stripHtml',
-STRIP_JS = 'stripJs',
-COPY = 'copy',
-TPL = 'template'
-
 module.exports = yeoman.Base.extend({
 
   initializing: {
 
     compose: function (args) {
+      this.log(this.options);
       this.entityConfig = this.options.entityConfig;
       this.composeWith('jhipster:modules', {
         options: {
@@ -33,7 +27,7 @@ module.exports = yeoman.Base.extend({
     },
 
     checkDBType: function () {
-      if (jhipsterVar.databaseType != 'sql' && jhipsterVar.databaseType != 'mongodb') {
+      if (jhipsterVar.databaseType !== 'sql' && jhipsterVar.databaseType !== 'mongodb') {
         // exit if DB type is not SQL or MongoDB
         this.abort = true;
       }
@@ -55,7 +49,7 @@ module.exports = yeoman.Base.extend({
 
     getEntitityNames: function () {
       var existingEntities = [],
-      existingEntityNames = [];
+        existingEntityNames = [];
       try {
         existingEntityNames = fs.readdirSync('.jhipster');
       } catch(e) {
@@ -78,7 +72,7 @@ module.exports = yeoman.Base.extend({
     }
 
     // don't prompt if data are imported from a file
-    if (this.entityConfig.useConfigurationFile == true &&  this.entityConfig.data && typeof this.entityConfig.data.enableEntityAudit !== 'undefined') {
+    if (this.entityConfig.useConfigurationFile === true &&  this.entityConfig.data && typeof this.entityConfig.data.enableEntityAudit !== 'undefined') {
       this.enableAudit = this.entityConfig.data.enableEntityAudit;
 
       if (typeof this.config.get('auditFramework') !== 'undefined') {
@@ -123,11 +117,7 @@ module.exports = yeoman.Base.extend({
       this.frontendBuilder = jhipsterVar.frontendBuilder;
       this.changelogDate = jhipsterFunc.dateFormatForLiquibase();
 
-      var webappDir = jhipsterVar.webappDir,
-      javaTemplateDir = 'src/main/java/package',
-      javaDir = jhipsterVar.javaDir,
-      resourceDir = jhipsterVar.resourceDir,
-      interpolateRegex = /<%=([\s\S]+?)%>/g; // so that thymeleaf tags in templates do not get mistreated as _ templates
+      var javaDir = jhipsterVar.javaDir;
 
       if (this.entityConfig.entityClass) {
         this.log('\n' + chalk.bold.green('I\'m updating the entity for audit ') + chalk.bold.yellow(this.entityConfig.entityClass));
@@ -140,22 +130,22 @@ module.exports = yeoman.Base.extend({
             jhipsterFunc.replaceContent(javaDir + 'domain/' + entityName + '.java', 'public class ' + entityName, 'public class ' + entityName + ' extends AbstractAuditingEntity');
           }
           // extend DTO with AbstractAuditingDTO
-          if(this.entityConfig.data.dto == 'mapstruct') {
+          if(this.entityConfig.data.dto === 'mapstruct') {
             if(!this.fs.read(javaDir + 'service/dto/' + entityName + 'DTO.java', {defaults: ''}).includes('extends AbstractAuditingDTO')) {
               jhipsterFunc.replaceContent(javaDir + 'service/dto/' + entityName + 'DTO.java', 'public class ' + entityName + 'DTO', 'public class ' + entityName + 'DTO extends AbstractAuditingDTO');
             }
           }
 
           //update liquibase changeset
-          var file = glob.sync("src/main/resources/config/liquibase/changelog/*_added_entity_" + entityName + ".xml")[0];
-          var columns = "<column name=\"created_by\" type=\"varchar(50)\">\n" +
-          "                <constraints nullable=\"false\"/>\n" +
-          "            </column>\n" +
-          "            <column name=\"created_date\" type=\"timestamp\" defaultValueDate=\"${now}\">\n" +
-          "                <constraints nullable=\"false\"/>\n" +
-          "            </column>\n" +
-          "            <column name=\"last_modified_by\" type=\"varchar(50)\"/>\n" +
-          "            <column name=\"last_modified_date\" type=\"timestamp\"/>";
+          var file = glob.sync('src/main/resources/config/liquibase/changelog/*_added_entity_' + entityName + '.xml')[0];
+          var columns = '<column name=\'created_by\' type=\'varchar(50)\'>\n' +
+          '                <constraints nullable=\'false\'/>\n' +
+          '            </column>\n' +
+          '            <column name=\'created_date\' type=\'timestamp\' defaultValueDate=\'${now}\'>\n' +
+          '                <constraints nullable=\'false\'/>\n' +
+          '            </column>\n' +
+          '            <column name=\'last_modified_by\' type=\'varchar(50)\'/>\n' +
+          '            <column name=\'last_modified_date\' type=\'timestamp\'/>';
           jhipsterFunc.addColumnToLiquibaseEntityChangeset(file, columns);
 
         } else if (this.auditFramework === 'javers') {
@@ -170,7 +160,7 @@ module.exports = yeoman.Base.extend({
             this.auditedEntities = [];
 
             this.existingEntities.forEach(function(entityName) {
-                this.auditedEntities.push("\"" + entityName + "\"")
+              this.auditedEntities.push('\'' + entityName + '\'');
             }, this);
 
             var files = [

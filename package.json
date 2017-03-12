@@ -27,7 +27,7 @@
     "chalk": "1.1.1",
     "glob": "^7.0.3",
     "semver": "5.1.0",
-    "generator-jhipster": "^3.6.0"
+    "generator-jhipster": ">3.6.0"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
