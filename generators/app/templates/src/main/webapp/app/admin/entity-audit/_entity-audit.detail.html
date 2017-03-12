@@ -1,24 +1,26 @@
 <div class="modal-header">
-    <button aria-label="Close" data-dismiss="modal" class="close" type="button" ng-click="vm.cancel()"><span
-        aria-hidden="true">&times;</span>
+    <button aria-label="<% if (enableTranslation) { %>{{ 'entityAudit.detail.close' | translate }}<% } else { %>Close<% } %>"
+            data-dismiss="modal" class="close" type="button" ng-click="vm.cancel()"><span
+            aria-hidden="true">&times;</span>
     </button>
-    <h4 class="modal-title">
+    <h4 class="modal-title" data-translate="entityAudit.detail.title">
         Audit Details
     </h4>
 </div>
 <div class="modal-body pad">
     <div>
-        <strong>{{vm.audit.action}} action was performed on below data</strong><br><br>
-        <del class="diff diff-key">Old/Removed value</del>
+        <strong data-translate="entityAudit.detail.action" translate-value-action="{{vm.audit.action}}">{{vm.audit.action}} action was performed on below data</strong><br><br>
+        <del class="diff diff-key" data-translate="entityAudit.detail.old">Old/Removed value</del>
         &nbsp;
-        <ins class="diff diff-key">New/Added value</ins>
+        <ins class="diff diff-key" data-translate="entityAudit.detail.new">New/Added value</ins>
     </div>
     <br>
-    <label>Changed Fields</label>
+    <label data-translate="entityAudit.detail.changedFields">Changed Fields</label>
     <pre id="resultChanges" ng-bind-html="vm.diffValueChanges"></pre>
-    <label>All Fields</label>
+    <label data-translate="entityAudit.detail.allFields">All Fields</label>
     <pre id="result" ng-bind-html="vm.diffValue"></pre>
 </div>
 <div class="modal-footer">
-    <button data-dismiss="modal" class="btn btn-default" type="button" ng-click="vm.cancel()">Done</button>
+    <button data-dismiss="modal" class="btn btn-default" type="button" ng-click="vm.cancel()"
+            data-translate="entityAudit.detail.done">Done</button>
 </div>

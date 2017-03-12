@@ -1,0 +1,9 @@
+{
+    "global": {
+        "menu": {
+            "admin": {
+                "entity-audit": "Entity Audit"
+            }
+        }
+    }
+}

@@ -1,0 +1,42 @@
+{
+    "entityAudit": {
+        "home": {
+            "title": "Entity Audits",
+            "filter": "Filter",
+            "entityOrTable": "Entity/Table",
+            "limitTo": "Limit to",
+            "loadChangeList": "Load Change List"
+        },
+        "result": {
+            "showInfo": "Last <strong>{{ limit }}</strong> Changes for <strong>{{ entity }}</strong>",
+            "searchFieldLabel": "Filter:",
+            "globalFilter": "global filter",
+            "entityIdFilter": "entity id filter",
+            "tableHeader": {
+                "entityId": "Entity Id",
+                "action": "Action",
+                "version": "Version",
+                "value": "Value",
+                "modifiedDate": "Modified Date",
+                "modifiedBy": "Modified By"
+            },
+            "tableBody": {
+                "field": "Field",
+                "value": "Value",
+                "viewDetails": "View Audit Change Details"
+            },
+            "noDataFound": "No Data found for the filters",
+            "firstAuditEntry": "There is no previous version available for this entry.\nThis is the first audit entry captured for this object."
+        },
+        "detail": {
+            "close": "Close",
+            "title": "Audit Details",
+            "action": "{{action}} action was performed on below data",
+            "old": "Old/Removed value",
+            "new": "New/Added value",
+            "changedFields": "Changed Fields",
+            "allFields": "All Fields",
+            "done": "Done"
+        }
+    }
+}

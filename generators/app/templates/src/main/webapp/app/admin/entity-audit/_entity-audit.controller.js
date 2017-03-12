@@ -70,8 +70,12 @@
         function openChange(audit){
 
             if(audit.commitVersion < 2){
+                <%_ if (enableTranslation) { _%>
+                AlertService.warning("entityAudit.result.firstAuditEntry");
+                <%_ } else { _%>
                 AlertService.warning("There is no previous version available for this entry.\nThis is the first" +
                     " audit entry captured for this object");
+                <% } %>
             } else {
                 EntityAuditService.getPrevVersion(audit.entityType, audit.entityId, audit.commitVersion).then(function (data) {
                     var previousVersion = JSON.parse(data.entityValue),

@@ -158,6 +158,7 @@ module.exports = yeoman.Base.extend({
       this.devDatabaseType = jhipsterVar.devDatabaseType;
       this.prodDatabaseType = jhipsterVar.prodDatabaseType;
       this.enableTranslation = jhipsterVar.enableTranslation;
+      this.languages = jhipsterVar.languages;
       this.changelogDate = jhipsterFunc.dateFormatForLiquibase();
       // if changelogDate for entity audit already exists then use this existing changelogDate
       var liguibaseFileName = glob.sync(jhipsterVar.resourceDir + '/config/liquibase/changelog/*_added_entity_EntityAuditEvent.xml')[0];
@@ -316,14 +317,32 @@ module.exports = yeoman.Base.extend({
             { from: this.javaTemplateDir + '/web/rest/_JaversEntityAuditResource.java', to: this.javaDir + 'web/rest/JaversEntityAuditResource.java'}
           );
         }
+        if (this.enableTranslation) {
+          this.languages.forEach(function(language) {
+            var sourceLanguage = 'en';
+            if (fs.existsSync(this.templatePath() + '/src/main/webapp/i18n/' + language + '/entity-audit.json')) {
+              sourceLanguage = language;
+            }
+            files.push(
+              { from: this.webappDir + 'i18n/' + sourceLanguage + '/entity-audit.json', to: this.webappDir + 'i18n/' + language + '/entity-audit.json'}
+            );
+          }, this);
+        }
         this.copyFiles(files);
         // add bower dependency required
         jhipsterFunc.addBowerDependency('angular-object-diff', '1.0.3');
         jhipsterFunc.addAngularJsModule('ds.objectDiff');
         // add new menu entry
         jhipsterFunc.addElementToAdminMenu('entity-audit', 'list-alt', this.enableTranslation, this.clientFramework);
-        jhipsterFunc.addTranslationKeyToAllLanguages('entity-audit', 'Entity Audit', 'addAdminElementTranslationKey', this.enableTranslation);
-
+        if (this.enableTranslation) {
+          this.languages.forEach(function(language) {
+            var menuText = 'Entity Audit';
+            try {
+              menuText = JSON.parse(fs.readFileSync(this.templatePath() + '/src/main/webapp/i18n/' + language + '/global.json', 'utf8')).global.menu.admin['entity-audit'];
+            } catch (e) {}
+            jhipsterFunc.addAdminElementTranslationKey('entity-audit', menuText, language);
+          }, this);
+        }
       }
 
     },

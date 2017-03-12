@@ -1,0 +1,42 @@
+{
+    "entityAudit": {
+        "home": {
+            "title": "Olemite auditid",
+            "filter": "Filter",
+            "entityOrTable": "Olem/tabel",
+            "limitTo": "Näita kuni",
+            "loadChangeList": "Laadi muutused"
+        },
+        "result": {
+            "showInfo": "<strong>{{ entity }}</strong> viimased <strong>{{ limit }}</strong> muutust",
+            "searchFieldLabel": "Filter:",
+            "globalFilter": "globaalne filter",
+            "entityIdFilter": "olemi id filter",
+            "tableHeader": {
+                "entityId": "Olemi Id",
+                "action": "Tegevus",
+                "version": "Versioon",
+                "value": "Väärtus",
+                "modifiedDate": "Muutmisaeg",
+                "modifiedBy": "Muutja"
+            },
+            "tableBody": {
+                "field": "Väli",
+                "value": "Väärtus",
+                "viewDetails": "Vaata muutuse detaile"
+            },
+            "noDataFound": "Ei leidnud filtritele vastavat infot",
+            "firstAuditEntry": "Sellel olemil pole eelmist versiooni.\nSee on selle objekti esimene auditeerimiskirje."
+        },
+        "detail": {
+            "close": "Sule",
+            "title": "Auditi detailid",
+            "action": "{{action}} tegevus tehti allpool toodud andmetega",
+            "old": "Vana/eemaldatud väärtus",
+            "new": "Uus/lisatud väärtus",
+            "changedFields": "Muudetud väljad",
+            "allFields": "Kõik väljad",
+            "done": "Tehtud"
+        }
+    }
+}
