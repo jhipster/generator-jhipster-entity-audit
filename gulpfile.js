@@ -5,7 +5,6 @@
   var bumper = require('gulp-bump');
   var git = require('gulp-git');
   var shell = require('gulp-shell');
-  var rename = require('gulp-rename');
   var fs = require('fs');
   var sequence = require('gulp-sequence');
   var path = require('path');
