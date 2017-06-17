@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
@@ -22,11 +21,14 @@ public class AsyncEntityAuditEventWriter {
 
     private final Logger log = LoggerFactory.getLogger(AsyncEntityAuditEventWriter.class);
 
-    @Inject
-    private EntityAuditEventRepository auditingEntityRepository;
+    private final EntityAuditEventRepository auditingEntityRepository;
 
-    @Inject
-    private ObjectMapper objectMapper; //Jackson object mapper
+    private final ObjectMapper objectMapper; //Jackson object mapper
+
+    public AsyncEntityAuditEventWriter(EntityAuditEventRepository auditingEntityRepository, ObjectMapper objectMapper) {
+        this.auditingEntityRepository = auditingEntityRepository;
+        this.objectMapper = objectMapper;
+    }
 
     /**
      * Writes audit events to DB asynchronously in a new thread

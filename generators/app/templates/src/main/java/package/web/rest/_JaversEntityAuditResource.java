@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.access.annotation.Secured;
 import com.codahale.metrics.annotation.Timed;
 
-import javax.inject.Inject;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.ArrayList;
@@ -38,9 +37,11 @@ public class JaversEntityAuditResource {
 
     private final Logger log = LoggerFactory.getLogger(JaversEntityAuditResource.class);
 
-    @Inject
-    private Javers javers;
+    private final Javers javers;
 
+    public JaversEntityAuditResource(Javers javers) {
+        this.javers = javers;
+    }
 
     /**
      * fetches all the audited entity types
