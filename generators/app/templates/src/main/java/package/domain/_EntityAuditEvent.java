@@ -3,14 +3,14 @@ package <%=packageName%>.domain;
 <% if (databaseType === 'sql' && auditFramework === 'custom') { %>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;<% } else if (auditFramework === 'javers') {%>
 import org.javers.core.metamodel.object.CdoSnapshot;
 import org.joda.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;<% }%>
+import java.time.Instant;<% }%>
 import java.io.Serializable;
 import java.util.Objects;
 <% if (databaseType === 'sql' && auditFramework === 'custom') { %>
@@ -57,7 +57,7 @@ public class EntityAuditEvent implements Serializable{
 
     @NotNull
     @Column(name = "modified_date", nullable = false)
-    private ZonedDateTime modifiedDate;
+    private Instant modifiedDate;
     <% } else if (auditFramework === 'javers') { %>
     private String id;
 
@@ -73,7 +73,7 @@ public class EntityAuditEvent implements Serializable{
 
     private String modifiedBy;
 
-    private ZonedDateTime modifiedDate;
+    private Instant modifiedDate;
 
     public String getId() {
         return id;
@@ -147,11 +147,11 @@ public class EntityAuditEvent implements Serializable{
         this.modifiedBy = modifiedBy;
     }
 
-    public ZonedDateTime getModifiedDate() {
+    public Instant getModifiedDate() {
         return modifiedDate;
     }
 
-    public void setModifiedDate(ZonedDateTime modifiedDate) {
+    public void setModifiedDate(Instant modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
@@ -226,14 +226,7 @@ public class EntityAuditEvent implements Serializable{
         }
         LocalDateTime localTime = snapshot.getCommitMetadata().getCommitDate();
 
-        ZonedDateTime modifyDate = ZonedDateTime.of(localTime.getYear(),
-          localTime.getMonthOfYear(),
-          localTime.getDayOfMonth(),
-          localTime.getHourOfDay(),
-          localTime.getMinuteOfHour(),
-          localTime.getSecondOfMinute(),
-          localTime.getMillisOfSecond(),
-          ZoneId.systemDefault());
+        Instant modifyDate = Instant.from(localTime);
 
         entityAuditEvent.setModifiedDate(modifyDate);
 

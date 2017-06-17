@@ -1,7 +1,7 @@
 package <%=packageName%>.service.dto;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import org.springframework.data.annotation.ReadOnlyProperty;
 
 /**
@@ -16,11 +16,11 @@ public abstract class AbstractAuditingDTO implements Serializable {
     private String createdBy;
 
     @ReadOnlyProperty
-    private ZonedDateTime createdDate = ZonedDateTime.now();
+    private Instant createdDate = Instant.now();
 
     private String lastModifiedBy;
 
-    private ZonedDateTime lastModifiedDate = ZonedDateTime.now();
+    private Instant lastModifiedDate = Instant.now();
 
     public String getCreatedBy() {
         return createdBy;
@@ -30,11 +30,11 @@ public abstract class AbstractAuditingDTO implements Serializable {
         this.createdBy = createdBy;
     }
 
-    public ZonedDateTime getCreatedDate() {
+    public Instant getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(ZonedDateTime createdDate) {
+    public void setCreatedDate(Instant createdDate) {
         this.createdDate = createdDate;
     }
 
@@ -46,11 +46,11 @@ public abstract class AbstractAuditingDTO implements Serializable {
         this.lastModifiedBy = lastModifiedBy;
     }
 
-    public ZonedDateTime getLastModifiedDate() {
+    public Instant getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(ZonedDateTime lastModifiedDate) {
+    public void setLastModifiedDate(Instant lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
 }
