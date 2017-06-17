@@ -176,6 +176,8 @@ module.exports = yeoman.Base.extend({
         }, this);
       };
       this.clientFramework = jhipsterVar.clientFramework;
+      this.hibernateCache = jhipsterVar.hibernateCache;
+      this.packageFolder = jhipsterVar.packageFolder;
     },
 
     writeBaseFiles : function () {
@@ -206,6 +208,9 @@ module.exports = yeoman.Base.extend({
         // remove the jsonIgnore on the audit fields so that the values can be passed
         jhipsterFunc.replaceContent(this.javaDir + 'domain/AbstractAuditingEntity.java', '\s*@JsonIgnore', '', true);
 
+        if (this.hibernateCache === 'ehcache') {
+          jhipsterFunc.addEntityToEhcache('EntityAuditEvent', [], this.packageName, this.packageFolder);
+        }
       } else {
 
         files = [
