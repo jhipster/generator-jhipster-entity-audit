@@ -6,6 +6,8 @@ const BaseGenerator = require('generator-jhipster/generators/generator-base');
 const jhipsterConstants = require('generator-jhipster/generators/generator-constants');
 const fs = require('fs');
 const glob = require('glob');
+
+const genUtils = require('../utils');
 const packagejs = require('../../package.json');
 
 const JhipsterAuditGenerator = generator.extend({});
@@ -298,58 +300,10 @@ module.exports = JhipsterAuditGenerator.extend({
         this.log(`\n${chalk.bold.green('I\'m Updating selected entities ')}${chalk.bold.yellow(this.entitiesToUpdate)}`);
         this.log(`\n${chalk.bold.yellow('Make sure these classes does not extend any other class to avoid any errors during compilation.')}`);
         let jsonObj = null;
-        this.auditedEntities = [];
 
         this.entitiesToUpdate.forEach((entityName) => {
-          this.auditedEntities.push(`'${entityName}'`);
-          if (this.auditFramework === 'custom') {
-            // extend entity with AbstractAuditingEntity
-            if (!this.fs.read(`${this.javaDir}domain/${entityName}.java`, {
-              defaults: ''
-            }).includes('extends AbstractAuditingEntity')) {
-              this.replaceContent(`${this.javaDir}domain/${entityName}.java`, `public class ${entityName}`, `public class ${entityName} extends AbstractAuditingEntity`);
-            }
-
-            // extend DTO with AbstractAuditingDTO
-            jsonObj = this.fs.readJSON(`.jhipster/${entityName}.json`);
-            if (jsonObj.dto === 'mapstruct') {
-              if (!this.fs.read(`${this.javaDir}service/dto/${entityName}DTO.java`, {
-                defaults: ''
-              }).includes('extends AbstractAuditingDTO')) {
-                this.replaceContent(`${this.javaDir}service/dto/${entityName}DTO.java`, `public class ${entityName}DTO`, `public class ${entityName}DTO extends AbstractAuditingDTO`);
-              }
-            }
-
-            // update liquibase changeset
-            const file = glob.sync(`${this.resourceDir}/config/liquibase/changelog/*_added_entity_${entityName}.xml`)[0];
-            if (file) {
-              const columns = '<column name=\'created_by\' type=\'varchar(50)\'>\n' +
-                '                <constraints nullable=\'false\'/>\n' +
-                '            </column>\n' +
-                // eslint-disable-next-line no-template-curly-in-string
-                '            <column name=\'created_date\' type=\'timestamp\' defaultValueDate=\'${now}\'>\n' +
-                '                <constraints nullable=\'false\'/>\n' +
-                '            </column>\n' +
-                '            <column name=\'last_modified_by\' type=\'varchar(50)\'/>\n' +
-                '            <column name=\'last_modified_date\' type=\'timestamp\'/>';
-              this.addColumnToLiquibaseEntityChangeset(file, columns);
-            }
-          } else {
-            // check if repositories are already annotated
-            const auditTableAnnotation = '@JaversSpringDataAuditable';
-            const pattern = new RegExp(auditTableAnnotation, 'g');
-            const content = this.fs.read(`${this.javaDir}repository/${entityName}Repository.java`, 'utf8');
-
-            if (!pattern.test(content)) {
-              // add javers annotations to repository
-              if (!this.fs.read(`${this.javaDir}repository/${entityName}Repository.java`, {
-                defaults: ''
-              }).includes('@JaversSpringDataAuditable')) {
-                this.replaceContent(`${this.javaDir}repository/${entityName}Repository.java`, `public interface ${entityName}Repository`, `@JaversSpringDataAuditable\npublic interface ${entityName}Repository`);
-                this.replaceContent(`${this.javaDir}repository/${entityName}Repository.java`, `domain.${entityName};`, `domain.${entityName};\nimport org.javers.spring.annotation.JaversSpringDataAuditable;`);
-              }
-            }
-          }
+          jsonObj = this.fs.readJSON(`.jhipster/${entityName}.json`);
+          genUtils.updateEntityAudit.call(this, entityName, jsonObj, this.javaDir, this.resourceDir);
         });
       }
     },
