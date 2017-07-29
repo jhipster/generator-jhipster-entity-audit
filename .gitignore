@@ -1,4 +1,11 @@
 node_modules
 coverage
-npm-debug.log
 .idea
+*.iml
+*.ipr
+*.iws
+atlassian-ide-plugin.xml
+/.project
+test/temp/
+*debug.log*
+.vscode
