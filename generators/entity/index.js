@@ -104,7 +104,6 @@ module.exports = JhipsterAuditEntityGenerator.extend({
         return;
       }
 
-
       // read config from .yo-rc.json
       this.baseName = this.jhAppConfig.baseName;
       this.packageName = this.jhAppConfig.packageName;

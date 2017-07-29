@@ -1,14 +1,20 @@
 const glob = require('glob');
 
-const columnTemplate = '<column name=\'created_by\' type=\'varchar(50)\'>\n' +
-  '                <constraints nullable=\'false\'/>\n' +
-  '            </column>\n' +
-  // eslint-disable-next-line no-template-curly-in-string
-  '            <column name=\'created_date\' type=\'timestamp\' defaultValueDate=\'${now}\'>\n' +
-  '                <constraints nullable=\'false\'/>\n' +
-  '            </column>\n' +
-  '            <column name=\'last_modified_by\' type=\'varchar(50)\'/>\n' +
-  '            <column name=\'last_modified_date\' type=\'timestamp\'/>';
+const changeset = (changelogDate, entityTableName) =>
+`
+    <!-- Added the entity audit columns -->
+    <changeSet id="${changelogDate}-audit-1" author="jhipster-entity-audit">
+        <addColumn tableName="${entityTableName}">
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp" defaultValueDate="\${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>`;
 
 const updateEntityAudit = function (entityName, entityData, javaDir, resourceDir, updateIndex) {
   if (this.auditFramework === 'custom') {
@@ -29,7 +35,7 @@ const updateEntityAudit = function (entityName, entityData, javaDir, resourceDir
 
     // update liquibase changeset
     const file = glob.sync(`${resourceDir}/config/liquibase/changelog/*_added_entity_${entityName}.xml`)[0];
-    this.addColumnToLiquibaseEntityChangeset(file, columnTemplate);
+    this.addChangesetToLiquibaseEntityChangelog(file, changeset(this.changelogDate, this.getTableName(entityName)));
   } else if (this.auditFramework === 'javers') {
     // check if repositories are already annotated
     const auditTableAnnotation = '@JaversSpringDataAuditable';
@@ -64,6 +70,6 @@ const updateEntityAudit = function (entityName, entityData, javaDir, resourceDir
 };
 
 module.exports = {
-  columnTemplate,
+  changeset,
   updateEntityAudit
 };
