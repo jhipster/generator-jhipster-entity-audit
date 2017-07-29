@@ -38,6 +38,14 @@
                 <constraints nullable="false" />
             </column>
         </createTable>
+        <createIndex indexName="idx_entity_audit_event_entity_id"
+            tableName="jhi_entity_audit_event">
+            <column name="entity_id" type="bigint"/>
+        </createIndex>
+        <createIndex indexName="idx_entity_audit_event_entity_type"
+            tableName="jhi_entity_audit_event">
+            <column name="entity_type" type="varchar(255)"/>
+        </createIndex>
         <dropDefaultValue tableName="jhi_entity_audit_event" columnName="modified_date" columnDataType="datetime"/>
         <!-- TODO add an archival job for the table -->
     </changeSet>
