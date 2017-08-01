@@ -35,7 +35,8 @@ const updateEntityAudit = function (entityName, entityData, javaDir, resourceDir
 
     // update liquibase changeset
     const file = glob.sync(`${resourceDir}/config/liquibase/changelog/*_added_entity_${entityName}.xml`)[0];
-    this.addChangesetToLiquibaseEntityChangelog(file, changeset(this.changelogDate, this.getTableName(entityName)));
+    const entityTableName = entityData.entityTableName ? entityData.entityTableName : entityName;
+    this.addChangesetToLiquibaseEntityChangelog(file, changeset(this.changelogDate, this.getTableName(entityTableName)));
   } else if (this.auditFramework === 'javers') {
     // check if repositories are already annotated
     const auditTableAnnotation = '@JaversSpringDataAuditable';
