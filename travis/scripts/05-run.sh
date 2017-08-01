@@ -3,7 +3,7 @@
 #-------------------------------------------------------------------------------
 # Functions
 #-------------------------------------------------------------------------------
-launchProtractor() {
+launchCurlOrProtractor() {
     retryCount=1
     maxRetry=10
     httpUrl="http://localhost:8080"
@@ -19,18 +19,45 @@ launchProtractor() {
     done
 
     if [ "$status" -ne 0 ]; then
-      echo "[$(date)] Not connected after" $retryCount " retries. Abort protractor tests."
-      exit 0
+        echo "[$(date)] Not connected after" $retryCount " retries."
+        exit 1
     fi
 
-    echo "[$(date)] Connected to application. Start protractor tests."
-    gulp itest --no-notification
+    if [ "$PROTRACTOR" != 1 ]; then
+        exit 0
+    fi
+
+    retryCount=0
+    maxRetry=2
+    until [ "$retryCount" -ge "$maxRetry" ]
+    do
+        result=0
+        if [[ -f "gulpfile.js" ]]; then
+            gulp itest --no-notification
+        elif [[ -f "tsconfig.json" ]]; then
+            yarn run e2e
+        fi
+        result=$?
+        [ $result -eq 0 ] && break
+        retryCount=$((retryCount+1))
+        echo "e2e tests failed... retryCount =" $retryCount "/" $maxRetry
+        sleep 15
+    done
+    exit $result
 }
 
 #-------------------------------------------------------------------------------
-# Start the application
+# Package UAA
 #-------------------------------------------------------------------------------
-cd "$HOME"/app
+if [[ "$JHIPSTER" == *"uaa"* ]]; then
+    cd "$UAA_APP_FOLDER"
+    ./mvnw package -DskipTests=true
+fi
+
+#-------------------------------------------------------------------------------
+# Package the application
+#-------------------------------------------------------------------------------
+cd "$APP_FOLDER"
 
 if [ -f "mvnw" ]; then
     ./mvnw package -DskipTests=true -P"$PROFILE"
@@ -47,13 +74,22 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+#-------------------------------------------------------------------------------
+# Run the application
+#-------------------------------------------------------------------------------
 if [ "$RUN_APP" == 1 ]; then
-    java -jar app.war --spring.profiles.active="$PROFILE" &
-    sleep 20
-    #-------------------------------------------------------------------------------
-    # Launch protractor tests
-    #-------------------------------------------------------------------------------
-    if [ "$PROTRACTOR" == 1 ]; then
-        launchProtractor
+    if [[ "$JHIPSTER" == *"uaa"* ]]; then
+        cd "$UAA_APP_FOLDER"
+        java -jar target/*.war &
+        sleep 80
+    fi
+
+    cd "$APP_FOLDER"
+    java -jar app.war \
+        --spring.profiles.active="$PROFILE" &
+    sleep 40
+
+    if [[ "$JHIPSTER" != *'micro'* ]]; then
+        launchCurlOrProtractor
     fi
 fi
