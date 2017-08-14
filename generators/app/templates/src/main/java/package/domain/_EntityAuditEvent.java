@@ -8,8 +8,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;<% } else if (auditFramework === 'javers') {%>
 import org.javers.core.metamodel.object.CdoSnapshot;
-import org.joda.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.Instant;<% }%>
 import java.io.Serializable;
 import java.util.Objects;
@@ -208,15 +208,15 @@ public class EntityAuditEvent implements Serializable{
         entityAuditEvent.setEntityId(snapshot.getGlobalId().value().split("/")[1]);
         entityAuditEvent.setModifiedBy(snapshot.getCommitMetadata().getAuthor());
 
-        if (snapshot.getState().getProperties().size() > 0) {
+        if (snapshot.getState().getPropertyNames().size() > 0) {
             int count = 0;
             StringBuilder sb = new StringBuilder("{");
 
-            for (String s:snapshot.getState().getProperties()) {
+            for (String s:snapshot.getState().getPropertyNames()) {
                 count++;
                 Object propertyValue = snapshot.getPropertyValue(s);
                 sb.append("\"" + s + "\": \"" + propertyValue + "\"");
-                if (count < snapshot.getState().getProperties().size()) {
+                if (count < snapshot.getState().getPropertyNames().size()) {
                   sb.append(",");
                 }
              }
@@ -226,7 +226,7 @@ public class EntityAuditEvent implements Serializable{
         }
         LocalDateTime localTime = snapshot.getCommitMetadata().getCommitDate();
 
-        Instant modifyDate = Instant.from(localTime);
+        Instant modifyDate = localTime.toInstant(ZoneOffset.UTC);
 
         entityAuditEvent.setModifiedDate(modifyDate);
 
