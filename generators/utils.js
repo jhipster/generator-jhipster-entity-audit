@@ -16,7 +16,7 @@ const changeset = (changelogDate, entityTableName) =>
         </addColumn>
     </changeSet>`;
 
-const updateEntityAudit = function (entityName, entityData, javaDir, resourceDir, updateIndex) {
+const updateEntityAudit = function (entityName, entityData, javaDir, resourceDir) {
   if (this.auditFramework === 'custom') {
     // extend entity with AbstractAuditingEntity
     if (!this.fs.read(`${javaDir}domain/${entityName}.java`, {
