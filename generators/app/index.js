@@ -293,7 +293,16 @@ module.exports = JhipsterAuditGenerator.extend({
         let jsonObj = null;
 
         this.entitiesToUpdate.forEach((entityName) => {
-          jsonObj = this.fs.readJSON(`.jhipster/${entityName}.json`);
+          const entityFile = `.jhipster/${entityName}.json`;
+          jsonObj = this.fs.readJSON(entityFile);
+
+          // flag this entity as audited so the :entity subgenerator
+          // can pick up all audited entities
+          // technically this is only needed for Javers, as the custom
+          // framework obtains this list at runtime using
+          // `EntityAuditEventRepository.findAllEntityTypes`;
+          this.updateEntityConfig(entityFile, 'enableEntityAudit', true);
+
           genUtils.updateEntityAudit.call(this, entityName, jsonObj, this.javaDir, this.resourceDir);
         });
       }
