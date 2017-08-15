@@ -1,5 +1,8 @@
 const glob = require('glob');
 
+
+const TPL = 'template';
+
 const changeset = (changelogDate, entityTableName) =>
 `
     <!-- Added the entity audit columns -->
@@ -15,6 +18,14 @@ const changeset = (changelogDate, entityTableName) =>
             <column name="last_modified_date" type="timestamp"/>
         </addColumn>
     </changeSet>`;
+
+const copyFiles = (gen, files) => {
+  files.forEach((file) => {
+    gen.copyTemplate(file.from, file.to, file.type ? file.type : TPL, gen, file.interpolate ? {
+      interpolate: file.interpolate
+    } : undefined);
+  });
+};
 
 const updateEntityAudit = function (entityName, entityData, javaDir, resourceDir, updateIndex) {
   if (this.auditFramework === 'custom') {
@@ -64,7 +75,7 @@ const updateEntityAudit = function (entityName, entityData, javaDir, resourceDir
           from: `${this.javaTemplateDir}/web/rest/_JaversEntityAuditResource.java`,
           to: `${javaDir}web/rest/JaversEntityAuditResource.java`
         }];
-        this.copyFiles(files);
+        copyFiles(this, files);
       }
     }
   }
@@ -72,5 +83,6 @@ const updateEntityAudit = function (entityName, entityData, javaDir, resourceDir
 
 module.exports = {
   changeset,
+  copyFiles,
   updateEntityAudit
 };

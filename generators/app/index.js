@@ -14,8 +14,6 @@ const JhipsterAuditGenerator = generator.extend({});
 util.inherits(JhipsterAuditGenerator, BaseGenerator);
 
 
-const TPL = 'template';
-
 module.exports = JhipsterAuditGenerator.extend({
 
   initializing: {
@@ -190,13 +188,6 @@ module.exports = JhipsterAuditGenerator.extend({
       this.javaDir = `${jhipsterConstants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
       this.resourceDir = jhipsterConstants.SERVER_MAIN_RES_DIR;
       this.interpolateRegex = jhipsterConstants.INTERPOLATE_REGEX;
-      this.copyFiles = (files) => {
-        files.forEach((file) => {
-          this.copyTemplate(file.from, file.to, file.type ? file.type : TPL, this, file.interpolate ? {
-            interpolate: file.interpolate
-          } : undefined);
-        });
-      };
     },
 
     writeBaseFiles() {
@@ -237,7 +228,7 @@ module.exports = JhipsterAuditGenerator.extend({
           interpolate: this.interpolateRegex
         }
         ];
-        this.copyFiles(files);
+        genUtils.copyFiles(this, files);
         this.addChangelogToLiquibase(`${this.changelogDate}_added_entity_EntityAuditEvent`);
 
         // add the new Listener to the 'AbstractAuditingEntity' class and add import
@@ -271,7 +262,7 @@ module.exports = JhipsterAuditGenerator.extend({
         }
         ];
 
-        this.copyFiles(files);
+        genUtils.copyFiles(this, files);
         // add required third party dependencies
         if (this.buildTool === 'maven') {
           if (this.databaseType === 'mongodb') {
@@ -359,7 +350,7 @@ module.exports = JhipsterAuditGenerator.extend({
             });
           });
         }
-        this.copyFiles(files);
+        genUtils.copyFiles(this, files);
         // add bower dependency required
         this.addBowerDependency('angular-object-diff', '1.0.3');
         this.addAngularJsModule('ds.objectDiff');
