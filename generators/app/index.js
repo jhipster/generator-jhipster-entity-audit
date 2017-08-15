@@ -110,7 +110,7 @@ module.exports = JhipsterAuditGenerator.extend({
     }, {
       when: response => response.updateType !== 'all',
       type: 'checkbox',
-      name: 'entitiesToUpdate',
+      name: 'auditedEntities',
       message: 'Please choose the entities to be audited',
       choices: this.existingEntityChoices,
       default: 'none'
@@ -147,7 +147,7 @@ module.exports = JhipsterAuditGenerator.extend({
         this.auditFramework = props.auditFramework;
         this.updateType = props.updateType;
         this.auditPage = props.auditPage;
-        this.entitiesToUpdate = props.entitiesToUpdate;
+        this.auditedEntities = props.auditedEntities;
         done();
       });
     }
@@ -285,14 +285,14 @@ module.exports = JhipsterAuditGenerator.extend({
     updateEntityFiles() {
       // Update existing entities to enable audit
       if (this.updateType === 'all') {
-        this.entitiesToUpdate = this.existingEntities;
+        this.auditedEntities = this.existingEntities;
       }
-      if (this.entitiesToUpdate && this.entitiesToUpdate.length > 0 && this.entitiesToUpdate !== 'none') {
-        this.log(`\n${chalk.bold.green('I\'m Updating selected entities ')}${chalk.bold.yellow(this.entitiesToUpdate)}`);
+      if (this.auditedEntities && this.auditedEntities.length > 0 && this.auditedEntities !== 'none') {
+        this.log(`\n${chalk.bold.green('I\'m Updating selected entities ')}${chalk.bold.yellow(this.auditedEntities)}`);
         this.log(`\n${chalk.bold.yellow('Make sure these classes does not extend any other class to avoid any errors during compilation.')}`);
         let jsonObj = null;
 
-        this.entitiesToUpdate.forEach((entityName) => {
+        this.auditedEntities.forEach((entityName) => {
           const entityFile = `.jhipster/${entityName}.json`;
           jsonObj = this.fs.readJSON(entityFile);
 
