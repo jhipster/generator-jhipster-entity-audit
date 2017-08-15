@@ -42,22 +42,11 @@ module.exports = JhipsterAuditEntityGenerator.extend({
       }
     },
 
-    getEntitityNames() {
-      const existingEntities = [];
-      let existingEntityNames = [];
-      try {
-        existingEntityNames = fs.readdirSync('.jhipster');
-      } catch (e) {
-        this.log(`${chalk.red.bold('ERROR!')} Could not read entities, you might not have generated any entities yet. I will continue to install audit files, entities will not be updated...\n`);
-      }
-
-      existingEntityNames.forEach((entry) => {
-        if (entry.indexOf('.json') !== -1) {
-          const entityName = entry.replace('.json', '');
-          existingEntities.push(entityName);
-        }
-      });
-      this.existingEntities = existingEntities;
+    getAuditedEntities() {
+      this.auditedEntities = this.getExistingEntities()
+        .filter(entity => entity.definition.enableEntityAudit)
+        .map(entity => entity.name);
+      console.log('auditedEntities:', this.auditedEntities);
     }
   },
 
@@ -92,6 +81,9 @@ module.exports = JhipsterAuditEntityGenerator.extend({
       // To access props later use this.props.someOption;
       this.enableAudit = props.enableAudit;
       this.auditFramework = this.config.get('auditFramework');
+      if (this.enableAudit && !this.auditedEntities.includes(entityName)) {
+        this.auditedEntities.push(entityName);
+      }
       done();
     });
   },
