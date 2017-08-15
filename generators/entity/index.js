@@ -21,6 +21,9 @@ module.exports = JhipsterAuditEntityGenerator.extend({
         this.error('Can\'t read .yo-rc.json');
       }
     },
+    setSource() {
+      this.sourceRoot(`${this.sourceRoot()}/../../app/templates`);
+    },
     checkDBType() {
       if (this.jhAppConfig.databaseType !== 'sql' && this.jhAppConfig.databaseType !== 'mongodb') {
         // exit if DB type is not SQL or MongoDB
