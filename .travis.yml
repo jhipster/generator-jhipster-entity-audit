@@ -35,7 +35,7 @@ env:
     - SPRING_JPA_SHOW_SQL=false
   matrix:
     - JHIPSTER=ng1-mysql PROFILE=prod RUN_APP=0
-    - JHIPSTER=ng1-psql-es-noi18n PROFILE=prod PROTRACTOR=1
+    - JHIPSTER=ng1-psql-noi18n PROFILE=prod PROTRACTOR=1
     - JHIPSTER=gradle-ng1-mysql PROTRACTOR=1
     - JHIPSTER=ms-ng1-gateway-eureka
 before_install:
