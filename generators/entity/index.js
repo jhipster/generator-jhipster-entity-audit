@@ -1,4 +1,3 @@
-const fs = require('fs');
 const util = require('util');
 const chalk = require('chalk');
 const generator = require('yeoman-generator');
@@ -49,7 +48,6 @@ module.exports = JhipsterAuditEntityGenerator.extend({
       this.auditedEntities = this.getExistingEntities()
         .filter(entity => entity.definition.enableEntityAudit)
         .map(entity => entity.name);
-      console.log('auditedEntities:', this.auditedEntities);
     }
   },
 
