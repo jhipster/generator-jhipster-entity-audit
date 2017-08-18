@@ -114,7 +114,6 @@ module.exports = JhipsterAuditEntityGenerator.extend({
 
       // use function in generator-base.js from generator-jhipster
       this.angularAppName = this.getAngularAppName();
-      this.changelogDate = this.dateFormatForLiquibase();
 
       // use constants from generator-constants.js
       const javaDir = `${jhipsterConstants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
@@ -126,6 +125,7 @@ module.exports = JhipsterAuditEntityGenerator.extend({
 
         const entityName = this.entityConfig.entityClass;
         const jsonObj = this.entityConfig.data;
+        this.changelogDate = this.entityConfig.data.changelogDate || this.dateFormatForLiquibase();
         genUtils.updateEntityAudit.call(this, entityName, jsonObj, javaDir, resourceDir, true);
       }
     },
