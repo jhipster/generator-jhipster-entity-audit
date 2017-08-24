@@ -312,27 +312,27 @@ module.exports = JhipsterAuditGenerator.extend({
       // Create audit log page for entities
       if (this.auditPage) {
         const files = [{
-          from: `${this.webappDir}app/admin/entity-audit/_entity-audits.html`,
+          from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audits.html`,
           to: `${this.webappDir}app/admin/entity-audit/entity-audits.html`
         },
         {
-          from: `${this.webappDir}app/admin/entity-audit/_entity-audit.detail.html`,
+          from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audit.detail.html`,
           to: `${this.webappDir}app/admin/entity-audit/entity-audit.detail.html`
         },
         {
-          from: `${this.webappDir}app/admin/entity-audit/_entity-audit.state.js`,
+          from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audit.state.js`,
           to: `${this.webappDir}app/admin/entity-audit/entity-audit.state.js`
         },
         {
-          from: `${this.webappDir}app/admin/entity-audit/_entity-audit.controller.js`,
+          from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audit.controller.js`,
           to: `${this.webappDir}app/admin/entity-audit/entity-audit.controller.js`
         },
         {
-          from: `${this.webappDir}app/admin/entity-audit/_entity-audit.detail.controller.js`,
+          from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audit.detail.controller.js`,
           to: `${this.webappDir}app/admin/entity-audit/entity-audit.detail.controller.js`
         },
         {
-          from: `${this.webappDir}app/admin/entity-audit/_entity-audit.service.js`,
+          from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audit.service.js`,
           to: `${this.webappDir}app/admin/entity-audit/entity-audit.service.js`
         }
         ];
