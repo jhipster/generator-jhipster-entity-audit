@@ -1,5 +1,8 @@
 const glob = require('glob');
 
+
+const TPL = 'template';
+
 const changeset = (changelogDate, entityTableName) =>
 `
     <!-- Added the entity audit columns -->
@@ -15,6 +18,14 @@ const changeset = (changelogDate, entityTableName) =>
             <column name="last_modified_date" type="timestamp"/>
         </addColumn>
     </changeSet>`;
+
+const copyFiles = (gen, files) => {
+  files.forEach((file) => {
+    gen.copyTemplate(file.from, file.to, file.type ? file.type : TPL, gen, file.interpolate ? {
+      interpolate: file.interpolate
+    } : undefined);
+  });
+};
 
 const updateEntityAudit = function (entityName, entityData, javaDir, resourceDir, updateIndex) {
   if (this.auditFramework === 'custom') {
@@ -51,20 +62,17 @@ const updateEntityAudit = function (entityName, entityData, javaDir, resourceDir
         this.replaceContent(`${javaDir}repository/${entityName}Repository.java`, `public interface ${entityName}Repository`, `@JaversSpringDataAuditable\npublic interface ${entityName}Repository`);
         this.replaceContent(`${javaDir}repository/${entityName}Repository.java`, `domain.${entityName};`, `domain.${entityName};\nimport org.javers.spring.annotation.JaversSpringDataAuditable;`);
       }
-      // update the list of audited entities if audit page is available
+
+      // this is used from :entity subgenerator to update the list of
+      // audited entities (if audit page available) in `#getAuditedEntities`
+      // method in `JaversEntityAuditResource` class, in case that list
+      // has changed after running the generator
       if (updateIndex && this.fs.exists(`${javaDir}web/rest/JaversEntityAuditResource.java`)) {
-        this.existingEntities.push(entityName);
-        this.auditedEntities = [];
-
-        this.existingEntities.forEach((entityName) => {
-          this.auditedEntities.push(`'${entityName}'`);
-        });
-
         const files = [{
           from: `${this.javaTemplateDir}/web/rest/_JaversEntityAuditResource.java`,
           to: `${javaDir}web/rest/JaversEntityAuditResource.java`
         }];
-        this.copyFiles(files);
+        copyFiles(this, files);
       }
     }
   }
@@ -72,5 +80,6 @@ const updateEntityAudit = function (entityName, entityData, javaDir, resourceDir
 
 module.exports = {
   changeset,
+  copyFiles,
   updateEntityAudit
 };

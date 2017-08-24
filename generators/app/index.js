@@ -14,8 +14,6 @@ const JhipsterAuditGenerator = generator.extend({});
 util.inherits(JhipsterAuditGenerator, BaseGenerator);
 
 
-const TPL = 'template';
-
 module.exports = JhipsterAuditGenerator.extend({
 
   initializing: {
@@ -112,7 +110,7 @@ module.exports = JhipsterAuditGenerator.extend({
     }, {
       when: response => response.updateType !== 'all',
       type: 'checkbox',
-      name: 'entitiesToUpdate',
+      name: 'auditedEntities',
       message: 'Please choose the entities to be audited',
       choices: this.existingEntityChoices,
       default: 'none'
@@ -149,7 +147,7 @@ module.exports = JhipsterAuditGenerator.extend({
         this.auditFramework = props.auditFramework;
         this.updateType = props.updateType;
         this.auditPage = props.auditPage;
-        this.entitiesToUpdate = props.entitiesToUpdate;
+        this.auditedEntities = props.auditedEntities;
         done();
       });
     }
@@ -190,13 +188,6 @@ module.exports = JhipsterAuditGenerator.extend({
       this.javaDir = `${jhipsterConstants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
       this.resourceDir = jhipsterConstants.SERVER_MAIN_RES_DIR;
       this.interpolateRegex = jhipsterConstants.INTERPOLATE_REGEX;
-      this.copyFiles = (files) => {
-        files.forEach((file) => {
-          this.copyTemplate(file.from, file.to, file.type ? file.type : TPL, this, file.interpolate ? {
-            interpolate: file.interpolate
-          } : undefined);
-        });
-      };
     },
 
     writeBaseFiles() {
@@ -237,7 +228,7 @@ module.exports = JhipsterAuditGenerator.extend({
           interpolate: this.interpolateRegex
         }
         ];
-        this.copyFiles(files);
+        genUtils.copyFiles(this, files);
         this.addChangelogToLiquibase(`${this.changelogDate}_added_entity_EntityAuditEvent`);
 
         // add the new Listener to the 'AbstractAuditingEntity' class and add import
@@ -271,21 +262,21 @@ module.exports = JhipsterAuditGenerator.extend({
         }
         ];
 
-        this.copyFiles(files);
+        genUtils.copyFiles(this, files);
         // add required third party dependencies
         if (this.buildTool === 'maven') {
           if (this.databaseType === 'mongodb') {
-            this.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', '2.3.0', '<scope>compile</scope>');
-            this.addMavenDependency('org.mongodb', 'mongo-java-driver', '3.2.2', '<scope>compile</scope>');
+            this.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', '3.5.0', '<scope>compile</scope>');
+            this.addMavenDependency('org.mongodb', 'mongo-java-driver', '3.4.2', '<scope>compile</scope>');
           } else if (this.databaseType === 'sql') {
-            this.addMavenDependency('org.javers', 'javers-spring-boot-starter-sql', '2.3.0', '<scope>compile</scope>');
+            this.addMavenDependency('org.javers', 'javers-spring-boot-starter-sql', '3.5.0', '<scope>compile</scope>');
           }
         } else if (this.buildTool === 'gradle') {
           if (this.databaseType === 'mongodb') {
-            this.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-mongo', '2.3.0');
-            this.addGradleDependency('compile', 'org.mongodb', 'mongo-java-driver', '3.2.2');
+            this.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-mongo', '3.5.0');
+            this.addGradleDependency('compile', 'org.mongodb', 'mongo-java-driver', '3.4.2');
           } else if (this.databaseType === 'sql') {
-            this.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-sql', '2.3.0');
+            this.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-sql', '3.5.0');
           }
         }
       }
@@ -294,15 +285,24 @@ module.exports = JhipsterAuditGenerator.extend({
     updateEntityFiles() {
       // Update existing entities to enable audit
       if (this.updateType === 'all') {
-        this.entitiesToUpdate = this.existingEntities;
+        this.auditedEntities = this.existingEntities;
       }
-      if (this.entitiesToUpdate && this.entitiesToUpdate.length > 0 && this.entitiesToUpdate !== 'none') {
-        this.log(`\n${chalk.bold.green('I\'m Updating selected entities ')}${chalk.bold.yellow(this.entitiesToUpdate)}`);
+      if (this.auditedEntities && this.auditedEntities.length > 0 && this.auditedEntities !== 'none') {
+        this.log(`\n${chalk.bold.green('I\'m Updating selected entities ')}${chalk.bold.yellow(this.auditedEntities)}`);
         this.log(`\n${chalk.bold.yellow('Make sure these classes does not extend any other class to avoid any errors during compilation.')}`);
         let jsonObj = null;
 
-        this.entitiesToUpdate.forEach((entityName) => {
-          jsonObj = this.fs.readJSON(`.jhipster/${entityName}.json`);
+        this.auditedEntities.forEach((entityName) => {
+          const entityFile = `.jhipster/${entityName}.json`;
+          jsonObj = this.fs.readJSON(entityFile);
+
+          // flag this entity as audited so the :entity subgenerator
+          // can pick up all audited entities
+          // technically this is only needed for Javers, as the custom
+          // framework obtains this list at runtime using
+          // `EntityAuditEventRepository.findAllEntityTypes`;
+          this.updateEntityConfig(entityFile, 'enableEntityAudit', true);
+
           genUtils.updateEntityAudit.call(this, entityName, jsonObj, this.javaDir, this.resourceDir);
         });
       }
@@ -359,7 +359,7 @@ module.exports = JhipsterAuditGenerator.extend({
             });
           });
         }
-        this.copyFiles(files);
+        genUtils.copyFiles(this, files);
         // add bower dependency required
         this.addBowerDependency('angular-object-diff', '1.0.3');
         this.addAngularJsModule('ds.objectDiff');
