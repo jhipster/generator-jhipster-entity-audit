@@ -3,7 +3,11 @@
 		    Audit Details
     </h4>
     <button
-            aria-label="<% if (enableTranslation) { %>{{ 'entityAudit.detail.close' | translate }}<% } else { %>Close<% } %>"
+            <% if (enableTranslation) {
+              %>attr.aria-label="{{ 'entityAudit.detail.close' | translate }}"<%
+            } else {
+              %>aria-label="Close"<%
+            } %>
             data-dismiss="modal" class="close" type="button"
             (click)="activeModal.dismiss('closed')">
         <span aria-hidden="true">&times;</span>
