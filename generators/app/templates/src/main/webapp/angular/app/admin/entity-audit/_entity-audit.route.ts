@@ -6,6 +6,6 @@ export const entityAuditRoute: Route = {
     path: 'entity-audit',
     component: EntityAuditComponent,
     data: {
-        pageTitle: 'Entity Audit'
+        pageTitle: 'global.menu.admin.entity-audit'
     }
 };
