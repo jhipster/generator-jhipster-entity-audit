@@ -400,8 +400,67 @@ module.exports = JhipsterAuditGenerator.extend({
       genUtils.copyFiles(this, files);
 
       // add bower dependency required
-      this.addBowerDependency('angular-object-diff', '1.0.3');
-      this.addAngularJsModule('ds.objectDiff');
+      if (this.clientFramework === 'angular1') {
+        this.addBowerDependency('angular-object-diff', '1.0.3');
+        this.addAngularJsModule('ds.objectDiff');
+      } else {
+        // add dependency required for displaying diffs
+        this.addNpmDependency('ng-diff-match-patch', '^2.0.6');
+        // based on BaseGenerator.addAdminToModule
+        const adminModulePath = `${this.webappDir}app/admin/admin.module.ts`;
+        this.rewriteFile(
+          adminModulePath,
+          'jhipster-needle-add-admin-module-import',
+          'import { DiffMatchPatchModule } from \'ng-diff-match-patch\';'
+        );
+        this.rewriteFile(
+          adminModulePath,
+          'jhipster-needle-add-admin-module',
+          'DiffMatchPatchModule,'
+        );
+
+        // register new component and service in admin module
+        this.replaceContent(adminModulePath, /\s*EntityAuditComponent,/, '', true);
+        this.replaceContent(adminModulePath, /\s*EntityAuditService,/, '', true);
+        this.replaceContent(
+          adminModulePath,
+          /(UserModalService)(\n} from)/m,
+          '$1,\n    EntityAuditComponent,\n    EntityAuditService,$2'
+        );
+        this.replaceContent(
+          adminModulePath,
+          /declarations: \[\n/m,
+          '$&        EntityAuditComponent,\n'
+        );
+        this.replaceContent(
+          adminModulePath,
+          /providers: \[\n/m,
+          '$&        EntityAuditService,\n'
+        );
+
+        // register new entity-audit component and service
+        this.rewriteFile(
+          `${this.webappDir}app/admin/index.ts`,
+          'export * from \'./admin.route\'',
+          'export * from \'./entity-audit/entity-audit.component\';\n' +
+            'export * from \'./entity-audit/entity-audit.service\';\n' +
+            'export * from \'./entity-audit/entity-audit.route\';'
+        );
+
+        const adminRoutePath = `${this.webappDir}app/admin/admin.route.ts`;
+        this.replaceContent(adminRoutePath, /\s*entityAuditRoute,/, '', true);
+        this.rewriteFile(
+          adminRoutePath,
+          ' userDialogRoute',
+          'entityAuditRoute,'
+        );
+        this.replaceContent(
+          adminRoutePath,
+          '...userMgmtRoute,',
+          '...userMgmtRoute,\n    entityAuditRoute,'
+        );
+      }
+
       // add new menu entry
       this.addElementToAdminMenu('entity-audit', 'list-alt', this.enableTranslation, this.clientFramework);
       if (this.enableTranslation) {
