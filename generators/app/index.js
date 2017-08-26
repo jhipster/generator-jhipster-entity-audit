@@ -339,6 +339,37 @@ module.exports = JhipsterAuditGenerator.extend({
           to: `${this.webappDir}app/admin/entity-audit/entity-audit.service.js`
         }
         ];
+      } else {
+        files = [
+          {
+            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit-event.model.ts`,
+            to: `${this.webappDir}app/admin/entity-audit/entity-audit-event.model.ts`
+          },
+          {
+            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit-modal.component.html`,
+            to: `${this.webappDir}app/admin/entity-audit/entity-audit-modal.component.html`
+          },
+          {
+            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit-modal.component.ts`,
+            to: `${this.webappDir}app/admin/entity-audit/entity-audit-modal.component.ts`
+          },
+          {
+            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit.component.html`,
+            to: `${this.webappDir}app/admin/entity-audit/entity-audit.component.html`
+          },
+          {
+            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit.component.ts`,
+            to: `${this.webappDir}app/admin/entity-audit/entity-audit.component.ts`
+          },
+          {
+            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit.route.ts`,
+            to: `${this.webappDir}app/admin/entity-audit/entity-audit.route.ts`
+          },
+          {
+            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit.service.ts`,
+            to: `${this.webappDir}app/admin/entity-audit/entity-audit.service.ts`
+          },
+        ];
       }
 
       if (this.auditFramework === 'custom') {
