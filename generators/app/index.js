@@ -310,8 +310,11 @@ module.exports = JhipsterAuditGenerator.extend({
 
     writeAuditPageFiles() {
       // Create audit log page for entities
-      if (this.auditPage) {
-        const files = [{
+      if (!this.auditPage) return;
+
+      let files = [];
+      if (this.clientFramework === 'angular1') {
+        files = [{
           from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audits.html`,
           to: `${this.webappDir}app/admin/entity-audit/entity-audits.html`
         },
@@ -336,46 +339,50 @@ module.exports = JhipsterAuditGenerator.extend({
           to: `${this.webappDir}app/admin/entity-audit/entity-audit.service.js`
         }
         ];
-        if (this.auditFramework === 'custom') {
+      }
+
+      if (this.auditFramework === 'custom') {
+        files.push({
+          from: `${this.javaTemplateDir}/web/rest/_EntityAuditResource.java`,
+          to: `${this.javaDir}web/rest/EntityAuditResource.java`
+        });
+      } else {
+        files.push({
+          from: `${this.javaTemplateDir}/web/rest/_JaversEntityAuditResource.java`,
+          to: `${this.javaDir}web/rest/JaversEntityAuditResource.java`
+        });
+      }
+
+      if (this.enableTranslation) {
+        this.languages.forEach((language) => {
+          let sourceLanguage = 'en';
+          if (fs.existsSync(`${this.templatePath()}/src/main/webapp/i18n/${language}/entity-audit.json`)) {
+            sourceLanguage = language;
+          }
           files.push({
-            from: `${this.javaTemplateDir}/web/rest/_EntityAuditResource.java`,
-            to: `${this.javaDir}web/rest/EntityAuditResource.java`
+            from: `${this.webappDir}i18n/${sourceLanguage}/entity-audit.json`,
+            to: `${this.webappDir}i18n/${language}/entity-audit.json`
           });
-        } else {
-          files.push({
-            from: `${this.javaTemplateDir}/web/rest/_JaversEntityAuditResource.java`,
-            to: `${this.javaDir}web/rest/JaversEntityAuditResource.java`
-          });
-        }
-        if (this.enableTranslation) {
-          this.languages.forEach((language) => {
-            let sourceLanguage = 'en';
-            if (fs.existsSync(`${this.templatePath()}/src/main/webapp/i18n/${language}/entity-audit.json`)) {
-              sourceLanguage = language;
-            }
-            files.push({
-              from: `${this.webappDir}i18n/${sourceLanguage}/entity-audit.json`,
-              to: `${this.webappDir}i18n/${language}/entity-audit.json`
-            });
-          });
-        }
-        genUtils.copyFiles(this, files);
-        // add bower dependency required
-        this.addBowerDependency('angular-object-diff', '1.0.3');
-        this.addAngularJsModule('ds.objectDiff');
-        // add new menu entry
-        this.addElementToAdminMenu('entity-audit', 'list-alt', this.enableTranslation, this.clientFramework);
-        if (this.enableTranslation) {
-          this.languages.forEach((language) => {
-            let menuText = 'Entity Audit';
-            try {
-              menuText = JSON.parse(fs.readFileSync(`${this.templatePath()}/src/main/webapp/i18n/${language}/global.json`, 'utf8')).global.menu.admin['entity-audit'];
-            } catch (e) {
-              this.log('Cannot parse file');
-            }
-            this.addAdminElementTranslationKey('entity-audit', menuText, language);
-          });
-        }
+        });
+      }
+
+      genUtils.copyFiles(this, files);
+
+      // add bower dependency required
+      this.addBowerDependency('angular-object-diff', '1.0.3');
+      this.addAngularJsModule('ds.objectDiff');
+      // add new menu entry
+      this.addElementToAdminMenu('entity-audit', 'list-alt', this.enableTranslation, this.clientFramework);
+      if (this.enableTranslation) {
+        this.languages.forEach((language) => {
+          let menuText = 'Entity Audit';
+          try {
+            menuText = JSON.parse(fs.readFileSync(`${this.templatePath()}/src/main/webapp/i18n/${language}/global.json`, 'utf8')).global.menu.admin['entity-audit'];
+          } catch (e) {
+            this.log('Cannot parse file');
+          }
+          this.addAdminElementTranslationKey('entity-audit', menuText, language);
+        });
       }
     },
 
