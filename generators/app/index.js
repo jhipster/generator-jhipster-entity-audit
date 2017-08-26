@@ -115,7 +115,6 @@ module.exports = JhipsterAuditGenerator.extend({
       choices: this.existingEntityChoices,
       default: 'none'
     }, {
-      when: response => this.jhAppConfig.clientFramework === 'angular1',
       type: 'confirm',
       name: 'auditPage',
       message: 'Do you want to add an audit log page for entities?',
