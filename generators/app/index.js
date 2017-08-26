@@ -419,18 +419,31 @@ module.exports = JhipsterAuditGenerator.extend({
         );
 
         // register new component and service in admin module
+        // remove any previous references so we don't duplicate them
         this.replaceContent(adminModulePath, /\s*EntityAuditComponent,/, '', true);
+        this.replaceContent(adminModulePath, /\s*EntityAuditModalComponent,/, '', true);
         this.replaceContent(adminModulePath, /\s*EntityAuditService,/, '', true);
+
+        // add to import statement
         this.replaceContent(
           adminModulePath,
-          /(UserModalService)(\n} from)/m,
-          '$1,\n    EntityAuditComponent,\n    EntityAuditService,$2'
+          /(UserModalService),?(\n} from)/m,
+          '$1,\n    EntityAuditComponent,\n    EntityAuditModalComponent,\n    EntityAuditService,$2'
         );
+        // add to declarations
         this.replaceContent(
           adminModulePath,
           /declarations: \[\n/m,
-          '$&        EntityAuditComponent,\n'
+          '$&        EntityAuditComponent,\n        EntityAuditModalComponent,\n'
         );
+        // add modal to entryComponents, see
+        // https://ng-bootstrap.github.io/#/components/modal/examples
+        this.replaceContent(
+          adminModulePath,
+          /entryComponents: \[\n/m,
+          '$&        EntityAuditModalComponent,\n'
+        );
+        // add to providers
         this.replaceContent(
           adminModulePath,
           /providers: \[\n/m,
@@ -438,13 +451,13 @@ module.exports = JhipsterAuditGenerator.extend({
         );
 
         // register new entity-audit component and service
-        this.rewriteFile(
-          `${this.webappDir}app/admin/index.ts`,
-          'export * from \'./admin.route\'',
-          'export * from \'./entity-audit/entity-audit.component\';\n' +
-            'export * from \'./entity-audit/entity-audit.service\';\n' +
-            'export * from \'./entity-audit/entity-audit.route\';'
-        );
+        ['.component', '-modal.component', '.service', '.route'].forEach((sfx) => {
+          this.rewriteFile(
+            `${this.webappDir}app/admin/index.ts`,
+            'export * from \'./admin.route\'',  // needle
+            `export * from './entity-audit/entity-audit${sfx}';`
+          );
+        });
 
         const adminRoutePath = `${this.webappDir}app/admin/admin.route.ts`;
         this.replaceContent(adminRoutePath, /\s*entityAuditRoute,/, '', true);
