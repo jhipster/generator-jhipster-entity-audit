@@ -6,7 +6,8 @@ import { EntityAuditEvent } from './entity-audit-event.model';
 
 @Component({
     selector: 'jhi-entity-audit-modal',
-    templateUrl: './entity-audit-modal.component.html'
+    templateUrl: './entity-audit-modal.component.html',
+    styleUrls: ['./entity-audit-modal.component.css']
 })
 export class EntityAuditModalComponent {
     action: string;
