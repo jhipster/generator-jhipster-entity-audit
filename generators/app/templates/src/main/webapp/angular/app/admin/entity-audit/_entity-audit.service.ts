@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions, URLSearchParams } from '@angular/http';
+import { Http, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs';
 
 import { EntityAuditEvent } from './entity-audit-event.model';

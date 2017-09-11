@@ -37,7 +37,7 @@ export class EntityAuditComponent implements OnInit {
         this.service.findByEntity(this.selectedEntity, this.selectedLimit)
             .subscribe((audits) => {
                 this.audits = audits.map((it) => {
-                    it.entityValue = JSON.parse(it.entityValue)
+                    it.entityValue = JSON.parse(it.entityValue);
                     return it
                 });
                 this.loading = false;
