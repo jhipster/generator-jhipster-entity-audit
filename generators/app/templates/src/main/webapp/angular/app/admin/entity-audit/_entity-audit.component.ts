@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { JhiAlertService } from 'ng-jhipster';
 
 import { EntityAuditService } from './entity-audit.service';
 import { EntityAuditEvent } from './entity-audit-event.model';
@@ -23,7 +24,8 @@ export class EntityAuditComponent implements OnInit {
 
     constructor(
         private modalService: NgbModal,
-        private service: EntityAuditService
+        private service: EntityAuditService,
+        private alertService: JhiAlertService
     ) {}
 
     ngOnInit() {
@@ -50,8 +52,14 @@ export class EntityAuditComponent implements OnInit {
 
     openChange(audit: EntityAuditEvent) {
         if (audit.commitVersion < 2) {
-            alert('There is no previous version available for this entry. \n ' +
-                  'This is the first audit entry captured for this object.');
+            <%_ if (enableTranslation) { _%>
+            this.alertService.warning('entityAudit.result.firstAuditEntry');
+            <%_ } else { _%>
+            this.alertService.warning(
+                'There is no previous version available for this entry.\n' +
+                'This is the first audit entry captured for this object.'
+            );
+            <% } %>
         } else {
             const modalRef = this.modalService.open(EntityAuditModalComponent);
             modalRef.componentInstance.openChange(audit);
