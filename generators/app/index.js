@@ -349,10 +349,6 @@ module.exports = JhipsterAuditGenerator.extend({
             to: `${this.webappDir}app/admin/entity-audit/entity-audit-modal.component.html`
           },
           {
-            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit-modal.component.css`,
-            to: `${this.webappDir}app/admin/entity-audit/entity-audit-modal.component.css`
-          },
-          {
             from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit-modal.component.ts`,
             to: `${this.webappDir}app/admin/entity-audit/entity-audit-modal.component.ts`
           },
