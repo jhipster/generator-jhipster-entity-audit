@@ -9,8 +9,7 @@
     "url": "http://deepu105.github.io"
   },
   "files": [
-    "generators/app",
-    "generators/entity"
+    "generators"
   ],
   "main": "generators/app/index.js",
   "keywords": [
