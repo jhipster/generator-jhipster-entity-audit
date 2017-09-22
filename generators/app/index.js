@@ -353,6 +353,10 @@ module.exports = JhipsterAuditGenerator.extend({
             to: `${this.webappDir}app/admin/entity-audit/entity-audit-modal.component.ts`
           },
           {
+            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit-routing.module.ts`,
+            to: `${this.webappDir}app/admin/entity-audit/entity-audit-routing.module.ts`
+          },
+          {
             from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit.component.html`,
             to: `${this.webappDir}app/admin/entity-audit/entity-audit.component.html`
           },
@@ -361,8 +365,8 @@ module.exports = JhipsterAuditGenerator.extend({
             to: `${this.webappDir}app/admin/entity-audit/entity-audit.component.ts`
           },
           {
-            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit.route.ts`,
-            to: `${this.webappDir}app/admin/entity-audit/entity-audit.route.ts`
+            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit.module.ts`,
+            to: `${this.webappDir}app/admin/entity-audit/entity-audit.module.ts`
           },
           {
             from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit.service.ts`,
@@ -410,66 +414,12 @@ module.exports = JhipsterAuditGenerator.extend({
         this.rewriteFile(
           adminModulePath,
           'jhipster-needle-add-admin-module-import',
-          'import { DiffMatchPatchModule } from \'ng-diff-match-patch\';'
+          'import { EntityAuditModule } from \'./entity-audit/entity-audit.module\';'
         );
         this.rewriteFile(
           adminModulePath,
           'jhipster-needle-add-admin-module',
-          'DiffMatchPatchModule,'
-        );
-
-        // register new component and service in admin module
-        // remove any previous references so we don't duplicate them
-        this.replaceContent(adminModulePath, /\s*EntityAuditComponent,/, '', true);
-        this.replaceContent(adminModulePath, /\s*EntityAuditModalComponent,/, '', true);
-        this.replaceContent(adminModulePath, /\s*EntityAuditService,/, '', true);
-
-        // add to import statement
-        this.replaceContent(
-          adminModulePath,
-          /(UserModalService),?(\n} from)/m,
-          '$1,\n    EntityAuditComponent,\n    EntityAuditModalComponent,\n    EntityAuditService,$2'
-        );
-        // add to declarations
-        this.replaceContent(
-          adminModulePath,
-          /declarations: \[\n/m,
-          '$&        EntityAuditComponent,\n        EntityAuditModalComponent,\n'
-        );
-        // add modal to entryComponents, see
-        // https://ng-bootstrap.github.io/#/components/modal/examples
-        this.replaceContent(
-          adminModulePath,
-          /entryComponents: \[\n/m,
-          '$&        EntityAuditModalComponent,\n'
-        );
-        // add to providers
-        this.replaceContent(
-          adminModulePath,
-          /providers: \[\n/m,
-          '$&        EntityAuditService,\n'
-        );
-
-        // register new entity-audit component and service
-        ['.component', '-modal.component', '.service', '.route'].forEach((sfx) => {
-          this.rewriteFile(
-            `${this.webappDir}app/admin/index.ts`,
-            'export * from \'./admin.route\'',  // needle
-            `export * from './entity-audit/entity-audit${sfx}';`
-          );
-        });
-
-        const adminRoutePath = `${this.webappDir}app/admin/admin.route.ts`;
-        this.replaceContent(adminRoutePath, /\s*entityAuditRoute,/, '', true);
-        this.rewriteFile(
-          adminRoutePath,
-          ' userDialogRoute',
-          'entityAuditRoute,'
-        );
-        this.replaceContent(
-          adminRoutePath,
-          '...userMgmtRoute,',
-          '...userMgmtRoute,\n    entityAuditRoute,'
+          'EntityAuditModule,'
         );
       }
 
