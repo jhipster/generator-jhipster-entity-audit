@@ -404,7 +404,7 @@ module.exports = JhipsterAuditGenerator.extend({
         this.addAngularJsModule('ds.objectDiff');
       } else {
         // add dependency required for displaying diffs
-        this.addNpmDependency('ng-diff-match-patch', '^2.0.6');
+        this.addNpmDependency('ng-diff-match-patch', '2.0.6');
         // based on BaseGenerator.addAdminToModule
         const adminModulePath = `${this.webappDir}app/admin/admin.module.ts`;
         this.rewriteFile(
