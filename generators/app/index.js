@@ -173,6 +173,7 @@ module.exports = JhipsterAuditGenerator.extend({
       this.buildTool = this.jhAppConfig.buildTool;
       // use function in generator-base.js from generator-jhipster
       this.angularAppName = this.getAngularAppName();
+      this.angular2AppName = this.getAngular2AppName();
       this.changelogDate = this.dateFormatForLiquibase();
       // if changelogDate for entity audit already exists then use this existing changelogDate
       const liguibaseFileName = glob.sync(`${this.jhAppConfig.resourceDir}/config/liquibase/changelog/*_added_entity_EntityAuditEvent.xml`)[0];
