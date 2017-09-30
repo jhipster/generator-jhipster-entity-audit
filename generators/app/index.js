@@ -115,7 +115,6 @@ module.exports = JhipsterAuditGenerator.extend({
       choices: this.existingEntityChoices,
       default: 'none'
     }, {
-      when: response => this.jhAppConfig.clientFramework === 'angular1',
       type: 'confirm',
       name: 'auditPage',
       message: 'Do you want to add an audit log page for entities?',
@@ -174,6 +173,7 @@ module.exports = JhipsterAuditGenerator.extend({
       this.buildTool = this.jhAppConfig.buildTool;
       // use function in generator-base.js from generator-jhipster
       this.angularAppName = this.getAngularAppName();
+      this.angular2AppName = this.getAngular2AppName();
       this.changelogDate = this.dateFormatForLiquibase();
       // if changelogDate for entity audit already exists then use this existing changelogDate
       const liguibaseFileName = glob.sync(`${this.jhAppConfig.resourceDir}/config/liquibase/changelog/*_added_entity_EntityAuditEvent.xml`)[0];
@@ -310,72 +310,132 @@ module.exports = JhipsterAuditGenerator.extend({
 
     writeAuditPageFiles() {
       // Create audit log page for entities
-      if (this.auditPage) {
-        const files = [{
-          from: `${this.webappDir}app/admin/entity-audit/_entity-audits.html`,
+      if (!this.auditPage) return;
+
+      let files = [];
+      if (this.clientFramework === 'angular1') {
+        files = [{
+          from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audits.html`,
           to: `${this.webappDir}app/admin/entity-audit/entity-audits.html`
         },
         {
-          from: `${this.webappDir}app/admin/entity-audit/_entity-audit.detail.html`,
+          from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audit.detail.html`,
           to: `${this.webappDir}app/admin/entity-audit/entity-audit.detail.html`
         },
         {
-          from: `${this.webappDir}app/admin/entity-audit/_entity-audit.state.js`,
+          from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audit.state.js`,
           to: `${this.webappDir}app/admin/entity-audit/entity-audit.state.js`
         },
         {
-          from: `${this.webappDir}app/admin/entity-audit/_entity-audit.controller.js`,
+          from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audit.controller.js`,
           to: `${this.webappDir}app/admin/entity-audit/entity-audit.controller.js`
         },
         {
-          from: `${this.webappDir}app/admin/entity-audit/_entity-audit.detail.controller.js`,
+          from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audit.detail.controller.js`,
           to: `${this.webappDir}app/admin/entity-audit/entity-audit.detail.controller.js`
         },
         {
-          from: `${this.webappDir}app/admin/entity-audit/_entity-audit.service.js`,
+          from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audit.service.js`,
           to: `${this.webappDir}app/admin/entity-audit/entity-audit.service.js`
         }
         ];
-        if (this.auditFramework === 'custom') {
+      } else {
+        files = [
+          {
+            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit-event.model.ts`,
+            to: `${this.webappDir}app/admin/entity-audit/entity-audit-event.model.ts`
+          },
+          {
+            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit-modal.component.html`,
+            to: `${this.webappDir}app/admin/entity-audit/entity-audit-modal.component.html`
+          },
+          {
+            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit-modal.component.ts`,
+            to: `${this.webappDir}app/admin/entity-audit/entity-audit-modal.component.ts`
+          },
+          {
+            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit-routing.module.ts`,
+            to: `${this.webappDir}app/admin/entity-audit/entity-audit-routing.module.ts`
+          },
+          {
+            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit.component.html`,
+            to: `${this.webappDir}app/admin/entity-audit/entity-audit.component.html`
+          },
+          {
+            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit.component.ts`,
+            to: `${this.webappDir}app/admin/entity-audit/entity-audit.component.ts`
+          },
+          {
+            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit.module.ts`,
+            to: `${this.webappDir}app/admin/entity-audit/entity-audit.module.ts`
+          },
+          {
+            from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit.service.ts`,
+            to: `${this.webappDir}app/admin/entity-audit/entity-audit.service.ts`
+          },
+        ];
+      }
+
+      if (this.auditFramework === 'custom') {
+        files.push({
+          from: `${this.javaTemplateDir}/web/rest/_EntityAuditResource.java`,
+          to: `${this.javaDir}web/rest/EntityAuditResource.java`
+        });
+      } else {
+        files.push({
+          from: `${this.javaTemplateDir}/web/rest/_JaversEntityAuditResource.java`,
+          to: `${this.javaDir}web/rest/JaversEntityAuditResource.java`
+        });
+      }
+
+      if (this.enableTranslation) {
+        this.languages.forEach((language) => {
+          let sourceLanguage = 'en';
+          if (fs.existsSync(`${this.templatePath()}/src/main/webapp/i18n/${language}/entity-audit.json`)) {
+            sourceLanguage = language;
+          }
           files.push({
-            from: `${this.javaTemplateDir}/web/rest/_EntityAuditResource.java`,
-            to: `${this.javaDir}web/rest/EntityAuditResource.java`
+            from: `${this.webappDir}i18n/${sourceLanguage}/entity-audit.json`,
+            to: `${this.webappDir}i18n/${language}/entity-audit.json`
           });
-        } else {
-          files.push({
-            from: `${this.javaTemplateDir}/web/rest/_JaversEntityAuditResource.java`,
-            to: `${this.javaDir}web/rest/JaversEntityAuditResource.java`
-          });
-        }
-        if (this.enableTranslation) {
-          this.languages.forEach((language) => {
-            let sourceLanguage = 'en';
-            if (fs.existsSync(`${this.templatePath()}/src/main/webapp/i18n/${language}/entity-audit.json`)) {
-              sourceLanguage = language;
-            }
-            files.push({
-              from: `${this.webappDir}i18n/${sourceLanguage}/entity-audit.json`,
-              to: `${this.webappDir}i18n/${language}/entity-audit.json`
-            });
-          });
-        }
-        genUtils.copyFiles(this, files);
-        // add bower dependency required
+        });
+      }
+
+      genUtils.copyFiles(this, files);
+
+      // add bower dependency required
+      if (this.clientFramework === 'angular1') {
         this.addBowerDependency('angular-object-diff', '1.0.3');
         this.addAngularJsModule('ds.objectDiff');
-        // add new menu entry
-        this.addElementToAdminMenu('entity-audit', 'list-alt', this.enableTranslation, this.clientFramework);
-        if (this.enableTranslation) {
-          this.languages.forEach((language) => {
-            let menuText = 'Entity Audit';
-            try {
-              menuText = JSON.parse(fs.readFileSync(`${this.templatePath()}/src/main/webapp/i18n/${language}/global.json`, 'utf8')).global.menu.admin['entity-audit'];
-            } catch (e) {
-              this.log('Cannot parse file');
-            }
-            this.addAdminElementTranslationKey('entity-audit', menuText, language);
-          });
-        }
+      } else {
+        // add dependency required for displaying diffs
+        this.addNpmDependency('ng-diff-match-patch', '2.0.6');
+        // based on BaseGenerator.addAdminToModule
+        const adminModulePath = `${this.webappDir}app/admin/admin.module.ts`;
+        this.rewriteFile(
+          adminModulePath,
+          'jhipster-needle-add-admin-module-import',
+          'import { EntityAuditModule } from \'./entity-audit/entity-audit.module\';'
+        );
+        this.rewriteFile(
+          adminModulePath,
+          'jhipster-needle-add-admin-module',
+          'EntityAuditModule,'
+        );
+      }
+
+      // add new menu entry
+      this.addElementToAdminMenu('entity-audit', 'list-alt', this.enableTranslation, this.clientFramework);
+      if (this.enableTranslation) {
+        this.languages.forEach((language) => {
+          let menuText = 'Entity Audit';
+          try {
+            menuText = JSON.parse(fs.readFileSync(`${this.templatePath()}/src/main/webapp/i18n/${language}/global.json`, 'utf8')).global.menu.admin['entity-audit'];
+          } catch (e) {
+            this.log('Cannot parse file');
+          }
+          this.addAdminElementTranslationKey('entity-audit', menuText, language);
+        });
       }
     },
 
