@@ -28,6 +28,11 @@ import { EntityAuditEvent } from './entity-audit-event.model';
             color: black;
             background: #ffbbbb;
         }
+
+        .code {
+          background: #dcdada;
+          padding: 10px;
+        }
     `]
 })
 export class EntityAuditModalComponent {

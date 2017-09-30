@@ -9,7 +9,12 @@ import { EntityAuditModalComponent } from './entity-audit-modal.component';
 @Component({
     selector: 'jhi-entity-audit',
     templateUrl: './entity-audit.component.html',
-    styles: []
+    styles: [`
+      .code {
+        background: #dcdada;
+        padding: 10px;
+      }
+    `]
 })
 export class EntityAuditComponent implements OnInit {
     audits: EntityAuditEvent[];

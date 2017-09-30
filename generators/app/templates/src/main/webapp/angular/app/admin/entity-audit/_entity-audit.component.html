@@ -7,38 +7,36 @@
         <div class="col-md-5">
             <h4 jhiTranslate="entityAudit.home.filter">Filter</h4>
             <form name="auditEventForm" class="form-inline" #auditEventForm="ngForm">
-                <label class="form-control-label mr-sm-2" for="entityName"
-                        jhiTranslate="entityAudit.home.entityOrTable">
-                    Entity/Table
-                </label>
-                <select class="form-control mb-2 mr-sm-2 mb-sm-0" id="entityName"
-                        name="entityName" required [(ngModel)]="selectedEntity"
-                        #entityName="ngModel">
-                    <option [value]="entityOption" *ngFor="let entityOption of entities">
-                        {{ entityOption }}
-                    </option>
-                </select>
+                <div class="d-flex">
+                  <label class="form-control-label mr-sm-2 col-2" for="entityName"
+                          jhiTranslate="entityAudit.home.entityOrTable">
+                      Entity/Table
+                  </label>
+                  <select class="form-control mb-2 mr-sm-2 mb-sm-0" id="entityName"
+                          name="entityName" required [(ngModel)]="selectedEntity"
+                          #entityName="ngModel">
+                      <option [value]="entityOption" *ngFor="let entityOption of entities">
+                          {{ entityOption }}
+                      </option>
+                  </select>
 
-                <label class="form-control-label mr-sm-2" for="limit"
-                        jhiTranslate="entityAudit.home.limitTo">
-                    Limit to
-                </label>
-                <select class="form-control mb-2 mr-sm-2 mb-sm-0" id="limit"
-                        name="limit" required [(ngModel)]="selectedLimit">
-                    <option [value]="limitOption" *ngFor="let limitOption of limits">
-                        {{ limitOption }}
-                    </option>
-                </select>
+                  <label class="form-control-label mr-sm-2 col-2" for="limit"
+                          jhiTranslate="entityAudit.home.limitTo">
+                      Limit to
+                  </label>
+                  <select class="form-control mb-2 mr-sm-2 mb-sm-0" id="limit"
+                          name="limit" required [(ngModel)]="selectedLimit">
+                      <option [value]="limitOption" *ngFor="let limitOption of limits">
+                          {{ limitOption }}
+                      </option>
+                  </select>
 
-                <button class="btn btn-default" (click)="loadChanges()"
-                        [disabled]="!auditEventForm.form.valid">
-                    <i class="fa fa-refresh"></i>&nbsp;
-                    <% if (enableTranslation) {
-                    %>{{'entityAudit.home.loadChangeList' | translate}}<%
-                    } else {
-                    %>Load Change List<%
-                    } %>
-                </button>
+                  <button class="btn btn-primary float-right" (click)="loadChanges()"
+                          [disabled]="!auditEventForm.form.valid">
+                      <i class="fa fa-refresh"></i>&nbsp;
+                      <span jhiTranslate="entityAudit.home.loadChangeList">Load Change List</span>
+                  </button>
+                </div>
             </form>
         </div>
     </div>
@@ -98,7 +96,7 @@
                         <td>{{ audit.entityId }}</td>
                         <td>{{ audit.action }}</td>
                         <td>{{ audit.commitVersion }}</td>
-                        <td><pre>{{ audit.entityValue | json }}</pre></td>
+                        <td><pre class="code">{{ audit.entityValue | json }}</pre></td>
                         <td>{{ audit.modifiedDate | date:'medium' }}</td>
                         <td>{{ audit.modifiedBy }}</td>
                         <td>

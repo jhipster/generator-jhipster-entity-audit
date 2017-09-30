@@ -463,6 +463,8 @@ module.exports = JhipsterAuditGenerator.extend({
         this.log(logMsg);
       } else if (this.clientFramework === 'angular1') {
         this.spawnCommand('gulp', ['install']);
+      } else if (this.clientFramework === 'angularX') {
+        this.spawnCommand(this.clientPackageManager, ['webpack:build']);
       }
     };
     const installConfig = {
@@ -480,6 +482,6 @@ module.exports = JhipsterAuditGenerator.extend({
 
   end() {
     this.log(`\n${chalk.bold.green('Auditing enabled for entities, you will have an option to enable audit while creating new entities as well')}`);
-    this.log(`\n${chalk.bold.green('I\'m running gulp install now')}`);
+    this.log(`\n${chalk.bold.green('I\'m running webpack/gulp now')}`);
   }
 });
