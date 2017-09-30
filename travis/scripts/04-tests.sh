@@ -36,5 +36,5 @@ if [ -f "gulpfile.js" ]; then
     gulp test --no-notification
 fi
 if [ -f "tsconfig.json" ]; then
-    yarn run test
+    npm run test
 fi

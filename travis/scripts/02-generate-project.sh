@@ -14,7 +14,7 @@ if [[ "$JHIPSTER" == *"uaa"* ]]; then
     mkdir -p "$UAA_APP_FOLDER"
     mv -f "$JHIPSTER_SAMPLES"/uaa/.yo-rc.json "$UAA_APP_FOLDER"/
     cd "$UAA_APP_FOLDER"
-    yarn link generator-jhipster
+    npm link generator-jhipster
     jhipster --force --no-insight --with-entities --skip-checks
     ls -al "$UAA_APP_FOLDER"
 fi

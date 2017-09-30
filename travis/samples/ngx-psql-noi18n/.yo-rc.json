@@ -1,7 +1,7 @@
 {
   "generator-jhipster": {
-    "applicationType": "gateway",
-    "baseName": "travisDefault",
+    "applicationType": "monolith",
+    "baseName": "travisPsqlEsNoi18n",
     "packageName": "io.github.jhipster.travis",
     "packageFolder": "io/github/jhipster/travis",
     "authenticationType": "jwt",
@@ -9,19 +9,14 @@
     "clusteredHttpSession": false,
     "websocket": false,
     "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
-    "prodDatabaseType": "mysql",
+    "devDatabaseType": "postgresql",
+    "prodDatabaseType": "postgresql",
     "searchEngine": false,
-    "serviceDiscoveryType": "eureka",
-    "useSass": false,
+    "useSass": true,
     "buildTool": "maven",
-    "enableTranslation": true,
-    "nativeLanguage": "en",
-    "languages": [
-      "en",
-      "fr"
-    ],
+    "enableTranslation": false,
     "enableSocialSignIn": false,
+    "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "testFrameworks": [
       "gatling",
       "protractor"
@@ -30,7 +25,7 @@
     "jhiPrefix": "jhi",
     "travis": true,
     "messageBroker": false,
-    "jwtSecretKey": "6acb91d39cc4584bd713bfa5e037d694efb6a1a2",
+    "serviceDiscoveryType": false,
     "clientPackageManager": "npm",
     "clientFramework": "angularX"
   }

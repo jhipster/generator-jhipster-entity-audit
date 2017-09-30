@@ -35,7 +35,7 @@ launchCurlOrProtractor() {
         if [[ -f "gulpfile.js" ]]; then
             gulp itest --no-notification
         elif [[ -f "tsconfig.json" ]]; then
-            yarn run e2e
+            npm run e2e
         fi
         result=$?
         [ $result -eq 0 ] && break
