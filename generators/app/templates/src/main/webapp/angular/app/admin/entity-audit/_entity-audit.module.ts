@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DiffMatchPatchModule } from 'ng-diff-match-patch';
 
@@ -25,6 +25,7 @@ import { EntityAuditService } from './entity-audit.service';
     ],
     providers: [
         EntityAuditService
-    ]
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class EntityAuditModule { }
