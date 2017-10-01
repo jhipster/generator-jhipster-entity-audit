@@ -37,9 +37,8 @@ env:
     - JHIPSTER=gradle-ngx-mysql PROTRACTOR=1
     - JHIPSTER=ms-ngx-gateway-eureka
     - JHIPSTER=ng1-mysql PROFILE=prod RUN_APP=0
-    - JHIPSTER=ng1-psql-noi18n PROFILE=prod PROTRACTOR=1
-    - JHIPSTER=gradle-ng1-mysql PROTRACTOR=1
-    - JHIPSTER=ms-ng1-gateway-eureka
+    - JHIPSTER=ng1-psql-noi18n PROFILE=prod
+    - JHIPSTER=gradle-ng1-mysql
 before_install:
   - export TZ=Australia/Canberra
   - date
