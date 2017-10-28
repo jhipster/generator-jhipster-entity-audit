@@ -11,39 +11,6 @@ const istanbul = require('gulp-istanbul');
 const nsp = require('gulp-nsp');
 const plumber = require('gulp-plumber');
 
-gulp.task('eslint', () => gulp.src(['gulpfile.js', 'generators/app/index.js', 'test/*.js'])
-    // .pipe(plumber({errorHandler: handleErrors}))
-    .pipe(eslint())
-    .pipe(eslint.format())
-    .pipe(eslint.failOnError())
-);
-
-gulp.task('nsp', (cb) => {
-  nsp({ package: path.resolve('package.json') }, cb);
-});
-
-gulp.task('pre-test', () => gulp.src('generators/app/index.js')
-    .pipe(istanbul({
-      includeUntested: true
-    }))
-    .pipe(istanbul.hookRequire())
-);
-
-gulp.task('test', ['pre-test'], (cb) => {
-  let mochaErr;
-
-  gulp.src('test/*.js')
-        .pipe(plumber())
-        .pipe(mocha({ reporter: 'spec' }))
-        .on('error', (err) => {
-          mochaErr = err;
-        })
-        .pipe(istanbul.writeReports())
-        .on('end', () => {
-          cb(mochaErr);
-        });
-});
-
 gulp.task('bump-patch', bump('patch'));
 gulp.task('bump-minor', bump('minor'));
 gulp.task('bump-major', bump('major'));
@@ -51,8 +18,8 @@ gulp.task('bump-major', bump('major'));
 gulp.task('git-commit', () => {
   const v = `update to version ${version()}`;
   gulp.src(['./generators/**/*', './README.md', './package.json', './gulpfile.js', './.travis.yml', './travis/**/*'])
-        .pipe(git.add())
-        .pipe(git.commit(v));
+    .pipe(git.add())
+    .pipe(git.commit(v));
 });
 
 gulp.task('git-push', (cb) => {
@@ -77,10 +44,10 @@ gulp.task('npm', shell.task([
 function bump(level) {
   return function () {
     return gulp.src(['./package.json'])
-            .pipe(bumper({
-              type: level
-            }))
-            .pipe(gulp.dest('./'));
+      .pipe(bumper({
+        type: level
+      }))
+      .pipe(gulp.dest('./'));
   };
 }
 

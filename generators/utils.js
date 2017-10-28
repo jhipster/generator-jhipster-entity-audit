@@ -4,7 +4,7 @@ const glob = require('glob');
 const TPL = 'template';
 
 const changeset = (changelogDate, entityTableName) =>
-`
+  `
     <!-- Added the entity audit columns -->
     <changeSet id="${changelogDate}-audit-1" author="jhipster-entity-audit">
         <addColumn tableName="${entityTableName}">

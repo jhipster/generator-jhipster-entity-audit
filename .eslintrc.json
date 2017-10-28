@@ -21,7 +21,7 @@
         "class-methods-use-this": "off",
         "no-underscore-dangle": "off",
         "no-plusplus": "off",
-
+        "prefer-destructuring": "off",
         "no-multi-assign": "off",
         "no-param-reassign": "off",
         "no-shadow": "off"
