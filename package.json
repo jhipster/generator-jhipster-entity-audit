@@ -47,10 +47,9 @@
     "npm": ">=2.14.2"
   },
   "scripts": {
-    "prepublish": "eslint .",
     "lint": "eslint .",
     "lint-fix": "eslint . --fix",
-    "release": "git push && git push --tags && npm publish",
+    "release": "npm run lint && git push && git push --tags && npm publish",
     "release:patch": "npm version patch -a -m \"Update to %s\" && npm run release",
     "release:minor": "npm version minor -a -m \"Update to %s\" && npm run release",
     "release:major": "npm version major -a -m \"Update to %s\" && npm run release"
