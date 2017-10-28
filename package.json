@@ -32,22 +32,7 @@
     "eslint": "4.10.0",
     "eslint-config-airbnb-base": "12.1.0",
     "eslint-plugin-import": "2.8.0",
-    "fs-extra": "4.0.2",
-    "gulp": "3.9.1",
-    "gulp-bump": "2.8.0",
-    "gulp-eslint": "4.0.0",
-    "gulp-exclude-gitignore": "1.2.0",
-    "gulp-git": "2.4.2",
-    "gulp-istanbul": "1.1.2",
-    "gulp-mocha": "4.3.1",
-    "gulp-nsp": "2.4.2",
-    "gulp-plumber": "1.1.0",
-    "gulp-rename": "1.2.2",
-    "gulp-sequence": "0.4.6",
-    "gulp-shell": "0.6.3",
-    "mocha": "4.0.1",
-    "yeoman-assert": "3.1.0",
-    "yeoman-test": "1.7.0"
+    "fs-extra": "4.0.2"
   },
   "repository": {
     "type": "git",
