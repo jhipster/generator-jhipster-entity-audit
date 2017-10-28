@@ -24,6 +24,8 @@
         "prefer-destructuring": "off",
         "no-multi-assign": "off",
         "no-param-reassign": "off",
-        "no-shadow": "off"
+        "no-shadow": "off",
+        "import/no-unresolved": "off",
+        "import/no-extraneous-dependencies": "off"
     }
 }

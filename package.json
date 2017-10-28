@@ -23,6 +23,8 @@
   ],
   "dependencies": {
     "yeoman-generator": "2.0.1",
+    "yeoman-environment": "2.0.5",
+    "shelljs": "0.7.8",
     "chalk": "2.3.0",
     "glob": "7.1.2",
     "semver": "5.4.1",
