@@ -23,5 +23,6 @@ mkdir -p "$APP_FOLDER"
 mv -f "$JHIPSTER_SAMPLES"/"$JHIPSTER"/.yo-rc.json "$APP_FOLDER"/
 cd "$APP_FOLDER"
 npm link generator-jhipster
-jhipster --force --no-insight --skip-checks --with-entities
+# Generate the project
+jhipster --force --no-insight --skip-checks --with-entities --debug
 ls -al "$APP_FOLDER"
