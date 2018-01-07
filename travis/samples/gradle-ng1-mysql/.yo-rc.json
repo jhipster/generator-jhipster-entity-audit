@@ -22,7 +22,7 @@
       "gatling",
       "protractor"
     ],
-    "jhiPrefix": "custom",
+    "jhiPrefix": "jhi",
     "enableTranslation": true,
     "nativeLanguage": "en",
     "languages": [
