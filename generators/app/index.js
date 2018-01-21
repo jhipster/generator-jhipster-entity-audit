@@ -167,6 +167,7 @@ module.exports = class extends BaseGenerator {
         this.packageFolder = this.jhAppConfig.packageFolder;
         this.clientPackageManager = this.jhAppConfig.clientPackageManager;
         this.buildTool = this.jhAppConfig.buildTool;
+        this.cacheProvider = this.jhAppConfig.cacheProvider;
         // use function in generator-base.js from generator-jhipster
         this.angularAppName = this.getAngularAppName();
         this.angular2AppName = this.getAngular2AppName();
@@ -243,9 +244,7 @@ module.exports = class extends BaseGenerator {
           // eslint-disable-next-line no-useless-escape
           this.replaceContent(`${this.javaDir}domain/AbstractAuditingEntity.java`, '\s*@JsonIgnore', '', true);
 
-          if (this.hibernateCache === 'ehcache') {
-            this.addEntityToEhcache('EntityAuditEvent', [], this.packageName, this.packageFolder);
-          }
+          this.addEntryToCache(`${this.packageName}.domain.EntityAuditEvent.class.getName()`, this.packageFolder, this.cacheProvider);
         } else {
           files = [{
             from: `${this.javaTemplateDir}/config/audit/_JaversAuthorProvider.java`,

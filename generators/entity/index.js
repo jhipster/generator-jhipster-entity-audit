@@ -102,6 +102,7 @@ module.exports = class extends BaseGenerator {
         this.clientFramework = this.jhAppConfig.clientFramework;
         this.clientPackageManager = this.jhAppConfig.clientPackageManager;
         this.buildTool = this.jhAppConfig.buildTool;
+        this.cacheProvider = this.jhAppConfig.cacheProvider;
 
         // use function in generator-base.js from generator-jhipster
         this.angularAppName = this.getAngularAppName();

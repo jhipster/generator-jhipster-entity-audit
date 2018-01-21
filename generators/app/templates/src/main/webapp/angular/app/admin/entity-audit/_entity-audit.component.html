@@ -42,20 +42,20 @@
     </div>
 
     <div [hidden]="loading">
-        <div class="table-responsive" *ngIf="audits">
+        <div class="table-responsive mt-2" *ngIf="audits">
             <p *ngIf="selectedEntity" jhiTranslate="entityAudit.result.showInfo"
                    translateValues="{limit: '{{selectedLimit}}', entity: '{{selectedEntity}}'}">
                 Last <strong>{{ selectedLimit }}</strong>
                 Changes for <strong>{{ selectedEntity }}</strong>
             </p>
 
-            <form class="form-inline">
+            <form class="form-inline mb-2">
                 <div class="form-group">
                     <label for="searchFieldEntityId"
                             jhiTranslate="entityAudit.result.searchFieldLabel">
                         Filter:
                     </label>
-                    <input type="text" class="form-control" id="searchFieldEntityId"
+                    <input type="text" class="form-control ml-2" id="searchFieldEntityId"
                             name="searchFieldEntityId"
                             placeholder="<% if (enableTranslation) { %>{{ 'entityAudit.result.entityIdFilter' | translate }}<% } else { %>entity id filter<% } %>"
                             [(ngModel)]="filterEntityId" />
@@ -110,7 +110,7 @@
                 </tbody>
             </table>
         </div>
-        <p *ngIf="!audits" jhiTranslate="entityAudit.result.noDataFound">
+        <p *ngIf="!audits" jhiTranslate="entityAudit.result.noDataFound" class="mt-2">
             No Data found for the filters
         </p>
     </div>
