@@ -117,7 +117,6 @@ module.exports = class extends BaseGenerator {
 
           const entityName = this.entityConfig.entityClass;
           const jsonObj = (this.entityConfig.data === undefined ? { changelogDate: this.entityConfig.changelogDate, entityTableName: this.entityConfig.entityTableName } : this.entityConfig.data);
-          this.log(jsonObj);
           this.changelogDate = jsonObj.changelogDate || this.dateFormatForLiquibase();
           genUtils.updateEntityAudit.call(this, entityName, jsonObj, javaDir, resourceDir, true);
         }
