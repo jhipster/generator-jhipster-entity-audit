@@ -116,16 +116,9 @@ module.exports = class extends BaseGenerator {
           this.log(`\n${chalk.bold.green('I\'m updating the entity for audit ')}${chalk.bold.yellow(this.entityConfig.entityClass)}`);
 
           const entityName = this.entityConfig.entityClass;
-          var jsonObj = {};
-          if(this.entityConfig.data === undefined) {
-            jsonObj = {
-                "changelogDate": this.entityConfig.changelogDate,
-                "entityTableName": this.entityConfig.entityTableName
-            }
-          } else {
-            jsonObj = this.entityConfig.data;
-          }
-          this.changelogDate = this.entityConfig.data.changelogDate || this.dateFormatForLiquibase();
+          const jsonObj = (this.entityConfig.data === undefined ? { changelogDate: this.entityConfig.changelogDate, entityTableName: this.entityConfig.entityTableName } : this.entityConfig.data);
+          this.log(jsonObj);
+          this.changelogDate = jsonObj.changelogDate || this.dateFormatForLiquibase();
           genUtils.updateEntityAudit.call(this, entityName, jsonObj, javaDir, resourceDir, true);
         }
       },
