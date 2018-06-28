@@ -170,7 +170,7 @@ module.exports = class extends BaseGenerator {
         this.cacheProvider = this.jhAppConfig.cacheProvider;
         // use function in generator-base.js from generator-jhipster
         this.angularAppName = this.getAngularAppName();
-        this.angular2AppName = this.getAngularAppName();
+        this.angularXAppName = this.getAngularXAppName();
         this.changelogDate = this.dateFormatForLiquibase();
         this.jhiPrefix = this.jhAppConfig.jhiPrefix;
         // if changelogDate for entity audit already exists then use this existing changelogDate

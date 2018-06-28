@@ -2,7 +2,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DiffMatchPatchModule } from 'ng-diff-match-patch';
 
-import { <%=angular2AppName%>SharedModule } from '../../shared';
+import { <%=angularXAppName%>SharedModule } from '../../shared';
 import { EntityAuditRoutingModule } from './entity-audit-routing.module';
 import { EntityAuditComponent } from './entity-audit.component';
 import { EntityAuditModalComponent } from './entity-audit-modal.component';
@@ -11,7 +11,7 @@ import { EntityAuditService } from './entity-audit.service';
 @NgModule({
     imports: [
         CommonModule,
-        <%=angular2AppName%>SharedModule,
+        <%=angularXAppName%>SharedModule,
         DiffMatchPatchModule,
         EntityAuditRoutingModule
     ],
