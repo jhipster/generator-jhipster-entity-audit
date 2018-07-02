@@ -45,7 +45,7 @@
     "url": "https://github.com/hipster-labs/generator-jhipster-entity-audit/issues"
   },
   "engines": {
-    "node": ">=6.9.0",
+    "node": ">=8.9.0",
     "npm": ">=2.14.2"
   },
   "scripts": {
