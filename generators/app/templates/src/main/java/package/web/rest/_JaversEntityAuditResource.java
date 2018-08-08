@@ -108,7 +108,7 @@ public class JaversEntityAuditResource {
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<EntityAuditEvent> getPrevVersion(@RequestParam(value = "qualifiedName") String qualifiedName,
-                                                           @RequestParam(value = "entityId") String entityId,
+                                                           @RequestParam(value = "entityId") Long entityId,
                                                            @RequestParam(value = "commitVersion") Long commitVersion)
         throws URISyntaxException, ClassNotFoundException {
 
