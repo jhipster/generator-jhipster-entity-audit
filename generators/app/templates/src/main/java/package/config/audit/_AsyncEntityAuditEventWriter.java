@@ -62,7 +62,7 @@ public class AsyncEntityAuditEventWriter {
         String entityData;
         log.trace("Getting Entity Id and Content");
         try {
-            Field privateLongField = entityClass.getDeclaredField("id");
+            Field privateLongField = getDeclaredField(entityClass, "id");
             privateLongField.setAccessible(true);
             entityId = (Long) privateLongField.get(entity);
             privateLongField.setAccessible(false);
@@ -101,5 +101,26 @@ public class AsyncEntityAuditEventWriter {
             log.trace("No entities.. Adding new version 1");
             auditedEntity.setCommitVersion(1);
         }
+    }
+
+    /**
+     * Search for a field in class hierarchy
+     *
+     * @param type child class
+     * @param name field name
+     * @return the field
+     * @throws NoSuchFieldException if field is not found
+     */
+    private static Field getDeclaredField(Class<?> type, String name) throws NoSuchFieldException {
+
+        do {
+            try {
+                return type.getDeclaredField(name);
+            } catch (NoSuchFieldException e) {
+                type = type.getSuperclass();
+            }
+        } while (type.getSuperclass() != null);
+
+        throw new NoSuchFieldException(name);
     }
 }
