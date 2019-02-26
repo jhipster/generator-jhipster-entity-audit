@@ -22,7 +22,7 @@ import com.codahale.metrics.annotation.Timed;
 
 import java.net.URISyntaxException;
 import java.util.List;
-import javax.transaction.Transactional;
+import io.micrometer.core.annotation.Timed;
 
 /**
  * REST controller for getting the audit events for entity
