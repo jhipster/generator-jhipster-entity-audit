@@ -34,7 +34,7 @@ export class EntityAuditComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.service.getAllAudited().subscribe((entities) => {
+        this.service.getAllAudited().subscribe(entities => {
             this.entities = entities;
         });
     }
@@ -42,14 +42,14 @@ export class EntityAuditComponent implements OnInit {
     loadChanges() {
         this.loading = true;
         this.service.findByEntity(this.selectedEntity, this.selectedLimit)
-            .subscribe((res) => {
+            .subscribe(res => {
                 const data = res.body;
                 this.audits = data.map((it: EntityAuditEvent) => {
                     it.entityValue = JSON.parse(it.entityValue);
                     return it;
                 });
                 this.loading = false;
-            }, (err) => this.loading = false);
+            }, err => this.loading = false);
     }
 
     trackId(index: number, item: EntityAuditEvent) {
