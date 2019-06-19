@@ -1,11 +1,13 @@
 package <%=packageName%>.web.rest;
 
 import <%=packageName%>.domain.EntityAuditEvent;
-import <%=packageName%>.web.rest.util.PaginationUtil;
+import <%=packageName%>.security.AuthoritiesConstants;
+
+import io.github.jhipster.web.util.PaginationUtil;
+
 import org.javers.core.Javers;
 import org.javers.core.metamodel.object.CdoSnapshot;
 import org.javers.repository.jql.QueryBuilder;
-import <%=packageName%>.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -21,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.access.annotation.Secured;
-import com.codahale.metrics.annotation.Timed;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -51,7 +52,6 @@ public class JaversEntityAuditResource {
     @RequestMapping(value = "/audits/entity/all",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public List<String> getAuditedEntities() {
 
@@ -66,13 +66,13 @@ public class JaversEntityAuditResource {
     @RequestMapping(value = "/audits/entity/changes",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<List<EntityAuditEvent>> getChanges(@RequestParam(value = "entityType") String entityType,
-                                                             @RequestParam(value = "limit") int limit)
+                                                             @RequestParam(value = "limit") int limit,
+                                                             @RequestParam MultiValueMap<String, String> queryParams,
+                                                             UriComponentsBuilder uriBuilder)
         throws URISyntaxException, ClassNotFoundException {
         log.debug("REST request to get a page of EntityAuditEvents");
-        Pageable pageRequest = createPageRequest(limit);
 
         Class entityTypeToFetch = Class.forName("<%=packageName%>.domain." + entityType);
         QueryBuilder jqlQuery = QueryBuilder.byClass(entityTypeToFetch)
@@ -91,7 +91,7 @@ public class JaversEntityAuditResource {
 
         Page<EntityAuditEvent> page = new PageImpl<>(auditEvents);
 
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/audits/entity/changes");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
 
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
 
@@ -105,7 +105,6 @@ public class JaversEntityAuditResource {
     @RequestMapping(value = "/audits/entity/changes/version/previous",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<EntityAuditEvent> getPrevVersion(@RequestParam(value = "qualifiedName") String qualifiedName,
                                                            @RequestParam(value = "entityId") String entityId,
@@ -123,15 +122,6 @@ public class JaversEntityAuditResource {
 
         return new ResponseEntity<>(prev, HttpStatus.OK);
 
-    }
-
-    /**
-     * creates a page request object for PaginationUti
-     *
-     * @return
-     */
-    private Pageable createPageRequest(int size) {
-        return new PageRequest(0, size);
     }
 
 }
