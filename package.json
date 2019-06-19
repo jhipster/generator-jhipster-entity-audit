@@ -28,7 +28,7 @@
     "chalk": "2.3.0",
     "glob": "7.1.2",
     "semver": "5.4.1",
-    "generator-jhipster": ">=5.0.0"
+    "generator-jhipster": ">=6.0.0"
   },
   "devDependencies": {
     "eslint": "4.10.0",

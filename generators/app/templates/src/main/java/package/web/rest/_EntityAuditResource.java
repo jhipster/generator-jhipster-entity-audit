@@ -2,13 +2,16 @@ package <%=packageName%>.web.rest;
 
 import <%=packageName%>.domain.EntityAuditEvent;
 import <%=packageName%>.repository.EntityAuditEventRepository;
-import <%=packageName%>.web.rest.util.PaginationUtil;
 import <%=packageName%>.security.AuthoritiesConstants;
+
+import io.github.jhipster.web.util.PaginationUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.util.MultiValueMap;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.security.access.annotation.Secured;
-import com.codahale.metrics.annotation.Timed;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -48,7 +51,6 @@ public class EntityAuditResource {
     @RequestMapping(value = "/audits/entity/all",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public List<String> getAuditedEntities() {
         return entityAuditEventRepository.findAllEntityTypes();
@@ -62,15 +64,14 @@ public class EntityAuditResource {
     @RequestMapping(value = "/audits/entity/changes",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<List<EntityAuditEvent>> getChanges(@RequestParam(value = "entityType") String entityType,
-                                                             @RequestParam(value = "limit") int limit)
+                                                             @RequestParam(value = "limit") int limit,@RequestParam MultiValueMap<String, String> queryParams, UriComponentsBuilder uriBuilder)
         throws URISyntaxException {
         log.debug("REST request to get a page of EntityAuditEvents");
         Pageable pageRequest = createPageRequest(limit);
         Page<EntityAuditEvent> page = entityAuditEventRepository.findAllByEntityType(entityType, pageRequest);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/audits/entity/changes");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(uriBuilder.queryParams(queryParams), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
 
     }
@@ -83,7 +84,6 @@ public class EntityAuditResource {
     @RequestMapping(value = "/audits/entity/changes/version/previous",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<EntityAuditEvent> getPrevVersion(@RequestParam(value = "qualifiedName") String qualifiedName,
                                                            @RequestParam(value = "entityId") Long entityId,
@@ -100,7 +100,7 @@ public class EntityAuditResource {
      * @return
      */
     private Pageable createPageRequest(int size) {
-        return new PageRequest(0, size);
+        return PageRequest.of(0, size);
     }
 
 }
