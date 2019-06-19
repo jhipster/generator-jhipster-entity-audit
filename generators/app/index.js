@@ -243,6 +243,7 @@ module.exports = class extends BaseGenerator {
           // remove the jsonIgnore on the audit fields so that the values can be passed
           // eslint-disable-next-line no-useless-escape
           this.replaceContent(`${this.javaDir}domain/AbstractAuditingEntity.java`, '\s*@JsonIgnore', '', true);
+          this.replaceContent(`${this.javaDir}domain/AbstractAuditingEntity.java`, 'import com.fasterxml.jackson.annotation.JsonIgnore;', '', true);
 
           this.addEntryToCache(`${this.packageName}.domain.EntityAuditEvent.class.getName()`, this.packageFolder, this.cacheProvider);
         } else {
