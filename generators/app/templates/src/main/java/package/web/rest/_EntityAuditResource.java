@@ -97,7 +97,7 @@ public class EntityAuditResource {
      * @return
      */
     private Pageable createPageRequest(int size) {
-        return new PageRequest(0, size);
+        return PageRequest.of(0, size);
     }
 
 }
