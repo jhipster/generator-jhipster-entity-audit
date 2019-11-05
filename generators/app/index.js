@@ -410,7 +410,7 @@ module.exports = class extends BaseGenerator {
           // add dependency required for displaying diffs
           this.addNpmDependency('ng-diff-match-patch', '2.0.6');
           // based on BaseGenerator.addAdminToModule
-          const adminModulePath = `${this.webappDir}app/admin/admin.module.ts`;
+          const adminModulePath = `${this.webappDir}app/admin/admin-routing.module.ts`;
           this.rewriteFile(
             adminModulePath,
             'jhipster-needle-add-admin-module-import',
@@ -418,13 +418,14 @@ module.exports = class extends BaseGenerator {
           );
           this.rewriteFile(
             adminModulePath,
-            'jhipster-needle-add-admin-module',
-            'EntityAuditModule,'
+            'jhipster-needle-add-admin-route',
+            ',\n      {\n        path: \'entity-audit\',\n            loadChildren: () => import(\'./entity-audit/entity-audit.module\').then(m => m.EntityAuditModule)\n      }'
           );
+          // this.addAdminToModule('', 'EntityAudit', 'entity-audit', 'entity-audit', this.enableTranslation, this.clientFramework)
         }
 
         // add new menu entry
-        this.addElementToAdminMenu('entity-audit', 'list-alt', this.enableTranslation, this.clientFramework);
+        this.addElementToAdminMenu('admin/entity-audit', 'list-alt', this.enableTranslation, this.clientFramework, 'entity-audit');
         if (this.enableTranslation) {
           this.languages.forEach((language) => {
             let menuText = 'Entity Audit';

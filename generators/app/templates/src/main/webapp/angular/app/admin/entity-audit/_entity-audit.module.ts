@@ -1,9 +1,10 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { DiffMatchPatchModule } from 'ng-diff-match-patch';
 
-import { <%=angularXAppName%>SharedModule } from '../../shared';
-import { EntityAuditRoutingModule } from './entity-audit-routing.module';
+import { <%=angularXAppName%>SharedModule } from 'app/shared/shared.module';
+import { entityAuditRoute } from './entity-audit-routing.module';
 import { EntityAuditComponent } from './entity-audit.component';
 import { EntityAuditModalComponent } from './entity-audit-modal.component';
 import { EntityAuditService } from './entity-audit.service';
@@ -13,7 +14,7 @@ import { EntityAuditService } from './entity-audit.service';
         CommonModule,
         <%=angularXAppName%>SharedModule,
         DiffMatchPatchModule,
-        EntityAuditRoutingModule
+        RouterModule.forChild([entityAuditRoute])
     ],
     declarations: [
         EntityAuditComponent,

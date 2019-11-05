@@ -8,13 +8,13 @@ const changeset = (changelogDate, entityTableName) =>
     <!-- Added the entity audit columns -->
     <changeSet id="${changelogDate}-audit-1" author="jhipster-entity-audit">
         <addColumn tableName="${entityTableName}">
-            <column name="created_by" type="varchar(50)">
+            <column name="created_by" type="varchar(191)" defaultValue="system@localhost">
                 <constraints nullable="false"/>
             </column>
             <column name="created_date" type="timestamp" defaultValueDate="\${now}">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_by" type="varchar(191)"/>
             <column name="last_modified_date" type="timestamp"/>
         </addColumn>
     </changeSet>`;
