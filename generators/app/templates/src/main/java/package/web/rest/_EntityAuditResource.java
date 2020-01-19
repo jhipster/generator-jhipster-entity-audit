@@ -67,8 +67,7 @@ public class EntityAuditResource {
                                                              @RequestParam(value = "limit") int limit)
         throws URISyntaxException {
         log.debug("REST request to get a page of EntityAuditEvents");
-        Pageable pageRequest = createPageRequest(limit);
-        Page<EntityAuditEvent> page = entityAuditEventRepository.findAllByEntityType(entityType, pageRequest);
+        Page<EntityAuditEvent> page = entityAuditEventRepository.findAllByEntityType(entityType, PageRequest.of(0, limit));
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
 
@@ -90,15 +89,6 @@ public class EntityAuditResource {
         EntityAuditEvent prev = entityAuditEventRepository.findOneByEntityTypeAndEntityIdAndCommitVersion(qualifiedName, entityId, commitVersion);
         return new ResponseEntity<>(prev, HttpStatus.OK);
 
-    }
-
-    /**
-     * creates a page request object for PaginationUti
-     *
-     * @return
-     */
-    private Pageable createPageRequest(int size) {
-        return PageRequest.of(0, size);
     }
 
 }
