@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.util.MultiValueMap;
 
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,7 +72,7 @@ public class JaversEntityAuditResource {
                                                              @RequestParam(value = "limit") int limit,
                                                              @RequestParam MultiValueMap<String, String> queryParams,
                                                              UriComponentsBuilder uriBuilder)
-        throws URISyntaxException, ClassNotFoundException {
+        throws ClassNotFoundException {
         log.debug("REST request to get a page of EntityAuditEvents");
 
         Class entityTypeToFetch = Class.forName("<%=packageName%>.domain." + entityType);
@@ -111,7 +110,7 @@ public class JaversEntityAuditResource {
     public ResponseEntity<EntityAuditEvent> getPrevVersion(@RequestParam(value = "qualifiedName") String qualifiedName,
                                                            @RequestParam(value = "entityId") String entityId,
                                                            @RequestParam(value = "commitVersion") Long commitVersion)
-        throws URISyntaxException, ClassNotFoundException {
+        throws ClassNotFoundException {
 
         Class entityTypeToFetch = Class.forName("<%=packageName%>.domain." + qualifiedName);
 
