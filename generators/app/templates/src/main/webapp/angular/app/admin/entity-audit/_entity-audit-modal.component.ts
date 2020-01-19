@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { EntityAuditService } from './entity-audit.service';
@@ -36,21 +37,21 @@ import { EntityAuditEvent } from './entity-audit-event.model';
     `]
 })
 export class EntityAuditModalComponent {
-    action: string;
-    left: string;
-    right: string;
+    action?: string;
+    left?: string;
+    right?: string;
 
     constructor(
         private service: EntityAuditService,
         public activeModal: NgbActiveModal
     ) {}
 
-    openChange(audit: EntityAuditEvent) {
+    openChange(audit: EntityAuditEvent): void {
         this.service.getPrevVersion(
-            audit.entityType, audit.entityId, audit.commitVersion
-        ).subscribe(res => {
-            const data: EntityAuditEvent = res.body;
-            const previousVersion = JSON.stringify(JSON.parse(data.entityValue), null, 2);
+            audit.entityType!, audit.entityId!, audit.commitVersion!
+        ).subscribe((res: HttpResponse<EntityAuditEvent>) => {
+            const data: EntityAuditEvent = res.body || {};
+            const previousVersion = JSON.stringify(JSON.parse(data.entityValue || ''), null, 2);
             const currentVersion = JSON.stringify(audit.entityValue, null, 2);
 
             this.action = audit.action;

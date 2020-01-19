@@ -17,7 +17,7 @@
     <div>
         <strong
                 jhiTranslate="entityAudit.detail.action"
-                translateValues="{action: '{{action}}'}">
+                [translateValues]="{ action: action }">
             {{action}} action was performed on below data
         </strong>
         <br><br>

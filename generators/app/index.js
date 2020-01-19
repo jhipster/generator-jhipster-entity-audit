@@ -384,11 +384,6 @@ module.exports = class extends BaseGenerator {
           const adminModulePath = `${this.webappDir}app/admin/admin-routing.module.ts`;
           this.rewriteFile(
             adminModulePath,
-            'jhipster-needle-add-admin-module-import',
-            'import { EntityAuditModule } from \'./entity-audit/entity-audit.module\';'
-          );
-          this.rewriteFile(
-            adminModulePath,
             'jhipster-needle-add-admin-route',
             ',\n      {\n        path: \'entity-audit\',\n            loadChildren: () => import(\'./entity-audit/entity-audit.module\').then(m => m.EntityAuditModule)\n      }'
           );

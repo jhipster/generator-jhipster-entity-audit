@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { EntityAuditEvent } from './entity-audit-event.model';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class EntityAuditService {
 
     constructor(private http: HttpClient) { }

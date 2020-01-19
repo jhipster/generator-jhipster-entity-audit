@@ -44,7 +44,7 @@
     <div [hidden]="loading">
         <div class="table-responsive mt-2" *ngIf="audits">
             <p *ngIf="selectedEntity" <% if (enableTranslation) { %> jhiTranslate="entityAudit.result.showInfo" <% } %>
-                   translateValues="{limit: '{{selectedLimit}}', entity: '{{selectedEntity}}'}">
+                   [translateValues]="{ limit: selectedLimit, entity: selectedEntity }">
                 Last <strong>{{ selectedLimit }}</strong>
                 Changes for <strong>{{ selectedEntity }}</strong>
             </p>
