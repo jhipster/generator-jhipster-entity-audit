@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
 /**
@@ -64,8 +63,7 @@ public class EntityAuditResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<EntityAuditEvent>> getChanges(@RequestParam(value = "entityType") String entityType,
-                                                             @RequestParam(value = "limit") int limit)
-        throws URISyntaxException {
+                                                             @RequestParam(value = "limit") int limit) {
         log.debug("REST request to get a page of EntityAuditEvents");
         Page<EntityAuditEvent> page = entityAuditEventRepository.findAllByEntityType(entityType, PageRequest.of(0, limit));
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -84,8 +82,7 @@ public class EntityAuditResource {
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<EntityAuditEvent> getPrevVersion(@RequestParam(value = "qualifiedName") String qualifiedName,
                                                            @RequestParam(value = "entityId") Long entityId,
-                                                           @RequestParam(value = "commitVersion") Integer commitVersion)
-        throws URISyntaxException {
+                                                           @RequestParam(value = "commitVersion") Integer commitVersion) {
         EntityAuditEvent prev = entityAuditEventRepository.findOneByEntityTypeAndEntityIdAndCommitVersion(qualifiedName, entityId, commitVersion);
         return new ResponseEntity<>(prev, HttpStatus.OK);
 
