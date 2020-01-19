@@ -4,14 +4,17 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
-    <property name="autoIncrement" value="true" dbms="mysql,h2,postgresql,oracle,mssql"/>
+    <%_ const isAutoIncrementDB = prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb'; _%>
+    <%_ if (isAutoIncrementDB) { _%>
+    <property name="autoIncrement" value="true"/>
 
+    <%_ } _%>
     <!--
         Added the entity EntityAuditEvent.
     -->
     <changeSet id="<%= changelogDate %>" author="jhipster">
         <createTable tableName="jhi_entity_audit_event">
-            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+            <column name="id" type="bigint" <%_ if (isAutoIncrementDB) { %> autoIncrement="${autoIncrement}" <%_ } %>>
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="entity_id" type="bigint">
