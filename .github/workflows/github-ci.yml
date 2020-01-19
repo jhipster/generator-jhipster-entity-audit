@@ -28,7 +28,7 @@ jobs:
           jhipster --with-entities --no-insight
           yo jhipster-entity-audit ${{ matrix.auditType }} --force
         working-directory: ./test-integration/samples/${{ matrix.sample }}
-      - name: Run integration-tests
+      - name: Run backend tests
         run: |
           if [ -f "mvnw" ]; then
               ./mvnw -ntp -P-webpack verify --batch-mode \
@@ -53,4 +53,7 @@ jobs:
                   -Dlogging.level.org.springframework.web=OFF \
                   -Dlogging.level.org.springframework.security=OFF
           fi
+        working-directory: ./test-integration/samples/${{ matrix.sample }}
+      - name: Run frontend tests
+        run: "npm run test"
         working-directory: ./test-integration/samples/${{ matrix.sample }}
