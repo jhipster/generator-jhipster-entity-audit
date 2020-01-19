@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         auditType: [default, javers]
-        sample: [maven-angularX]
+        sample: [maven-angularX, gradle-ms-noFakeData]
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v1
@@ -58,5 +58,13 @@ jobs:
           fi
         working-directory: /tmp/${{ matrix.sample }}
       - name: Run frontend tests
-        run: "npm run test"
+        run: |
+          if [[ $(grep yarn .yo-rc.json) != "" ]]; then
+            JHI_CLIENT_PACKAGE_MANAGER=yarn
+          else
+            JHI_CLIENT_PACKAGE_MANAGER=npm
+          fi
+          if [ -f "tsconfig.json" ]; then
+            $JHI_CLIENT_PACKAGE_MANAGER run test
+          fi
         working-directory: /tmp/${{ matrix.sample }}
