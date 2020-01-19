@@ -103,6 +103,7 @@ module.exports = class extends BaseGenerator {
         this.clientPackageManager = this.jhAppConfig.clientPackageManager;
         this.buildTool = this.jhAppConfig.buildTool;
         this.cacheProvider = this.jhAppConfig.cacheProvider;
+        this.skipFakeData = this.jhAppConfig.skipFakeData;
 
         // use function in generator-base.js from generator-jhipster
         this.angularAppName = this.getAngularAppName();
@@ -118,7 +119,7 @@ module.exports = class extends BaseGenerator {
           const entityName = this.entityConfig.entityClass;
           const jsonObj = (this.entityConfig.data === undefined ? { changelogDate: this.entityConfig.changelogDate, entityTableName: this.entityConfig.entityTableName } : this.entityConfig.data);
           this.changelogDate = jsonObj.changelogDate || this.dateFormatForLiquibase();
-          genUtils.updateEntityAudit.call(this, entityName, jsonObj, javaDir, resourceDir, true);
+          genUtils.updateEntityAudit.call(this, entityName, jsonObj, javaDir, resourceDir, true, this.skipFakeData);
         }
       },
       updateConfig() {

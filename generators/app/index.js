@@ -169,6 +169,7 @@ module.exports = class extends BaseGenerator {
         this.clientPackageManager = this.jhAppConfig.clientPackageManager;
         this.buildTool = this.jhAppConfig.buildTool;
         this.cacheProvider = this.jhAppConfig.cacheProvider;
+        this.skipFakeData = this.jhAppConfig.skipFakeData;
         // use function in generator-base.js from generator-jhipster
         this.angularAppName = this.getAngularAppName();
         this.angularXAppName = this.getAngularXAppName();
@@ -320,7 +321,7 @@ module.exports = class extends BaseGenerator {
             // `EntityAuditEventRepository.findAllEntityTypes`;
             this.updateEntityConfig(entityFile, 'enableEntityAudit', true);
 
-            genUtils.updateEntityAudit.call(this, entityName, jsonObj, this.javaDir, this.resourceDir);
+            genUtils.updateEntityAudit.call(this, entityName, jsonObj, this.javaDir, this.resourceDir, false, this.skipFakeData);
           });
         }
       },
@@ -394,7 +395,6 @@ module.exports = class extends BaseGenerator {
 
         genUtils.copyFiles(this, files);
 
-        // add bower dependency required
         if (this.clientFramework === 'angularX') {
           // add dependency required for displaying diffs
           this.addNpmDependency('ng-diff-match-patch', '2.0.6');
@@ -449,6 +449,7 @@ module.exports = class extends BaseGenerator {
     const installConfig = {
       npm: this.clientPackageManager !== 'yarn',
       yarn: this.clientPackageManager === 'yarn',
+      bower: false,
       callback: injectDependenciesAndConstants
     };
     if (this.options['skip-install']) {

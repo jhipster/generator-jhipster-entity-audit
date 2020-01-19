@@ -3,21 +3,25 @@ const glob = require('glob');
 
 const TPL = 'template';
 
-const changeset = (changelogDate, entityTableName) =>
-  `
+const changeset = (changelogDate, entityTableName, includesDefaults) => {
+  const createdByDefaultValue = includesDefaults === true ? ' defaultValue="system"' : '';
+  // eslint-disable-next-line no-template-curly-in-string
+  const createdDateDefaultValue = includesDefaults === true ? ' defaultValueDate="${now}"' : '';
+  return `
     <!-- Added the entity audit columns -->
     <changeSet id="${changelogDate}-audit-1" author="jhipster-entity-audit">
         <addColumn tableName="${entityTableName}">
-            <column name="created_by" type="varchar(50)" defaultValue="system">
+            <column name="created_by" type="varchar(50)"${createdByDefaultValue}>
                 <constraints nullable="false"/>
             </column>
-            <column name="created_date" type="timestamp" defaultValueDate="\${now}">
+            <column name="created_date" type="timestamp"${createdDateDefaultValue}>
                 <constraints nullable="false"/>
             </column>
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
         </addColumn>
     </changeSet>`;
+};
 
 const copyFiles = (gen, files) => {
   files.forEach((file) => {
@@ -27,7 +31,7 @@ const copyFiles = (gen, files) => {
   });
 };
 
-const updateEntityAudit = function (entityName, entityData, javaDir, resourceDir, updateIndex) {
+const updateEntityAudit = function (entityName, entityData, javaDir, resourceDir, updateIndex = false, skipFakeData = false) {
   // extend entity with AbstractAuditingEntity
   if (!this.fs.read(`${javaDir}domain/${entityName}.java`, {
     defaults: ''
@@ -45,7 +49,7 @@ const updateEntityAudit = function (entityName, entityData, javaDir, resourceDir
   // update liquibase changeset
   const file = glob.sync(`${resourceDir}/config/liquibase/changelog/*_added_entity_${entityName}.xml`)[0];
   const entityTableName = entityData.entityTableName ? entityData.entityTableName : entityName;
-  this.addChangesetToLiquibaseEntityChangelog(file, changeset(this.changelogDate, this.getTableName(entityTableName)));
+  this.addChangesetToLiquibaseEntityChangelog(file, changeset(this.changelogDate, this.getTableName(entityTableName), !skipFakeData));
   if (this.auditFramework === 'javers') {
     // check if repositories are already annotated
     const auditTableAnnotation = '@JaversSpringDataAuditable';
