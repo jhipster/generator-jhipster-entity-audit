@@ -22,12 +22,15 @@ jobs:
         run: npm install -g yo
       - name: Install JHipster
         run: npm install -g generator-jhipster
+      - name: Prepare temporary directory
+        run: |
+          cp -r ./test-integration/samples/${{ matrix.sample }} /tmp/
+          cp -r ./test-integration/samples/.jhipster /tmp/${{ matrix.sample }}
       - name: Generate project
         run: |
-          cp -r ../.jhipster .
           jhipster --with-entities --no-insight
           yo jhipster-entity-audit ${{ matrix.auditType }} --force
-        working-directory: ./test-integration/samples/${{ matrix.sample }}
+        working-directory: /tmp/${{ matrix.sample }}
       - name: Run backend tests
         run: |
           if [ -f "mvnw" ]; then
@@ -53,7 +56,7 @@ jobs:
                   -Dlogging.level.org.springframework.web=OFF \
                   -Dlogging.level.org.springframework.security=OFF
           fi
-        working-directory: ./test-integration/samples/${{ matrix.sample }}
+        working-directory: /tmp/${{ matrix.sample }}
       - name: Run frontend tests
         run: "npm run test"
-        working-directory: ./test-integration/samples/${{ matrix.sample }}
+        working-directory: /tmp/${{ matrix.sample }}
