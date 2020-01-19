@@ -259,10 +259,27 @@ module.exports = class extends BaseGenerator {
           {
             from: `${this.javaTemplateDir}/domain/_EntityAuditEvent.java`,
             to: `${this.javaDir}domain/EntityAuditEvent.java`
+          },
+          {
+            from: `${this.javaTemplateDir}/service/dto/_AbstractAuditingDTO.java`,
+            to: `${this.javaDir}service/dto/AbstractAuditingDTO.java`
           }
           ];
 
           genUtils.copyFiles(this, files);
+
+          // add annotations for Javers to ignore fields in 'AbstractAuditingEntity' class
+          if (!this.fs.read(`${this.javaDir}domain/AbstractAuditingEntity.java`, {
+            defaults: ''
+          }).includes('@DiffIgnore')) {
+            this.rewriteFile(
+              `${this.javaDir}domain/AbstractAuditingEntity.java`,
+              'import org.springframework.data.annotation.CreatedBy;',
+              'import org.javers.core.metamodel.annotation.DiffIgnore;'
+            );
+            this.replaceContent(`${this.javaDir}domain/AbstractAuditingEntity.java`, '@JsonIgnore', '@JsonIgnore\n    @DiffIgnore', true);
+          }
+
           // add required third party dependencies
           if (this.buildTool === 'maven') {
             if (this.databaseType === 'mongodb') {
