@@ -1,4 +1,4 @@
-# generator-jhipster-entity-audit [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+# generator-jhipster-entity-audit [![NPM version][npm-image]][npm-url] [![Build Status][github-actions-image]][github-actions-url] [![Dependency Status][daviddm-image]][daviddm-url]
 > JHipster module to enable entity auditing and to add audit log page
 
 ## Usage
@@ -52,7 +52,7 @@ Apache-2.0 © [Deepu KS](http://deepu105.github.io/)
 
 [npm-image]: https://badge.fury.io/js/generator-jhipster-entity-audit.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster-entity-audit
-[travis-image]: https://travis-ci.org/hipster-labs/generator-jhipster-entity-audit.svg?branch=master
-[travis-url]: https://travis-ci.org/hipster-labs/generator-jhipster-entity-audit
+[github-actions-image]: https://github.com/hipster-labs/generator-jhipster-entity-audit/workflows/Build/badge.svg
+[github-actions-url]: https://github.com/hipster-labs/generator-jhipster-entity-audit/actions
 [daviddm-image]: https://david-dm.org/hipster-labs/generator-jhipster-entity-audit.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/hipster-labs/generator-jhipster-entity-audit
