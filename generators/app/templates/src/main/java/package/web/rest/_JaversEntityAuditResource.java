@@ -18,12 +18,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.MultiValueMap;
 
 import java.net.URISyntaxException;
@@ -54,7 +54,7 @@ public class JaversEntityAuditResource {
     @RequestMapping(value = "/audits/entity/all",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    @Secured(AuthoritiesConstants.ADMIN)
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public List<String> getAuditedEntities() {
 
       return Arrays.asList(<%- auditedEntities.map(e => `"${e}"`).join(', ') %>);
@@ -68,7 +68,7 @@ public class JaversEntityAuditResource {
     @RequestMapping(value = "/audits/entity/changes",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    @Secured(AuthoritiesConstants.ADMIN)
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<List<EntityAuditEvent>> getChanges(@RequestParam(value = "entityType") String entityType,
                                                              @RequestParam(value = "limit") int limit,
                                                              @RequestParam MultiValueMap<String, String> queryParams,
@@ -107,7 +107,7 @@ public class JaversEntityAuditResource {
     @RequestMapping(value = "/audits/entity/changes/version/previous",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    @Secured(AuthoritiesConstants.ADMIN)
+    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<EntityAuditEvent> getPrevVersion(@RequestParam(value = "qualifiedName") String qualifiedName,
                                                            @RequestParam(value = "entityId") String entityId,
                                                            @RequestParam(value = "commitVersion") Long commitVersion)

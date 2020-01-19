@@ -312,33 +312,7 @@ module.exports = class extends BaseGenerator {
         if (!this.auditPage) return;
 
         let files = [];
-        if (this.clientFramework === 'angular1') {
-          files = [{
-            from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audits.html`,
-            to: `${this.webappDir}app/admin/entity-audit/entity-audits.html`
-          },
-          {
-            from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audit.detail.html`,
-            to: `${this.webappDir}app/admin/entity-audit/entity-audit.detail.html`
-          },
-          {
-            from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audit.state.js`,
-            to: `${this.webappDir}app/admin/entity-audit/entity-audit.state.js`
-          },
-          {
-            from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audit.controller.js`,
-            to: `${this.webappDir}app/admin/entity-audit/entity-audit.controller.js`
-          },
-          {
-            from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audit.detail.controller.js`,
-            to: `${this.webappDir}app/admin/entity-audit/entity-audit.detail.controller.js`
-          },
-          {
-            from: `${this.webappDir}angularjs/app/admin/entity-audit/_entity-audit.service.js`,
-            to: `${this.webappDir}app/admin/entity-audit/entity-audit.service.js`
-          }
-          ];
-        } else {
+        if (this.clientFramework === 'angularX') {
           files = [
             {
               from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit-event.model.ts`,
@@ -403,10 +377,7 @@ module.exports = class extends BaseGenerator {
         genUtils.copyFiles(this, files);
 
         // add bower dependency required
-        if (this.clientFramework === 'angular1') {
-          this.addBowerDependency('angular-object-diff', '1.0.3');
-          this.addAngularJsModule('ds.objectDiff');
-        } else {
+        if (this.clientFramework === 'angularX') {
           // add dependency required for displaying diffs
           this.addNpmDependency('ng-diff-match-patch', '2.0.6');
           // based on BaseGenerator.addAdminToModule
@@ -451,25 +422,18 @@ module.exports = class extends BaseGenerator {
 
 
   install() {
-    let logMsg =
+    const logMsg =
       `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
 
-    if (this.clientFramework === 'angular1') {
-      logMsg =
-        `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install & bower install`)}`;
-    }
     const injectDependenciesAndConstants = (err) => {
       if (err) {
         this.warning('Install of dependencies failed!');
         this.log(logMsg);
-      } else if (this.clientFramework === 'angular1') {
-        this.spawnCommand('gulp', ['install']);
       } else if (this.clientFramework === 'angularX') {
         this.spawnCommand(this.clientPackageManager, ['webpack:build']);
       }
     };
     const installConfig = {
-      bower: this.clientFramework === 'angular1',
       npm: this.clientPackageManager !== 'yarn',
       yarn: this.clientPackageManager === 'yarn',
       callback: injectDependenciesAndConstants
@@ -483,6 +447,6 @@ module.exports = class extends BaseGenerator {
 
   end() {
     this.log(`\n${chalk.bold.green('Auditing enabled for entities, you will have an option to enable audit while creating new entities as well')}`);
-    this.log(`\n${chalk.bold.green('I\'m running webpack/gulp now')}`);
+    this.log(`\n${chalk.bold.green('I\'m running webpack now')}`);
   }
 };
