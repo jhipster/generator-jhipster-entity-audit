@@ -424,6 +424,9 @@ module.exports = class extends BaseGenerator {
       },
 
       registering() {
+        // Register this generator as a dev dependency
+        this.addNpmDevDependency('generator-jhipster-entity-audit', packagejs.version);
+        // Register post-entity hook
         try {
           this.registerModule('generator-jhipster-entity-audit', 'entity', 'post', 'entity', 'Add support for entity audit and audit log page');
         } catch (err) {
