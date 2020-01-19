@@ -265,10 +265,10 @@ module.exports = class extends BaseGenerator {
           // add required third party dependencies
           if (this.buildTool === 'maven') {
             if (this.databaseType === 'mongodb') {
-              this.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', '3.5.0', '<scope>compile</scope>');
-              this.addMavenDependency('org.mongodb', 'mongo-java-driver', '3.4.2', '<scope>compile</scope>');
+              this.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', '3.5.0');
+              this.addMavenDependency('org.mongodb', 'mongo-java-driver', '3.4.2');
             } else if (this.databaseType === 'sql') {
-              this.addMavenDependency('org.javers', 'javers-spring-boot-starter-sql', '3.5.0', '<scope>compile</scope>');
+              this.addMavenDependency('org.javers', 'javers-spring-boot-starter-sql', '3.5.0');
             }
           } else if (this.buildTool === 'gradle') {
             if (this.databaseType === 'mongodb') {
