@@ -28,27 +28,25 @@ const copyFiles = (gen, files) => {
 };
 
 const updateEntityAudit = function (entityName, entityData, javaDir, resourceDir, updateIndex) {
-  if (this.auditFramework === 'custom') {
-    // extend entity with AbstractAuditingEntity
-    if (!this.fs.read(`${javaDir}domain/${entityName}.java`, {
+  // extend entity with AbstractAuditingEntity
+  if (!this.fs.read(`${javaDir}domain/${entityName}.java`, {
+    defaults: ''
+  }).includes('extends AbstractAuditingEntity')) {
+    this.replaceContent(`${javaDir}domain/${entityName}.java`, `public class ${entityName}`, `public class ${entityName} extends AbstractAuditingEntity`);
+  }
+  // extend DTO with AbstractAuditingDTO
+  if (entityData.dto === 'mapstruct') {
+    if (!this.fs.read(`${javaDir}service/dto/${entityName}DTO.java`, {
       defaults: ''
-    }).includes('extends AbstractAuditingEntity')) {
-      this.replaceContent(`${javaDir}domain/${entityName}.java`, `public class ${entityName}`, `public class ${entityName} extends AbstractAuditingEntity`);
+    }).includes('extends AbstractAuditingDTO')) {
+      this.replaceContent(`${javaDir}service/dto/${entityName}DTO.java`, `public class ${entityName}DTO`, `public class ${entityName}DTO extends AbstractAuditingDTO`);
     }
-    // extend DTO with AbstractAuditingDTO
-    if (entityData.dto === 'mapstruct') {
-      if (!this.fs.read(`${javaDir}service/dto/${entityName}DTO.java`, {
-        defaults: ''
-      }).includes('extends AbstractAuditingDTO')) {
-        this.replaceContent(`${javaDir}service/dto/${entityName}DTO.java`, `public class ${entityName}DTO`, `public class ${entityName}DTO extends AbstractAuditingDTO`);
-      }
-    }
-
-    // update liquibase changeset
-    const file = glob.sync(`${resourceDir}/config/liquibase/changelog/*_added_entity_${entityName}.xml`)[0];
-    const entityTableName = entityData.entityTableName ? entityData.entityTableName : entityName;
-    this.addChangesetToLiquibaseEntityChangelog(file, changeset(this.changelogDate, this.getTableName(entityTableName)));
-  } else if (this.auditFramework === 'javers') {
+  }
+  // update liquibase changeset
+  const file = glob.sync(`${resourceDir}/config/liquibase/changelog/*_added_entity_${entityName}.xml`)[0];
+  const entityTableName = entityData.entityTableName ? entityData.entityTableName : entityName;
+  this.addChangesetToLiquibaseEntityChangelog(file, changeset(this.changelogDate, this.getTableName(entityTableName)));
+  if (this.auditFramework === 'javers') {
     // check if repositories are already annotated
     const auditTableAnnotation = '@JaversSpringDataAuditable';
     const pattern = new RegExp(auditTableAnnotation, 'g');
