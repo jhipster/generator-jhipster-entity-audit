@@ -2,12 +2,6 @@
     "fluentMethods": true,
     "relationships": [
         {
-            "relationshipName": "user",
-            "otherEntityName": "user",
-            "relationshipType": "many-to-one",
-            "otherEntityField": "login"
-        },
-        {
             "relationshipName": "operation",
             "otherEntityName": "operation",
             "relationshipType": "one-to-many",
