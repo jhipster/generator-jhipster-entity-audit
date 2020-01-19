@@ -5,6 +5,7 @@ const jhipsterConstants = require('generator-jhipster/generators/generator-const
 const fs = require('fs');
 const glob = require('glob');
 
+const constants = require('../generator-constants');
 const genUtils = require('../utils');
 const packagejs = require('../../package.json');
 
@@ -265,17 +266,17 @@ module.exports = class extends BaseGenerator {
           // add required third party dependencies
           if (this.buildTool === 'maven') {
             if (this.databaseType === 'mongodb') {
-              this.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', '3.5.0');
-              this.addMavenDependency('org.mongodb', 'mongo-java-driver', '3.4.2');
+              this.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', constants.JAVERS_VERSION);
+              this.addMavenDependency('org.mongodb', 'mongo-java-driver', constants.MONGO_DRIVER_VERSION);
             } else if (this.databaseType === 'sql') {
-              this.addMavenDependency('org.javers', 'javers-spring-boot-starter-sql', '3.5.0');
+              this.addMavenDependency('org.javers', 'javers-spring-boot-starter-sql', constants.JAVERS_VERSION);
             }
           } else if (this.buildTool === 'gradle') {
             if (this.databaseType === 'mongodb') {
-              this.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-mongo', '3.5.0');
-              this.addGradleDependency('compile', 'org.mongodb', 'mongo-java-driver', '3.4.2');
+              this.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-mongo', constants.JAVERS_VERSION);
+              this.addGradleDependency('compile', 'org.mongodb', 'mongo-java-driver', constants.MONGO_DRIVER_VERSION);
             } else if (this.databaseType === 'sql') {
-              this.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-sql', '3.5.0');
+              this.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-sql', constants.JAVERS_VERSION);
             }
           }
         }
