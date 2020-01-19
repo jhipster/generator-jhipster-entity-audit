@@ -174,9 +174,9 @@ module.exports = class extends BaseGenerator {
         this.changelogDate = this.dateFormatForLiquibase();
         this.jhiPrefix = this.jhAppConfig.jhiPrefix;
         // if changelogDate for entity audit already exists then use this existing changelogDate
-        const liguibaseFileName = glob.sync(`${this.jhAppConfig.resourceDir}/config/liquibase/changelog/*_added_entity_EntityAuditEvent.xml`)[0];
-        if (liguibaseFileName) {
-          this.changelogDate = new RegExp('/config/liquibase/changelog/(.*)_added_entity_EntityAuditEvent.xml').exec(liguibaseFileName)[1];
+        const liquibaseFileName = glob.sync(`${this.jhAppConfig.resourceDir}/config/liquibase/changelog/*_added_entity_EntityAuditEvent.xml`)[0];
+        if (liquibaseFileName) {
+          this.changelogDate = new RegExp('/config/liquibase/changelog/(.*)_added_entity_EntityAuditEvent.xml').exec(liquibaseFileName)[1];
         }
 
 
