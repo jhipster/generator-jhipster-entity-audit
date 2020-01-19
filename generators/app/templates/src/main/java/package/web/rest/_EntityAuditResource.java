@@ -2,8 +2,9 @@ package <%=packageName%>.web.rest;
 
 import <%=packageName%>.domain.EntityAuditEvent;
 import <%=packageName%>.repository.EntityAuditEventRepository;
-import io.github.jhipster.web.util.PaginationUtil;
 import <%=packageName%>.security.AuthoritiesConstants;
+
+import io.github.jhipster.web.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
