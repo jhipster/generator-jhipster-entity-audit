@@ -45,7 +45,7 @@ export class EntityAuditModalComponent {
         public activeModal: NgbActiveModal
     ) {}
 
-    openChange(audit: EntityAuditEvent) {
+    openChange(audit: EntityAuditEvent): void {
         this.service.getPrevVersion(
             audit.entityType, audit.entityId, audit.commitVersion
         ).subscribe(res => {

@@ -33,13 +33,13 @@ export class EntityAuditComponent implements OnInit {
         private alertService: JhiAlertService
     ) {}
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.service.getAllAudited().subscribe(entities => {
             this.entities = entities;
         });
     }
 
-    loadChanges() {
+    loadChanges(): void {
         this.loading = true;
         this.service.findByEntity(this.selectedEntity, this.selectedLimit)
             .subscribe(res => {
@@ -49,14 +49,14 @@ export class EntityAuditComponent implements OnInit {
                     return it;
                 });
                 this.loading = false;
-            }, err => this.loading = false);
+            }, () => this.loading = false);
     }
 
-    trackId(index: number, item: EntityAuditEvent) {
+    trackId(index: number, item: EntityAuditEvent): string {
         return item.id;
     }
 
-    openChange(audit: EntityAuditEvent) {
+    openChange(audit: EntityAuditEvent): void {
         if (audit.commitVersion < 2) {
             <%_ if (enableTranslation) { _%>
             this.alertService.warning('entityAudit.result.firstAuditEntry');
