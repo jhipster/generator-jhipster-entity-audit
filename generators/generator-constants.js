@@ -1,5 +1,5 @@
 const constants = {
-  JAVERS_VERSION: '3.5.0',
+  JAVERS_VERSION: '5.8.8',
   MONGO_DRIVER_VERSION: '3.4.2'
 };
 
