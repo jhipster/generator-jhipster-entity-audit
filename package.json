@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster-entity-audit",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "JHipster module to enable entity audit and audit log page",
   "homepage": "https://github.com/hipster-labs/generator-jhipster-entity-audit",
   "author": {
