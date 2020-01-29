@@ -1,4 +1,4 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DiffMatchPatchModule } from 'ng-diff-match-patch';
@@ -22,7 +22,6 @@ import { EntityAuditModalComponent } from './entity-audit-modal.component';
     // https://ng-bootstrap.github.io/#/components/modal/examples
     entryComponents: [
         EntityAuditModalComponent
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    ]
 })
-export class EntityAuditModule { }
+export class EntityAuditModule {}

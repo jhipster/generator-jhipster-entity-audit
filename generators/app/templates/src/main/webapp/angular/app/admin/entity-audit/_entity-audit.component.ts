@@ -7,7 +7,7 @@ import { EntityAuditEvent } from './entity-audit-event.model';
 import { EntityAuditModalComponent } from './entity-audit-modal.component';
 
 @Component({
-    selector: '<%= jhiPrefix %>-entity-audit',
+    selector: '<%= jhiPrefixDashed %>-entity-audit',
     templateUrl: './entity-audit.component.html',
     styles: [`
       .code {

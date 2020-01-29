@@ -4,6 +4,7 @@ const BaseGenerator = require('generator-jhipster/generators/generator-base');
 const jhipsterConstants = require('generator-jhipster/generators/generator-constants');
 const fs = require('fs');
 const glob = require('glob');
+const _ = require('lodash');
 
 const constants = require('../generator-constants');
 const genUtils = require('../utils');
@@ -19,9 +20,12 @@ module.exports = class extends BaseGenerator {
         if (args === 'javers') {
           this.javersAudit = true;
         }
+        this.registerPrettierTransform();
       },
       readConfig() {
         this.jhAppConfig = this.getAllJhipsterConfig();
+        this.auditFramework = this.config.get('auditFramework');
+        this.auditPage = this.config.get('auditPage');
         if (!this.jhAppConfig) {
           this.error('Can\'t read .yo-rc.json');
         }
@@ -75,6 +79,7 @@ module.exports = class extends BaseGenerator {
   prompting() {
     const done = this.async();
     const prompts = [{
+      when: () => this.auditFramework === undefined,
       type: 'list',
       name: 'auditFramework',
       message: 'Choose which audit framework you would like to use.',
@@ -90,6 +95,7 @@ module.exports = class extends BaseGenerator {
       default: 'custom'
     },
     {
+      when: () => this.auditFramework === undefined,
       type: 'list',
       name: 'updateType',
       message: 'Do you want to enable audit for all existing entities?',
@@ -104,13 +110,14 @@ module.exports = class extends BaseGenerator {
       ],
       default: 'all'
     }, {
-      when: response => response.updateType !== 'all',
+      when: response => this.auditFramework === undefined && response.updateType !== 'all',
       type: 'checkbox',
       name: 'auditedEntities',
       message: 'Please choose the entities to be audited',
       choices: this.existingEntityChoices,
       default: 'none'
     }, {
+      when: () => this.auditPage === undefined,
       type: 'confirm',
       name: 'auditPage',
       message: 'Do you want to add an audit log page for entities?',
@@ -128,29 +135,32 @@ module.exports = class extends BaseGenerator {
       this.updateType = 'all';
       this.auditPage = true;
       done();
-    } else {
+    } else if (this.auditFramework === undefined) {
       this.prompt(prompts).then((props) => {
+        this.auditFramework = this.auditFramework || props.auditFramework;
+        this.updateType = props.updateType;
+        this.auditPage = this.auditPage || props.auditPage;
+        this.auditedEntities = props.auditedEntities;
+
+
         // Check if an invalid database, auditFramework is selected
-        if (props.auditFramework === 'custom' && this.jhAppConfig.databaseType === 'mongodb') {
+        if (this.auditFramework === 'custom' && this.jhAppConfig.databaseType === 'mongodb') {
           this.env.error(`${chalk.red.bold('ERROR!')} The JHipster audit framework supports SQL databases only...\n`);
-        } else if (props.auditFramework === 'javers' && this.jhAppConfig.databaseType !== 'sql' && this.jhAppConfig.databaseType !== 'mongodb') {
+        } else if (this.auditFramework === 'javers' && this.jhAppConfig.databaseType !== 'sql' && this.jhAppConfig.databaseType !== 'mongodb') {
           this.env.error(`${chalk.red.bold('ERROR!')} The Javers audit framework supports only SQL or MongoDB databases...\n`);
         }
 
-        this.props = props;
-        // To access props later use this.props.someOption;
-        this.auditFramework = props.auditFramework;
-        this.updateType = props.updateType;
-        this.auditPage = props.auditPage;
-        this.auditedEntities = props.auditedEntities;
         done();
       });
+    } else {
+      done();
     }
   }
   get writing() {
     return {
       updateYeomanConfig() {
         this.config.set('auditFramework', this.auditFramework);
+        this.config.set('auditPage', this.auditPage);
       },
 
       setupGlobalVar() {
@@ -170,17 +180,15 @@ module.exports = class extends BaseGenerator {
         this.buildTool = this.jhAppConfig.buildTool;
         this.cacheProvider = this.jhAppConfig.cacheProvider;
         this.skipFakeData = this.jhAppConfig.skipFakeData;
+        this.skipServer = this.jhAppConfig.skipServer;
+        this.skipClient = this.jhAppConfig.skipClient;
         // use function in generator-base.js from generator-jhipster
         this.angularAppName = this.getAngularAppName();
         this.angularXAppName = this.getAngularXAppName();
         this.changelogDate = this.dateFormatForLiquibase();
         this.jhiPrefix = this.jhAppConfig.jhiPrefix;
-        // if changelogDate for entity audit already exists then use this existing changelogDate
-        const liquibaseFileName = glob.sync(`${this.jhAppConfig.resourceDir}/config/liquibase/changelog/*_added_entity_EntityAuditEvent.xml`)[0];
-        if (liquibaseFileName) {
-          this.changelogDate = new RegExp('/config/liquibase/changelog/(.*)_added_entity_EntityAuditEvent.xml').exec(liquibaseFileName)[1];
-        }
-
+        this.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);
+        this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
 
         // use constants from generator-constants.js
         this.webappDir = jhipsterConstants.CLIENT_MAIN_SRC_DIR;
@@ -188,9 +196,17 @@ module.exports = class extends BaseGenerator {
         this.javaDir = `${jhipsterConstants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
         this.resourceDir = jhipsterConstants.SERVER_MAIN_RES_DIR;
         this.interpolateRegex = jhipsterConstants.INTERPOLATE_REGEX;
+
+        // if changelogDate for entity audit already exists then use this existing changelogDate
+        const liquibaseFileName = glob.sync(`${this.resourceDir}/config/liquibase/changelog/*_added_entity_EntityAuditEvent.xml`)[0];
+        if (liquibaseFileName) {
+          this.changelogDate = new RegExp('/config/liquibase/changelog/(.*)_added_entity_EntityAuditEvent.xml').exec(liquibaseFileName)[1];
+        }
       },
 
       writeBaseFiles() {
+        if (this.skipServer) return;
+
         let files;
         if (this.auditFramework === 'custom') {
           // collect files to copy
@@ -321,7 +337,9 @@ module.exports = class extends BaseGenerator {
             // `EntityAuditEventRepository.findAllEntityTypes`;
             this.updateEntityConfig(entityFile, 'enableEntityAudit', true);
 
-            genUtils.updateEntityAudit.call(this, entityName, jsonObj, this.javaDir, this.resourceDir, false, this.skipFakeData);
+            if (!this.skipServer) {
+              genUtils.updateEntityAudit.call(this, entityName, jsonObj, this.javaDir, this.resourceDir, false, this.skipFakeData);
+            }
           });
         }
       },
@@ -331,7 +349,7 @@ module.exports = class extends BaseGenerator {
         if (!this.auditPage) return;
 
         let files = [];
-        if (this.clientFramework === 'angularX') {
+        if (this.clientFramework === 'angularX' && !this.skipClient) {
           files = [
             {
               from: `${this.webappDir}angular/app/admin/entity-audit/_entity-audit-event.model.ts`,
@@ -368,19 +386,21 @@ module.exports = class extends BaseGenerator {
           ];
         }
 
-        if (this.auditFramework === 'custom') {
-          files.push({
-            from: `${this.javaTemplateDir}/web/rest/_EntityAuditResource.java`,
-            to: `${this.javaDir}web/rest/EntityAuditResource.java`
-          });
-        } else {
-          files.push({
-            from: `${this.javaTemplateDir}/web/rest/_JaversEntityAuditResource.java`,
-            to: `${this.javaDir}web/rest/JaversEntityAuditResource.java`
-          });
+        if (!this.skipServer) {
+          if (this.auditFramework === 'custom') {
+            files.push({
+              from: `${this.javaTemplateDir}/web/rest/_EntityAuditResource.java`,
+              to: `${this.javaDir}web/rest/EntityAuditResource.java`
+            });
+          } else {
+            files.push({
+              from: `${this.javaTemplateDir}/web/rest/_JaversEntityAuditResource.java`,
+              to: `${this.javaDir}web/rest/JaversEntityAuditResource.java`
+            });
+          }
         }
 
-        if (this.enableTranslation) {
+        if (this.enableTranslation && !this.skipClient) {
           this.languages.forEach((language) => {
             let sourceLanguage = 'en';
             if (fs.existsSync(`${this.templatePath()}/src/main/webapp/i18n/${language}/entity-audit.json`)) {
@@ -395,42 +415,45 @@ module.exports = class extends BaseGenerator {
 
         genUtils.copyFiles(this, files);
 
-        if (this.clientFramework === 'angularX') {
-          // add dependency required for displaying diffs
-          this.addNpmDependency('ng-diff-match-patch', '2.0.6');
-          // based on BaseGenerator.addAdminToModule
-          const adminModulePath = `${this.webappDir}app/admin/admin-routing.module.ts`;
-          this.rewriteFile(
-            adminModulePath,
-            'jhipster-needle-add-admin-route',
-            ',\n      {\n        path: \'entity-audit\',\n            loadChildren: () => import(\'./entity-audit/entity-audit.module\').then(m => m.EntityAuditModule)\n      }'
-          );
-          // this.addAdminToModule('', 'EntityAudit', 'entity-audit', 'entity-audit', this.enableTranslation, this.clientFramework)
-        }
+        if (!this.skipClient) {
+          if (this.clientFramework === 'angularX') {
+            // add dependency required for displaying diffs
+            this.addNpmDependency('ng-diff-match-patch', '2.0.6');
+            // based on BaseGenerator.addAdminToModule
+            const adminModulePath = `${this.webappDir}app/admin/admin-routing.module.ts`;
+            this.rewriteFile(
+              adminModulePath,
+              'jhipster-needle-add-admin-route',
+              ',\n      {\n        path: \'entity-audit\',\n        loadChildren: () => import(\'./entity-audit/entity-audit.module\').then(m => m.EntityAuditModule)\n      }'
+            );
+            // this.addAdminToModule('', 'EntityAudit', 'entity-audit', 'entity-audit', this.enableTranslation, this.clientFramework)
+          }
 
-        // add new menu entry
-        this.addElementToAdminMenu('admin/entity-audit', 'list-alt', this.enableTranslation, this.clientFramework, 'entity-audit');
-        if (this.enableTranslation) {
-          this.languages.forEach((language) => {
-            let menuText = 'Entity Audit';
-            try {
-              menuText = JSON.parse(fs.readFileSync(`${this.templatePath()}/src/main/webapp/i18n/${language}/global.json`, 'utf8')).global.menu.admin['entity-audit'];
-            } catch (e) {
-              this.log('Cannot parse file');
-            }
-            this.addAdminElementTranslationKey('entity-audit', menuText, language);
-          });
+          // add new menu entry
+          this.addElementToAdminMenu('admin/entity-audit', 'list-alt', this.enableTranslation, this.clientFramework, 'entity-audit');
+          if (this.enableTranslation) {
+            this.languages.forEach((language) => {
+              let menuText = 'Entity Audit';
+              try {
+                menuText = JSON.parse(fs.readFileSync(`${this.templatePath()}/src/main/webapp/i18n/${language}/global.json`, 'utf8')).global.menu.admin['entity-audit'];
+              } catch (e) {
+                this.log('Cannot parse file');
+              }
+              this.addAdminElementTranslationKey('entity-audit', menuText, language);
+            });
+          }
         }
       },
 
       registering() {
         // Register this generator as a dev dependency
         this.addNpmDevDependency('generator-jhipster-entity-audit', packagejs.version);
-        // Register post-entity hook
+        // Register post-app and post-entity hook
         try {
+          this.registerModule('generator-jhipster-entity-audit', 'app', 'post', 'app', 'Add support for entity audit and audit log page');
           this.registerModule('generator-jhipster-entity-audit', 'entity', 'post', 'entity', 'Add support for entity audit and audit log page');
         } catch (err) {
-          this.log(`${chalk.red.bold('WARN!')} Could not register as a jhipster post entity creation hook...\n`);
+          this.log(`${chalk.red.bold('WARN!')} Could not register as a jhipster post app and entity creation hook...\n`);
         }
       }
     };
