@@ -1,7 +1,7 @@
 <div>
     <h2 <% if (enableTranslation) { %> jhiTranslate="entityAudit.home.title" <% } %> >Entity Audit</h2>
 
-    <jhi-alert></jhi-alert>
+    <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
 
     <div class="row">
         <div class="col-md-5">
@@ -33,7 +33,7 @@
 
                   <button class="btn btn-primary float-right" (click)="loadChanges()"
                           [disabled]="!auditEventForm.form.valid">
-                      <i class="fa fa-refresh"></i>&nbsp;
+                        <fa-icon icon="sync"></fa-icon>
                       <span <% if (enableTranslation) { %> jhiTranslate="entityAudit.home.loadChangeList" <% } %> >Load Change List</span>
                   </button>
                 </div>
@@ -43,8 +43,7 @@
 
     <div [hidden]="loading">
         <div class="table-responsive mt-2" *ngIf="audits">
-            <p *ngIf="selectedEntity" <% if (enableTranslation) { %> jhiTranslate="entityAudit.result.showInfo" <% } %>
-                   [translateValues]="{ limit: selectedLimit, entity: selectedEntity }">
+            <p *ngIf="selectedEntity"<% if (enableTranslation) { %> jhiTranslate="entityAudit.result.showInfo" [translateValues]="{ limit: selectedLimit, entity: selectedEntity }"<% } %>>
                 Last <strong>{{ selectedLimit }}</strong>
                 Changes for <strong>{{ selectedEntity }}</strong>
             </p>
@@ -88,7 +87,7 @@
                                 <% if (enableTranslation) { %> jhiTranslate="entityAudit.result.tableHeader.modifiedBy" <% } %> >
                             Modified By
                         </th>
-                        <th><i class="fa fa-eye"></i></th>
+                        <th><fa-icon icon="eye"></fa-icon></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -103,7 +102,7 @@
                             <button type="button" class="btn btn-info btn-xs"
                                     ngbTooltip="<% if (enableTranslation) { %>{{ 'entityAudit.result.tableBody.viewDetails' | translate }}<% } else { %>View Audit Change Details<% } %>"
                                     (click)=openChange(audit)>
-                                <i class="fa fa-eye"></i>
+                                <fa-icon icon="eye"></fa-icon>
                             </button>
                         </td>
                     </tr>

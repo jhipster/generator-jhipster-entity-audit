@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.util.Objects;
 <% if (databaseType === 'sql' && auditFramework === 'custom') { %>
 @Entity
-@Table(name = "jhi_entity_audit_event")
+@Table(name = "<%= jhiTablePrefix %>_entity_audit_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
 public class EntityAuditEvent implements Serializable{
 

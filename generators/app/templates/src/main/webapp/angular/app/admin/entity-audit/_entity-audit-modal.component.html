@@ -1,6 +1,6 @@
 <div class="modal-header">
     <h4 class="modal-title" jhiTranslate="entityAudit.detail.title">
-		    Audit Details
+        Audit Details
     </h4>
     <button
             <% if (enableTranslation) {
@@ -15,9 +15,9 @@
 </div>
 <div class="modal-body pad">
     <div>
-        <strong
+        <strong<% if (enableTranslation) { %>
                 jhiTranslate="entityAudit.detail.action"
-                [translateValues]="{ action: action }">
+                [translateValues]="{ action: action }"<% } %>>
             {{action}} action was performed on below data
         </strong>
         <br><br>

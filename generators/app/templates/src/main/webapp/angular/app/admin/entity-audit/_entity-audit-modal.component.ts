@@ -6,7 +6,7 @@ import { EntityAuditService } from './entity-audit.service';
 import { EntityAuditEvent } from './entity-audit-event.model';
 
 @Component({
-    selector: '<%= jhiPrefix %>-entity-audit-modal',
+    selector: '<%= jhiPrefixDashed %>-entity-audit-modal',
     templateUrl: './entity-audit-modal.component.html',
     styles: [`
         /* NOTE: for now the /deep/ shadow-piercing descendant combinator is
