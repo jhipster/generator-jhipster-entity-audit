@@ -14,7 +14,7 @@ import java.lang.reflect.Field;
 
 /**
  * Async Entity Audit Event writer
- * This is invoked by Hibernate entity listeners to write audit event for entitities
+ * This is invoked by Hibernate entity listeners to write audit event for entities
  */
 @Component
 public class AsyncEntityAuditEventWriter {
@@ -70,7 +70,7 @@ public class AsyncEntityAuditEventWriter {
         } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException |
             IOException e) {
             log.error("Exception while getting entity ID and content {}", e);
-            // returning null as we dont want to raise an application exception here
+            // returning null as we don't want to raise an application exception here
             return null;
         }
         auditedEntity.setEntityId(entityId);
