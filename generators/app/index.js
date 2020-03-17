@@ -418,7 +418,7 @@ module.exports = class extends BaseGenerator {
         if (!this.skipClient) {
           if (this.clientFramework === 'angularX') {
             // add dependency required for displaying diffs
-            this.addNpmDependency('ng-diff-match-patch', '2.0.6');
+            this.addNpmDependency('ng-diff-match-patch', '3.0.1');
             // based on BaseGenerator.addAdminToModule
             const adminModulePath = `${this.webappDir}app/admin/admin-routing.module.ts`;
             this.rewriteFile(
