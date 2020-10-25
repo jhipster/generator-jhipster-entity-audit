@@ -424,7 +424,7 @@ module.exports = class extends BaseGenerator {
             this.rewriteFile(
               adminModulePath,
               'jhipster-needle-add-admin-route',
-              ',\n      {\n        path: \'entity-audit\',\n        loadChildren: () => import(\'./entity-audit/entity-audit.module\').then(m => m.EntityAuditModule)\n      }'
+              '      {\n        path: \'entity-audit\',\n        loadChildren: () => import(\'./entity-audit/entity-audit.module\').then(m => m.EntityAuditModule)\n      }'
             );
             // this.addAdminToModule('', 'EntityAudit', 'entity-audit', 'entity-audit', this.enableTranslation, this.clientFramework)
           }
