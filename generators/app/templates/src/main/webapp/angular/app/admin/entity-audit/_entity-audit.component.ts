@@ -56,7 +56,7 @@ export class EntityAuditComponent implements OnInit {
     }
 
     trackId(index: number, item: EntityAuditEvent): string {
-        return item.id;
+        return item.id!;
     }
 
     openChange(audit: EntityAuditEvent): void {
