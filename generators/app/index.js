@@ -420,13 +420,12 @@ module.exports = class extends BaseGenerator {
             // add dependency required for displaying diffs
             this.addNpmDependency('ng-diff-match-patch', '2.0.6');
             // based on BaseGenerator.addAdminToModule
-            const adminModulePath = `${this.webappDir}app/admin/admin-routing.module.ts`;
+            const adminModulePath = `${this.webappDir}app/admin/admin.route.ts`;
             this.rewriteFile(
               adminModulePath,
               'jhipster-needle-add-admin-route',
-              '      {\n        path: \'entity-audit\',\n        loadChildren: () => import(\'./entity-audit/entity-audit.module\').then(m => m.EntityAuditModule)\n      }'
+              ',\n      {\n        path: \'entity-audit\',\n        loadChildren: () => import(\'./entity-audit/entity-audit.module\').then(m => m.EntityAuditModule)\n      }'
             );
-            // this.addAdminToModule('', 'EntityAudit', 'entity-audit', 'entity-audit', this.enableTranslation, this.clientFramework)
           }
 
           // add new menu entry

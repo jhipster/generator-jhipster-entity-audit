@@ -48,7 +48,7 @@ export class EntityAuditModalComponent {
 
     openChange(audit: EntityAuditEvent): void {
         this.service.getPrevVersion(
-            audit.entityType!, audit.entityId!, audit.commitVersion!
+            audit.entityType, audit.entityId, audit.commitVersion
         ).subscribe((res: HttpResponse<EntityAuditEvent>) => {
             const data: EntityAuditEvent = res.body || {};
             const previousVersion = JSON.stringify(JSON.parse(data.entityValue || ''), null, 2);
