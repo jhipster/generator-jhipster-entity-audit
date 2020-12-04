@@ -110,7 +110,7 @@ module.exports = class extends BaseGenerator {
       ],
       default: 'all'
     }, {
-      when: response => this.auditFramework === undefined && response.updateType !== 'all',
+      when: (response) => this.auditFramework === undefined && response.updateType !== 'all',
       type: 'checkbox',
       name: 'auditedEntities',
       message: 'Please choose the entities to be audited',
@@ -156,6 +156,7 @@ module.exports = class extends BaseGenerator {
       done();
     }
   }
+
   get writing() {
     return {
       updateYeomanConfig() {
@@ -460,8 +461,7 @@ module.exports = class extends BaseGenerator {
 
 
   install() {
-    const logMsg =
-      `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
+    const logMsg = `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
 
     const injectDependenciesAndConstants = (err) => {
       if (err) {

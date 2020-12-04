@@ -41,8 +41,8 @@ module.exports = class extends BaseGenerator {
 
       getAuditedEntities() {
         this.auditedEntities = this.getExistingEntities()
-          .filter(entity => entity.definition.enableEntityAudit)
-          .map(entity => entity.name);
+          .filter((entity) => entity.definition.enableEntityAudit)
+          .map((entity) => entity.name);
       }
     };
   }
@@ -84,6 +84,7 @@ module.exports = class extends BaseGenerator {
       done();
     });
   }
+
   get writing() {
     return {
 
