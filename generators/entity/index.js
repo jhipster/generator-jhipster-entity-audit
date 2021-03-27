@@ -9,17 +9,19 @@ module.exports = class extends BaseGenerator {
   get initializing() {
     return {
       readConfig() {
+        // read JHipster config
+        this.loadAppConfig();
+        this.loadClientConfig();
+        this.loadServerConfig();
+        this.loadTranslationConfig();
+        // load entity config
         this.entityConfig = this.options.entityConfig;
-        this.jhAppConfig = this.getAllJhipsterConfig();
-        if (!this.jhAppConfig) {
-          this.error('Can\'t read .yo-rc.json');
-        }
       },
       setSource() {
         this.sourceRoot(`${this.sourceRoot()}/../../app/templates`);
       },
       checkDBType() {
-        if (this.jhAppConfig.databaseType !== 'sql' && this.jhAppConfig.databaseType !== 'mongodb') {
+        if (this.databaseType !== 'sql' && this.databaseType !== 'mongodb') {
           // exit if DB type is not SQL or MongoDB
           this.abort = true;
         }
@@ -53,8 +55,8 @@ module.exports = class extends BaseGenerator {
     }
 
     // don't prompt if data are imported from a file
-    if (this.entityConfig.useConfigurationFile === true && this.entityConfig.data && typeof this.entityConfig.data.enableEntityAudit !== 'undefined') {
-      this.enableAudit = this.entityConfig.data.enableEntityAudit;
+    if (this.entityConfig.useConfigurationFile === true && typeof this.entityConfig.enableEntityAudit !== 'undefined') {
+      this.enableAudit = this.entityConfig.enableEntityAudit;
 
       if (typeof this.config.get('auditFramework') !== 'undefined') {
         this.auditFramework = this.config.get('auditFramework');
@@ -95,20 +97,6 @@ module.exports = class extends BaseGenerator {
           return;
         }
 
-        // read config from .yo-rc.json
-        this.baseName = this.jhAppConfig.baseName;
-        this.packageName = this.jhAppConfig.packageName;
-        this.packageFolder = this.jhAppConfig.packageFolder;
-        this.clientFramework = this.jhAppConfig.clientFramework;
-        this.clientPackageManager = this.jhAppConfig.clientPackageManager;
-        this.buildTool = this.jhAppConfig.buildTool;
-        this.cacheProvider = this.jhAppConfig.cacheProvider;
-        this.skipFakeData = this.jhAppConfig.skipFakeData;
-        this.skipServer = this.jhAppConfig.skipServer;
-
-        // use function in generator-base.js from generator-jhipster
-        this.angularAppName = this.getAngularAppName();
-
         // use constants from generator-constants.js
         const javaDir = `${jhipsterConstants.SERVER_MAIN_SRC_DIR + this.packageFolder}/`;
         const resourceDir = jhipsterConstants.SERVER_MAIN_RES_DIR;
@@ -118,10 +106,9 @@ module.exports = class extends BaseGenerator {
           this.log(`\n${chalk.bold.green('I\'m updating the entity for audit ')}${chalk.bold.yellow(this.entityConfig.entityClass)}`);
 
           const entityName = this.entityConfig.entityClass;
-          const jsonObj = (this.entityConfig.data === undefined ? { changelogDate: this.entityConfig.changelogDate, entityTableName: this.entityConfig.entityTableName } : this.entityConfig.data);
-          this.changelogDate = jsonObj.changelogDate || this.dateFormatForLiquibase();
+          this.changelogDate = this.entityConfig.changelogDate || this.dateFormatForLiquibase();
           if (!this.skipServer) {
-            genUtils.updateEntityAudit.call(this, entityName, jsonObj, javaDir, resourceDir, true, this.skipFakeData);
+            genUtils.updateEntityAudit.call(this, entityName, this.entityConfig, javaDir, resourceDir, true, this.skipFakeData);
           }
         }
       },

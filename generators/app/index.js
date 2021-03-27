@@ -20,15 +20,20 @@ module.exports = class extends BaseGenerator {
         if (args === 'javers') {
           this.javersAudit = true;
         }
-        this.registerPrettierTransform();
       },
+
       readConfig() {
-        this.jhAppConfig = this.getAllJhipsterConfig();
-        this.auditFramework = this.config.get('auditFramework');
-        this.auditPage = this.config.get('auditPage');
-        if (!this.jhAppConfig) {
-          this.error('Can\'t read .yo-rc.json');
-        }
+        // read JHipster config
+        this.loadAppConfig();
+        this.loadClientConfig();
+        this.loadServerConfig();
+        this.loadTranslationConfig();
+
+        // load audit module config
+        this.auditStorage = this._getStorage();
+        this.auditConfig = this.auditStorage.createProxy();
+        this.auditFramework = this.auditConfig.auditFramework;
+        this.auditPage = this.auditConfig.auditPage;
       },
 
       displayLogo() {
@@ -36,16 +41,15 @@ module.exports = class extends BaseGenerator {
       },
 
       checkJHVersion() {
-        const jhipsterVersion = this.jhAppConfig.jhipsterVersion;
         const minimumJhipsterVersion = packagejs.dependencies['generator-jhipster'];
-        if (!semver.satisfies(jhipsterVersion, minimumJhipsterVersion)) {
+        if (!semver.satisfies(this.jhipsterVersion, minimumJhipsterVersion)) {
           this.env.error(`${chalk.red.bold('ERROR!')}  I support only JHipster versions greater than ${minimumJhipsterVersion}...
             If you want to use Entity Audit with an older JHipster version, download a previous version that supports the required JHipster version.`);
         }
       },
 
       checkDBType() {
-        if (this.jhAppConfig.databaseType !== 'sql' && this.jhAppConfig.databaseType !== 'mongodb') {
+        if (this.databaseType !== 'sql' && this.databaseType !== 'mongodb') {
           this.env.error(`${chalk.red.bold('ERROR!')} I support only SQL or MongoDB databases...\n`);
         }
       },
@@ -144,9 +148,9 @@ module.exports = class extends BaseGenerator {
 
 
         // Check if an invalid database, auditFramework is selected
-        if (this.auditFramework === 'custom' && this.jhAppConfig.databaseType === 'mongodb') {
+        if (this.auditFramework === 'custom' && this.databaseType === 'mongodb') {
           this.env.error(`${chalk.red.bold('ERROR!')} The JHipster audit framework supports SQL databases only...\n`);
-        } else if (this.auditFramework === 'javers' && this.jhAppConfig.databaseType !== 'sql' && this.jhAppConfig.databaseType !== 'mongodb') {
+        } else if (this.auditFramework === 'javers' && this.databaseType !== 'sql' && this.databaseType !== 'mongodb') {
           this.env.error(`${chalk.red.bold('ERROR!')} The Javers audit framework supports only SQL or MongoDB databases...\n`);
         }
 
@@ -164,30 +168,8 @@ module.exports = class extends BaseGenerator {
       },
 
       setupGlobalVar() {
-        // read config from .yo-rc.json
-        this.baseName = this.jhAppConfig.baseName;
-        this.packageName = this.jhAppConfig.packageName;
-        this.buildTool = this.jhAppConfig.buildTool;
-        this.databaseType = this.jhAppConfig.databaseType;
-        this.devDatabaseType = this.jhAppConfig.devDatabaseType;
-        this.prodDatabaseType = this.jhAppConfig.prodDatabaseType;
-        this.enableTranslation = this.jhAppConfig.enableTranslation;
-        this.languages = this.jhAppConfig.languages;
-        this.clientFramework = this.jhAppConfig.clientFramework;
-        this.hibernateCache = this.jhAppConfig.hibernateCache;
-        this.packageFolder = this.jhAppConfig.packageFolder;
-        this.clientPackageManager = this.jhAppConfig.clientPackageManager;
-        this.buildTool = this.jhAppConfig.buildTool;
-        this.cacheProvider = this.jhAppConfig.cacheProvider;
-        this.skipFakeData = this.jhAppConfig.skipFakeData;
-        this.skipServer = this.jhAppConfig.skipServer;
-        this.skipClient = this.jhAppConfig.skipClient;
         // use function in generator-base.js from generator-jhipster
-        this.angularAppName = this.getAngularAppName();
-        this.angularXAppName = this.getAngularXAppName();
         this.changelogDate = this.dateFormatForLiquibase();
-        this.jhiPrefix = this.jhAppConfig.jhiPrefix;
-        this.jhiPrefixDashed = _.kebabCase(this.jhiPrefix);
         this.jhiTablePrefix = this.getTableName(this.jhiPrefix);
 
         // use constants from generator-constants.js
@@ -421,12 +403,8 @@ module.exports = class extends BaseGenerator {
             this.addNpmDependency('ng-diff-match-patch', '2.0.6');
             // based on BaseGenerator.addAdminToModule
             const adminModulePath = `${this.webappDir}app/admin/admin-routing.module.ts`;
-            this.rewriteFile(
-              adminModulePath,
-              'jhipster-needle-add-admin-route',
-              '      {\n        path: \'entity-audit\',\n        loadChildren: () => import(\'./entity-audit/entity-audit.module\').then(m => m.EntityAuditModule)\n      }'
-            );
-            // this.addAdminToModule('', 'EntityAudit', 'entity-audit', 'entity-audit', this.enableTranslation, this.clientFramework)
+            // add admin route
+            this.addAdminRoute('entity-audit', './entity-audit/entity-audit.module', 'EntityAuditModule', this.enableTranslation ? 'entityAudit.home.title' : 'Entity audit');
           }
 
           // add new menu entry
@@ -459,34 +437,7 @@ module.exports = class extends BaseGenerator {
     };
   }
 
-
-  install() {
-    const logMsg =
-      `To install your dependencies manually, run: ${chalk.yellow.bold(`${this.clientPackageManager} install`)}`;
-
-    const injectDependenciesAndConstants = (err) => {
-      if (err) {
-        this.warning('Install of dependencies failed!');
-        this.log(logMsg);
-      } else if (this.clientFramework === 'angularX') {
-        this.spawnCommand(this.clientPackageManager, ['webpack:build']);
-      }
-    };
-    const installConfig = {
-      npm: this.clientPackageManager !== 'yarn',
-      yarn: this.clientPackageManager === 'yarn',
-      bower: false,
-      callback: injectDependenciesAndConstants
-    };
-    if (this.options['skip-install']) {
-      this.log(logMsg);
-    } else {
-      this.installDependencies(installConfig);
-    }
-  }
-
   end() {
     this.log(`\n${chalk.bold.green('Auditing enabled for entities, you will have an option to enable audit while creating new entities as well')}`);
-    this.log(`\n${chalk.bold.green('I\'m running webpack now')}`);
   }
 };

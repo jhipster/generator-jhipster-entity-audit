@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h4 class="modal-title" jhiTranslate="entityAudit.detail.title">
+    <h4 class="modal-title" <%= jhiPrefix %>Translate="entityAudit.detail.title">
         Audit Details
     </h4>
     <button
@@ -16,24 +16,24 @@
 <div class="modal-body pad">
     <div>
         <strong<% if (enableTranslation) { %>
-                jhiTranslate="entityAudit.detail.action"
+                <%= jhiPrefix %>Translate="entityAudit.detail.action"
                 [translateValues]="{ action: action }"<% } %>>
             {{action}} action was performed on below data
         </strong>
         <br><br>
 
-        <del class="diff diff-key" jhiTranslate="entityAudit.detail.old">
+        <del class="diff diff-key" <%= jhiPrefix %>Translate="entityAudit.detail.old">
             Old/Removed value
         </del>
         &nbsp;
-        <ins class="diff diff-key" jhiTranslate="entityAudit.detail.new">
+        <ins class="diff diff-key" <%= jhiPrefix %>Translate="entityAudit.detail.new">
             New/Added value
         </ins>
     </div>
     <br>
 
-    <label jhiTranslate="entityAudit.detail.changedFields">Changed Fields</label>
-    <pre class="code" id="resultChanges" diff [left]="left!" [right]="right!"></pre>
+    <label <%= jhiPrefix %>Translate="entityAudit.detail.changedFields">Changed Fields</label>
+    <pre *ngIf="left && right" class="code" id="resultChanges" diff [left]="left" [right]="right"></pre>
 </div>
 <div class="modal-footer">
     <button

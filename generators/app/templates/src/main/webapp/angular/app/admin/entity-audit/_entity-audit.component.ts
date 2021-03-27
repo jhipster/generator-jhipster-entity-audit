@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { JhiAlertService } from 'ng-jhipster';
 
 import { EntityAuditService } from './entity-audit.service';
 import { EntityAuditEvent } from './entity-audit-event.model';
 import { EntityAuditModalComponent } from './entity-audit-modal.component';
+import { AlertService } from 'app/core/util/alert.service';
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-entity-audit',
@@ -14,7 +14,8 @@ import { EntityAuditModalComponent } from './entity-audit-modal.component';
         background: #dcdada;
         padding: 10px;
       }
-    `]
+    `],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EntityAuditComponent implements OnInit {
     audits: EntityAuditEvent[] = [];
@@ -24,13 +25,13 @@ export class EntityAuditComponent implements OnInit {
     selectedLimit = this.limits[0];
     loading = false;
     filterEntityId = '';
-    orderProp?: string;
-    reverse = false;
+    orderProp: keyof EntityAuditEvent = 'entityId';
+    ascending = true;
 
     constructor(
         private modalService: NgbModal,
         private service: EntityAuditService,
-        private alertService: JhiAlertService
+        private alertService: AlertService
     ) {}
 
     ngOnInit(): void {
@@ -46,9 +47,9 @@ export class EntityAuditComponent implements OnInit {
         this.loading = true;
         this.service.findByEntity(this.selectedEntity, this.selectedLimit)
             .subscribe(res => {
-                const data = res.body || [];
+                const data = res.body ?? [];
                 this.audits = data.map((it: EntityAuditEvent) => {
-                    it.entityValue = JSON.parse(it.entityValue  || '');
+                    it.entityValue = JSON.parse(it.entityValue  ?? '');
                     return it;
                 });
                 this.loading = false;
@@ -61,17 +62,42 @@ export class EntityAuditComponent implements OnInit {
 
     openChange(audit: EntityAuditEvent): void {
         if (!audit.commitVersion || audit.commitVersion < 2) {
+            this.alertService.addAlert({
+                type: 'warning',
             <%_ if (enableTranslation) { _%>
-            this.alertService.warning('entityAudit.result.firstAuditEntry');
+                translationKey: 'entityAudit.result.firstAuditEntry',
             <%_ } else { _%>
-            this.alertService.warning(
-                'There is no previous version available for this entry.\n' +
-                'This is the first audit entry captured for this object.'
-            );
+                message: 'There is no previous version available for this entry.\n' +
+                         'This is the first audit entry captured for this object.',
             <%_ } _%>
+            });
         } else {
             const modalRef = this.modalService.open(EntityAuditModalComponent);
             modalRef.componentInstance.openChange(audit);
         }
+    }
+
+    orderBy(orderProp: keyof EntityAuditEvent): void {
+        this.ascending = this.orderProp === orderProp ? !this.ascending : true;
+        this.orderProp = orderProp;
+    }
+
+    getAudits(): EntityAuditEvent[] {
+        return this.audits
+            .filter(audit => !this.filterEntityId || audit.entityId === this.filterEntityId)
+            .sort((a, b) => {
+                const aOrderProp = a[this.orderProp];
+                const bOrderProp = b[this.orderProp];
+                if (
+                    (aOrderProp === undefined && bOrderProp === undefined) ||
+                    (aOrderProp !== undefined && bOrderProp !== undefined && aOrderProp === bOrderProp)
+                ) {
+                    return 0;
+                }
+                if (aOrderProp === undefined || aOrderProp < bOrderProp!) {
+                    return this.ascending ? -1 : 1;
+                }
+                return this.ascending ? 1 : -1;
+            });
     }
 }

@@ -50,8 +50,8 @@ export class EntityAuditModalComponent {
         this.service.getPrevVersion(
             audit.entityType!, audit.entityId!, audit.commitVersion!
         ).subscribe((res: HttpResponse<EntityAuditEvent>) => {
-            const data: EntityAuditEvent = res.body || {};
-            const previousVersion = JSON.stringify(JSON.parse(data.entityValue || ''), null, 2);
+            const data: EntityAuditEvent = res.body ?? {};
+            const previousVersion = JSON.stringify(JSON.parse(data.entityValue ?? ''), null, 2);
             const currentVersion = JSON.stringify(audit.entityValue, null, 2);
 
             this.action = audit.action;

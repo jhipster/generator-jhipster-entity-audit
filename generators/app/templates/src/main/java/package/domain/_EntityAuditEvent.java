@@ -174,6 +174,7 @@ public class EntityAuditEvent implements Serializable{
 
     @Override
     public String toString() {
+        // prettier-ignore
         return "EntityAuditEvent{" +
             "id=" + id +
             ", entityId='" + entityId + "'" +

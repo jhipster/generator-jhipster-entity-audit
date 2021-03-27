@@ -1,15 +1,15 @@
 <div>
-    <h2 <% if (enableTranslation) { %> jhiTranslate="entityAudit.home.title" <% } %> >Entity Audit</h2>
+    <h2<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.home.title"<% } %>>Entity Audit</h2>
 
     <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
 
     <div class="row">
         <div class="col-md-5">
-            <h4 <% if (enableTranslation) { %> jhiTranslate="entityAudit.home.filter" <% } %> >Filter</h4>
+            <h4<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.home.filter"<% } %>>Filter</h4>
+
             <form name="auditEventForm" class="form-inline" #auditEventForm="ngForm">
                 <div class="d-flex">
-                  <label class="form-control-label mr-sm-2 col-2" for="entityName"
-                          <% if (enableTranslation) { %> jhiTranslate="entityAudit.home.entityOrTable" <% } %> >
+                    <label class="form-control-label mr-sm-2 col-2" for="entityName"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.home.entityOrTable"<% } %>>
                       Entity/Table
                   </label>
                   <select class="form-control mb-2 mr-sm-2 mb-sm-0" id="entityName"
@@ -20,8 +20,7 @@
                       </option>
                   </select>
 
-                  <label class="form-control-label mr-sm-2 col-2" for="limit"
-                          <% if (enableTranslation) { %> jhiTranslate="entityAudit.home.limitTo" <% } %> >
+                    <label class="form-control-label mr-sm-2 col-2" for="limit"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.home.limitTo"<% } %>>
                       Limit to
                   </label>
                   <select class="form-control mb-2 mr-sm-2 mb-sm-0" id="limit"
@@ -34,7 +33,7 @@
                   <button class="btn btn-primary float-right" (click)="loadChanges()"
                           [disabled]="!auditEventForm.form.valid">
                         <fa-icon icon="sync"></fa-icon>
-                      <span <% if (enableTranslation) { %> jhiTranslate="entityAudit.home.loadChangeList" <% } %> >Load Change List</span>
+                        <span<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.home.loadChangeList"<% } %>>Load Change List</span>
                   </button>
                 </div>
             </form>
@@ -43,15 +42,14 @@
 
     <div [hidden]="loading">
         <div class="table-responsive mt-2" *ngIf="audits">
-            <p *ngIf="selectedEntity"<% if (enableTranslation) { %> jhiTranslate="entityAudit.result.showInfo" [translateValues]="{ limit: selectedLimit, entity: selectedEntity }"<% } %>>
+            <p *ngIf="selectedEntity"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.showInfo" [translateValues]="{ limit: selectedLimit, entity: selectedEntity }"<% } %>>
                 Last <strong>{{ selectedLimit }}</strong>
                 Changes for <strong>{{ selectedEntity }}</strong>
             </p>
 
             <form class="form-inline mb-2">
                 <div class="form-group">
-                    <label for="searchFieldEntityId"
-                            <% if (enableTranslation) { %> jhiTranslate="entityAudit.result.searchFieldLabel" <% } %> >
+                    <label for="searchFieldEntityId"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.searchFieldLabel"<% } %>>
                         Filter:
                     </label>
                     <input type="text" class="form-control ml-2" id="searchFieldEntityId"
@@ -64,34 +62,29 @@
             <table class="table table-condensed table-striped table-bordered">
                 <thead>
                     <tr>
-                        <th (click)="orderProp = 'entityId'; reverse = !reverse"
-                                <% if (enableTranslation) { %> jhiTranslate="entityAudit.result.tableHeader.entityId" <% } %> >
+                        <th (click)="orderBy('entityId')"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.entityId"<% } %>>
                             Entity Id
                         </th>
-                        <th (click)="orderProp = 'action'; reverse = !reverse"
-                                <% if (enableTranslation) { %> jhiTranslate="entityAudit.result.tableHeader.action" <% } %> >
+                        <th (click)="orderBy('action')"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.action"<% } %>>
                             Action
                         </th>
-                        <th (click)="orderProp = 'commitVersion'; reverse = !reverse"
-                                <% if (enableTranslation) { %> jhiTranslate="entityAudit.result.tableHeader.version" <% } %> >
+                        <th (click)="orderBy('commitVersion')"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.version"<% } %>>
                             Version
                         </th>
-                        <th <% if (enableTranslation) { %> jhiTranslate="entityAudit.result.tableHeader.value" <% } %> >
+                        <th<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.value"<% } %>>
                             Value
                         </th>
-                        <th (click)="orderProp = 'modifiedDate'; reverse = !reverse"
-                                <% if (enableTranslation) { %> jhiTranslate="entityAudit.result.tableHeader.modifiedDate" <% } %> >
+                        <th (click)="orderBy('modifiedDate')"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.modifiedDate"<% } %>>
                             Modified Date
                         </th>
-                        <th (click)="orderProp = 'modifiedBy'; reverse = !reverse"
-                                <% if (enableTranslation) { %> jhiTranslate="entityAudit.result.tableHeader.modifiedBy" <% } %> >
+                        <th (click)="orderBy('modifiedBy')"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.modifiedBy"<% } %>>
                             Modified By
                         </th>
                         <th><fa-icon icon="eye"></fa-icon></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let audit of (audits | pureFilter:filterEntityId:'entityId' | orderBy:orderProp:reverse); trackBy: trackId">
+                    <tr *ngFor="let audit of getAudits(); trackBy: trackId">
                         <td>{{ audit.entityId }}</td>
                         <td>{{ audit.action }}</td>
                         <td>{{ audit.commitVersion }}</td>
@@ -109,7 +102,7 @@
                 </tbody>
             </table>
         </div>
-        <p *ngIf="!audits" <% if (enableTranslation) { %> jhiTranslate="entityAudit.result.noDataFound" <% } %> class="mt-2">
+        <p *ngIf="!audits"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.noDataFound"<% } %> class="mt-2">
             No Data found for the filters
         </p>
     </div>
