@@ -24,7 +24,7 @@
   "dependencies": {
     "yeoman-generator": "4.5.0",
     "yeoman-environment": "2.7.0",
-    "shelljs": "0.8.3",
+    "shelljs": "0.8.5",
     "chalk": "3.0.0",
     "glob": "7.1.6",
     "lodash": "4.17.15",
