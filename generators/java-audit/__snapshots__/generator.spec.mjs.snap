@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SubGenerator java-audit of entity-audit JHipster blueprint run should succeed 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/audit/EntityAuditAction.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/EntityAuditEvent.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/service/dto/AbstractAuditingDTO.java": Object {
+    "stateCleared": "modified",
+  },
+}
+`;

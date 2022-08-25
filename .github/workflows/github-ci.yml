@@ -1,70 +1,108 @@
-name: Build
-on: [push, pull_request]
+#
+# Copyright 2013-2022 the original author or authors from the JHipster project.
+#
+# This file is part of the JHipster project, see https://www.jhipster.tech/
+# for more information.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: JDL tests
+concurrency:
+  # Group PRs by head_ref, push to main branch by commit id, and others branch by ref.
+  group: ${{ github.workflow }}-${{ github.head_ref || (github.ref == 'refs/heads/main' && github.sha) || github.ref }}
+  cancel-in-progress: true
+on:
+  push:
+    branches:
+      - '*'
+    paths-ignore:
+      - 'generators/ci-cd/**'
+  pull_request:
+    types: [closed, opened, synchronize, reopened]
+    branches:
+      - '*'
+    paths-ignore:
+      - 'generators/ci-cd/**'
+permissions:
+  contents: read
 jobs:
-  integration-tests:
-    name: integration tests
-    runs-on: ubuntu-latest
+  applications:
+    name: ${{ matrix.suite }} (${{ matrix.os }}, ${{ matrix.build-tool }})
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ github.workspace }}/app
+    if: github.event.action != 'closed'
+    timeout-minutes: 30
     strategy:
+      fail-fast: false
       matrix:
-        auditType: [default, javers]
-        sample: [maven-angularX, gradle-ms-noFakeData]
-    timeout-minutes: 40
+        os: [ubuntu-20.04]
+        build-tool: [maven, gradle]
+        suite:
+          - postgresql-mvc-jwt
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      #----------------------------------------------------------------------
+      # Install all tools and check configuration
+      #----------------------------------------------------------------------
+      - name: 'SETUP: create app folder'
+        run: mkdir app
+        working-directory: ${{ github.workspace }}
+      - name: 'SETUP: checkout generator-jhipster-entity-audit'
+        uses: actions/checkout@v3
         with:
-          node-version: 12.14.0
-      - name: Install node.js packages
-        run: npm install
-      - name: Link module
-        run: npm link
-      - name: Install tools
-        run: npm install -g yo
-      - name: Install JHipster
-        run: npm install -g generator-jhipster
-      - name: Prepare temporary directory
+          path: generator-jhipster-entity-audit
+          fetch-depth: 2
+      - name: 'SETUP: setup node'
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+      - name: 'SETUP: install generator-jhister-entity-audit'
         run: |
-          cp -r ./test-integration/samples/${{ matrix.sample }} /tmp/
-          cp -r ./test-integration/samples/.jhipster /tmp/${{ matrix.sample }}
-      - name: Generate project
-        run: |
-          jhipster --with-entities --no-insight
-          yo jhipster-entity-audit ${{ matrix.auditType }} --force
-        working-directory: /tmp/${{ matrix.sample }}
-      - name: Run backend tests
-        run: |
-          if [ -f "mvnw" ]; then
-              ./mvnw -ntp -P-webpack verify --batch-mode \
-                  -Dlogging.level.ROOT=OFF \
-                  -Dlogging.level.org.zalando=OFF \
-                  -Dlogging.level.io.github.jhipster=OFF \
-                  -Dlogging.level.com.mycompany.myapp=OFF \
-                  -Dlogging.level.org.springframework=OFF \
-                  -Dlogging.level.org.springframework.web=OFF \
-                  -Dlogging.level.org.springframework.security=OFF
-          elif [ -f "gradlew" ]; then
-              JHI_GRADLE_EXCLUDE_WEBPACK="-x webpack"
-              if [[ $(grep "\"skipClient\": true" .yo-rc.json) != "" ]]; then
-                  JHI_GRADLE_EXCLUDE_WEBPACK=""
-              fi
-              ./gradlew test integrationTest $JHI_GRADLE_EXCLUDE_WEBPACK \
-                  -Dlogging.level.ROOT=OFF \
-                  -Dlogging.level.org.zalando=OFF \
-                  -Dlogging.level.io.github.jhipster=OFF \
-                  -Dlogging.level.com.mycompany.myapp=OFF \
-                  -Dlogging.level.org.springframework=OFF \
-                  -Dlogging.level.org.springframework.web=OFF \
-                  -Dlogging.level.org.springframework.security=OFF
-          fi
-        working-directory: /tmp/${{ matrix.sample }}
-      - name: Run frontend tests
-        run: |
-          if [[ $(grep yarn .yo-rc.json) != "" ]]; then
-            JHI_CLIENT_PACKAGE_MANAGER=yarn
-          else
-            JHI_CLIENT_PACKAGE_MANAGER=npm
-          fi
-          if [ -f "tsconfig.json" ]; then
-            $JHI_CLIENT_PACKAGE_MANAGER run test
-          fi
-        working-directory: /tmp/${{ matrix.sample }}
+          npm ci --prod
+          npm link
+        working-directory: ${{ github.workspace }}/generator-jhipster-entity-audit
+      - name: 'SETUP: get date'
+        id: get-date
+        run: echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+      - name: 'SETUP: load cache'
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            ~/.cache/Cypress/
+            ~/.m2/repository
+          key: ${{ runner.os }}-app-${{ matrix.suite }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster-entity-audit/package*.json') }}
+      #----------------------------------------------------------------------
+      # Install JHipster and generate project+entities
+      #----------------------------------------------------------------------
+      - name: 'PROJECT: generate'
+        run: 'JHI_PROFILE=${{ matrix.profile }} jhipster jdl "${{ github.workspace }}/generator-jhipster-entity-audit/test-integration/samples/${{ matrix.suite }}.jdl" --build ${{ matrix.build-tool }} --no-insight --skip-git --skip-commit-hook --skip-jhipster-dependencies --no-cypress-audit'
+      - name: 'TESTS: backend tests'
+        run: npm run ci:backend:test
+      - name: 'TESTS: frontend tests'
+        run: npm run ci:frontend:test
+      - name: 'TESTS: packaging'
+        run: npm run ci:e2e:package
+      - name: 'TESTS: start docker dependencies'
+        run: npm run ci:e2e:prepare
+        if: matrix.e2e != 'false'
+      - name: 'TESTS: run e2e'
+        run: npm run ci:e2e:run --if-present
+        if: matrix.e2e != 'false'

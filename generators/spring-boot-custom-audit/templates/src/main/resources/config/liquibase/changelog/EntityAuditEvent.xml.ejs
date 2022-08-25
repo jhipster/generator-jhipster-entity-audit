@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <%_ const isAutoIncrementDB = prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb'; _%>
+    <%_ if (isAutoIncrementDB) { _%>
+    <property name="autoIncrement" value="true"/>
+
+    <%_ } _%>
+    <!--
+        Added the entity EntityAuditEvent.
+    -->
+    <changeSet id="<%= entityAuditEventChangelogDate %>" author="jhipster">
+        <createTable tableName="<%= jhiTablePrefix %>_entity_audit_event">
+            <column name="id" type="bigint" <%_ if (isAutoIncrementDB) { %> autoIncrement="${autoIncrement}" <%_ } %>>
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="entity_id" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="entity_type" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="action" type="varchar(20)">
+                <constraints nullable="false" />
+            </column>
+            <column name="entity_value" type="clob"/>
+            <column name="commit_version" type="integer"/>
+            <column name="modified_by" type="varchar(100)"/>
+            <column name="modified_date" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <createIndex indexName="idx_entity_audit_event_entity_id"
+            tableName="<%= jhiTablePrefix %>_entity_audit_event">
+            <column name="entity_id" type="bigint"/>
+        </createIndex>
+        <createIndex indexName="idx_entity_audit_event_entity_type"
+            tableName="<%= jhiTablePrefix %>_entity_audit_event">
+            <column name="entity_type" type="varchar(255)"/>
+        </createIndex>
+        <dropDefaultValue tableName="<%= jhiTablePrefix %>_entity_audit_event" columnName="modified_date" columnDataType="datetime"/>
+        <!-- TODO add an archival job for the table -->
+    </changeSet>
+</databaseChangeLog>

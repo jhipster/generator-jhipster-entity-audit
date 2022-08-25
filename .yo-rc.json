@@ -1,0 +1,51 @@
+{
+  "generator-jhipster": {
+    "additionalSubGenerators": "angular-audit,java-audit,spring-boot-custom-audit,spring-boot-javers",
+    "baseName": "entity-audit",
+    "cli": true,
+    "generators": {
+      "angular-audit": {
+        "command": false,
+        "priorities": ["preparing", "writing"],
+        "sbs": null,
+        "written": true
+      },
+      "app": {
+        "command": false,
+        "priorities": ["prompting", "loading", "preparing"],
+        "sbs": true,
+        "written": true
+      },
+      "client": {
+        "command": false,
+        "priorities": ["composing"],
+        "sbs": true,
+        "written": true
+      },
+      "java-audit": {
+        "command": false,
+        "priorities": ["composing", "writing"],
+        "sbs": null,
+        "written": true
+      },
+      "spring-boot-custom-audit": {
+        "command": false,
+        "priorities": ["writing", "postWriting"],
+        "sbs": null,
+        "written": true
+      },
+      "spring-boot-javers": {
+        "command": false,
+        "priorities": ["writing", "postWriting"],
+        "sbs": null,
+        "written": true
+      }
+    },
+    "jhipsterVersion": "7.9.2",
+    "localBlueprint": false,
+    "prettierDefaultIndent": 2,
+    "projectName": "Entity Audit Application",
+    "skipCommitHook": true,
+    "subGenerators": ["app", "client"]
+  }
+}

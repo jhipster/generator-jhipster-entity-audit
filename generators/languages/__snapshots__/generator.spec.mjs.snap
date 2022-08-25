@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SubGenerator languages of entity-audit JHipster blueprint run should succeed 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/resources/i18n/messages_en.properties": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/activate.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/configuration.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/entity-audit.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/error.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/global.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/health.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/home.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/login.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/logs.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/metrics.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/password.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/register.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/reset.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/sessions.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/settings.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/en/user-management.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/i18n/messages_en.properties": Object {
+    "stateCleared": "modified",
+  },
+}
+`;
