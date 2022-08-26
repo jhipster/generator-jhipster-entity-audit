@@ -2,16 +2,17 @@ import { join } from 'path';
 import { GeneratorBaseEntities, constants } from 'generator-jhipster';
 import {
   PRIORITY_PREFIX,
-  WRITING_PRIORITY,
-  POST_WRITING_ENTITIES_PRIORITY,
   COMPOSING_PRIORITY,
   LOADING_PRIORITY,
   PREPARING_PRIORITY,
   CONFIGURING_EACH_ENTITY_PRIORITY,
   PREPARING_EACH_ENTITY_PRIORITY,
+  WRITING_PRIORITY,
+  POST_WRITING_PRIORITY,
+  POST_WRITING_ENTITIES_PRIORITY,
 } from 'generator-jhipster/esm/priorities';
 
-const { SERVER_MAIN_SRC_DIR, SERVER_MAIN_RES_DIR } = constants;
+const { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } = constants;
 
 const COMMON_ATTRIBUTES = {
   // Hides form on create
@@ -88,6 +89,7 @@ export default class extends GeneratorBaseEntities {
         application.auditFrameworkJavers = auditFramework === 'javers';
         application.auditFrameworkAny = auditFramework && auditFramework !== 'no';
         application.absolutePackageFolder = `${SERVER_MAIN_SRC_DIR}${packageFolder}/`;
+        application.absolutePackageTestFolder = `${SERVER_TEST_SRC_DIR}${packageFolder}/`;
       },
 
       async prepare({ application }) {
@@ -142,6 +144,31 @@ export default class extends GeneratorBaseEntities {
           },
           context: application,
         });
+      },
+    };
+  }
+
+  get [POST_WRITING_PRIORITY]() {
+    return {
+      async postWritingEntitiesTask({ application: { absolutePackageTestFolder, packageName } }) {
+        this.editFile(`${absolutePackageTestFolder}TechnicalStructureTest.java`, contents =>
+          contents
+            .replace(
+              /import static com.tngtech.archunit.library.Architectures.layeredArchitecture;/,
+              `import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.type;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
+import com.mycompany.myapp.audit.EntityAuditEventListener;
+import com.mycompany.myapp.domain.AbstractAuditingEntity;
+`
+            )
+            .replace(
+              /.ignoreDependency/,
+              `.ignoreDependency(resideInAPackage("${packageName}.audit"), alwaysTrue())
+        .ignoreDependency(type(AbstractAuditingEntity.class), type(EntityAuditEventListener.class))
+        .ignoreDependency`
+            )
+        );
       },
     };
   }

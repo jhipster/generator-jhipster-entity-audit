@@ -1,13 +1,16 @@
-package <%=packageName%>.service;
+package <%=packageName%>.audit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import <%=packageName%>.domain.AbstractAuditingEntity;
 import <%=packageName%>.domain.EntityAuditEvent;
+import <%=packageName%>.domain.enumeration.EntityAuditAction;
 import <%=packageName%>.repository.EntityAuditEventRepository;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -17,7 +20,8 @@ import org.springframework.stereotype.Component;
  * This is invoked by Hibernate entity listeners to write audit event for entities
  */
 @Component
-public class AsyncEntityAuditEventWriter {
+@Profile("!testdev & !testprod")
+public class AsyncEntityAuditEventWriter implements EntityAuditEventWriter {
 
     private final Logger log = LoggerFactory.getLogger(AsyncEntityAuditEventWriter.class);
 
@@ -109,5 +113,10 @@ public class AsyncEntityAuditEventWriter {
             log.trace("No entities.. Adding new version 1");
             auditedEntity.setCommitVersion(1);
         }
+    }
+
+    @PostConstruct
+    void injectWriter() {
+        EntityAuditEventListener.setEntityAuditEventWriter(this);
     }
 }

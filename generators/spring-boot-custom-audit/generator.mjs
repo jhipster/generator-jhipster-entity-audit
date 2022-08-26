@@ -46,9 +46,8 @@ export default class extends GeneratorBaseEntities {
                 path: `${SERVER_MAIN_SRC_DIR}package/`,
                 renameTo: (ctx, file) => `${ctx.absolutePackageFolder}/${file}`,
                 templates: [
-                  'config/EntityAuditEventConfig.java',
-                  'domain/EntityAuditEventListener.java',
-                  'service/AsyncEntityAuditEventWriter.java',
+                  'audit/EntityAuditEventListener.java',
+                  'audit/AsyncEntityAuditEventWriter.java',
                   'repository/EntityAuditEventRepository.java',
                 ],
               },
@@ -88,7 +87,7 @@ export default class extends GeneratorBaseEntities {
           return contents.replace(/AuditingEntityListener.class/, '{AuditingEntityListener.class, EntityAuditEventListener.class}').replace(
             /import org.springframework.data.jpa.domain.support.AuditingEntityListener;/,
             `import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import ${packageName}.domain.EntityAuditEventListener;`
+import ${packageName}.audit.EntityAuditEventListener;`
           );
         });
 

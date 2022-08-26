@@ -1,0 +1,8 @@
+package <%=packageName%>.audit;
+
+import <%=packageName%>.domain.enumeration.EntityAuditAction;
+
+@FunctionalInterface
+public interface EntityAuditEventWriter {
+    public void writeAuditEvent(Object target, EntityAuditAction action);
+}
