@@ -132,7 +132,11 @@ export default class extends GeneratorBaseEntities {
               {
                 path: `${SERVER_MAIN_SRC_DIR}package/`,
                 renameTo: (ctx, file) => `${ctx.absolutePackageFolder}/${file}`,
-                templates: ['config/audit/EntityAuditAction.java', 'domain/EntityAuditEvent.java', 'service/dto/AbstractAuditingDTO.java'],
+                templates: [
+                  'domain/enumeration/EntityAuditAction.java',
+                  'domain/EntityAuditEvent.java',
+                  'service/dto/AbstractAuditingDTO.java',
+                ],
               },
             ],
           },

@@ -1,33 +1,36 @@
 package <%=packageName%>.domain;
 
-<% if (databaseType === 'sql' && auditFramework === 'custom') { %>
+<%_ if (auditFrameworkCustom) { _%>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import java.time.Instant;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;<% } else if (auditFramework === 'javers') {%>
+import javax.validation.constraints.Size;
+<%_ } else if (auditFrameworkJavers) { _%>
 import org.javers.core.metamodel.object.CdoSnapshot;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.Instant;<% }%>
 import java.io.Serializable;
 import java.util.Objects;
-<% if (databaseType === 'sql' && auditFramework === 'custom') { %>
+
+<%_ if (auditFrameworkCustom) { _%>
 @Entity
 @Table(name = "<%= jhiTablePrefix %>_entity_audit_event")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+<%_ } _%>
 public class EntityAuditEvent implements Serializable{
 
     private static final long serialVersionUID = 1L;
-    <% if (databaseType == 'sql' && auditFramework === 'custom') { %>
+<%_ if (auditFrameworkCustom) { _%>
     @Id
-        <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
+  <%_ if (prodDatabaseType === 'mysql' || prodDatabaseType === 'mariadb') { _%>
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-        <%_ }  else { _%>
+  <%_ }  else { _%>
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
-        <%_ } _%>
+  <%_ } _%>
     private Long id;
 
     @NotNull
@@ -58,7 +61,7 @@ public class EntityAuditEvent implements Serializable{
     @NotNull
     @Column(name = "modified_date", nullable = false)
     private Instant modifiedDate;
-    <% } else if (auditFramework === 'javers') { %>
+<% } else if (auditFrameworkJavers) { %>
     private String id;
 
     private String entityId;
@@ -89,8 +92,10 @@ public class EntityAuditEvent implements Serializable{
 
     public void setEntityId(String entityId) {
         this.entityId = entityId;
-    }<% } %>
-    <% if (databaseType === 'sql' && auditFramework === 'custom') { %>
+    }
+<%_ } _%>
+<%_ if (auditFrameworkCustom) { _%>
+
     public Long getId() {
         return id;
     }
@@ -105,7 +110,8 @@ public class EntityAuditEvent implements Serializable{
 
     public void setEntityId(String entityId) {
         this.entityId = entityId;
-    }<% } %>
+    }
+<%_ } _%>
 
     public String getEntityType() {
         return entityType;
@@ -185,8 +191,8 @@ public class EntityAuditEvent implements Serializable{
             ", modifiedDate='" + modifiedDate + "'" +
             '}';
     }
+<%_ if (auditFrameworkJavers) { _%>
 
-    <% if (auditFramework === 'javers') { %>
     public static EntityAuditEvent fromJaversSnapshot(CdoSnapshot snapshot) {
         EntityAuditEvent entityAuditEvent = new EntityAuditEvent();
 
@@ -232,6 +238,6 @@ public class EntityAuditEvent implements Serializable{
 
         return entityAuditEvent;
 
-    }<% }%>
-
+    }
+<%_ } _%>
 }
