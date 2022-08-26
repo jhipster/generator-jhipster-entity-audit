@@ -38,7 +38,7 @@ permissions:
   contents: read
 jobs:
   applications:
-    name: ${{ matrix.suite }} (${{ matrix.os }}, ${{ matrix.build-tool }})
+    name: ${{ matrix.audit-framework }} ${{ matrix.build-tool }}) ${{ matrix.suite }} (${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     defaults:
       run:
