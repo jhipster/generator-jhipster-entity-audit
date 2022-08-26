@@ -100,9 +100,7 @@ export default class extends GeneratorBaseEntities {
     return {
       async configureEntity({ entityName, entityConfig }) {
         const { auditedEntities = [] } = this.options;
-        if (auditedEntities.includes(entityName)) {
-          entityConfig.enableAudit = true;
-        }
+        entityConfig.enableAudit = auditedEntities.includes(entityName) || entityConfig.enableAudit;
         if (!entityConfig.enableAudit) return;
 
         const fieldNames = entityConfig.fields.map(f => f.fieldName);
