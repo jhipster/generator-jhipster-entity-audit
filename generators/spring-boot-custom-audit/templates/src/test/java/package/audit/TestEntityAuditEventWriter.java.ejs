@@ -1,13 +1,12 @@
-package <%=packageName%>.audit;
+package com.mycompany.myapp.audit;
 
-import javax.annotation.PostConstruct;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-import org.springframework.stereotype.Component;
-
-@Component
+@Configuration
 public class TestEntityAuditEventWriter {
-    @PostConstruct
-    void setEventWriter() {
-        EntityAuditEventListener.setEntityAuditEventWriter((target, action) -> {});
+    @Bean
+    EntityAuditEventWriter entityAuditEventWriter() {
+        return (target, action) -> {};
     }
 }
