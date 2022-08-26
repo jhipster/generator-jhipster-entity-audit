@@ -94,7 +94,7 @@ export class EntityAuditComponent implements OnInit {
                 ) {
                     return 0;
                 }
-                if (aOrderProp === undefined || aOrderProp < bOrderProp!) {
+                if (aOrderProp === undefined || aOrderProp < bOrderProp) {
                     return this.ascending ? -1 : 1;
                 }
                 return this.ascending ? 1 : -1;
