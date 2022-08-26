@@ -85,9 +85,9 @@ import org.javers.core.metamodel.annotation.DiffIgnore;`
           }
         } else if (buildToolGradle) {
           if (databaseTypeMongodb) {
-            this.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-mongo', JAVERS_VERSION);
+            this.addGradleDependency('implementation', 'org.javers', 'javers-spring-boot-starter-mongo', JAVERS_VERSION);
           } else if (databaseTypeSql) {
-            this.addGradleDependency('compile', 'org.javers', 'javers-spring-boot-starter-sql', JAVERS_VERSION);
+            this.addGradleDependency('implementation', 'org.javers', 'javers-spring-boot-starter-sql', JAVERS_VERSION);
           }
         }
       },
