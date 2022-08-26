@@ -128,6 +128,12 @@ Object {
   "src/main/java/com/mycompany/myapp/aop/logging/LoggingAspect.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/audit/AsyncEntityAuditEventWriter.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/audit/EntityAuditEventListener.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": Object {
     "stateCleared": "modified",
   },
@@ -173,18 +179,6 @@ Object {
   "src/main/java/com/mycompany/myapp/config/WebConfigurer.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/config/audit/AsyncEntityAuditEventWriter.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/audit/EntityAuditAction.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/audit/EntityAuditEventConfig.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/audit/EntityAuditEventListener.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/package-info.java": Object {
     "stateCleared": "modified",
   },
@@ -198,6 +192,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/User.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/enumeration/EntityAuditAction.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/package-info.java": Object {

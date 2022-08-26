@@ -5,22 +5,19 @@ Object {
   ".yo-rc.json": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/config/audit/AsyncEntityAuditEventWriter.java": Object {
+  "src/main/java/com/mycompany/myapp/audit/AsyncEntityAuditEventWriter.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/config/audit/EntityAuditAction.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/audit/EntityAuditEventConfig.java": Object {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/config/audit/EntityAuditEventListener.java": Object {
+  "src/main/java/com/mycompany/myapp/audit/EntityAuditEventListener.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/AbstractAuditingEntity.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/EntityAuditEvent.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/enumeration/EntityAuditAction.java": Object {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/repository/EntityAuditEventRepository.java": Object {
@@ -33,6 +30,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/main/resources/config/liquibase/changelog/20220101000100_added_entity_EntityAuditEvent.xml": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
     "stateCleared": "modified",
   },
 }
