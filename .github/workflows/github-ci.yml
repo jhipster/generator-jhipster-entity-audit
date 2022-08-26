@@ -51,6 +51,7 @@ jobs:
       matrix:
         os: [ubuntu-20.04]
         build-tool: [maven, gradle]
+        audit-framework: [custom, javers]
         suite:
           - postgresql-mvc-jwt
     steps:
@@ -93,7 +94,7 @@ jobs:
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
       - name: 'PROJECT: generate'
-        run: 'JHI_PROFILE=${{ matrix.profile }} jhipster-entity-audit jdl "${{ github.workspace }}/generator-jhipster-entity-audit/test-integration/samples/${{ matrix.suite }}.jdl" --build ${{ matrix.build-tool }} --no-insight --skip-git --skip-commit-hook --skip-jhipster-dependencies --no-cypress-audit'
+        run: 'JHI_PROFILE=${{ matrix.profile }} jhipster-entity-audit jdl "${{ github.workspace }}/generator-jhipster-entity-audit/test-integration/samples/${{ matrix.suite }}.jdl" --build ${{ matrix.build-tool }} --audit-framework ${{ matrix.audit-framework }} --audit-page --no-insight --skip-git --skip-commit-hook --skip-jhipster-dependencies --no-cypress-audit'
       - name: 'TESTS: backend tests'
         run: npm run ci:backend:test
       - name: 'TESTS: frontend tests'
