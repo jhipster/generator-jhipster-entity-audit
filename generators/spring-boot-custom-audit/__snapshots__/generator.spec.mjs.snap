@@ -11,6 +11,9 @@ Object {
   "src/main/java/com/mycompany/myapp/audit/EntityAuditEventListener.java": Object {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/audit/EntityAuditEventWriter.java": Object {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/domain/AbstractAuditingEntity.java": Object {
     "stateCleared": "modified",
   },
@@ -23,9 +26,6 @@ Object {
   "src/main/java/com/mycompany/myapp/repository/EntityAuditEventRepository.java": Object {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/service/dto/AbstractAuditingDTO.java": Object {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/web/rest/EntityAuditResource.java": Object {
     "stateCleared": "modified",
   },
@@ -33,6 +33,9 @@ Object {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": Object {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/audit/TestEntityAuditEventWriter.java": Object {
     "stateCleared": "modified",
   },
 }

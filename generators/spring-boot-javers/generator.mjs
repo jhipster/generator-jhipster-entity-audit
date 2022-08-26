@@ -45,7 +45,11 @@ export default class extends GeneratorBaseEntities {
                 condition: application.auditPage,
                 path: `${SERVER_MAIN_SRC_DIR}package/`,
                 renameTo: (ctx, file) => `${ctx.absolutePackageFolder}/${file}`,
-                templates: ['web/rest/JaversEntityAuditResource.java'],
+                templates: [
+                  'web/rest/JaversEntityAuditResource.java',
+                  'web/rest/dto/EntityAuditEvent.java',
+                  'web/rest/dto/EntityAuditAction.java',
+                ],
               },
             ],
           },

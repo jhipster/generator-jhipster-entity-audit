@@ -7,8 +7,6 @@ import {
   PREPARING_PRIORITY,
   CONFIGURING_EACH_ENTITY_PRIORITY,
   PREPARING_EACH_ENTITY_PRIORITY,
-  WRITING_PRIORITY,
-  POST_WRITING_PRIORITY,
   POST_WRITING_ENTITIES_PRIORITY,
 } from 'generator-jhipster/esm/priorities';
 
@@ -125,6 +123,7 @@ export default class extends GeneratorBaseEntities {
     };
   }
 
+  /*
   get [WRITING_PRIORITY]() {
     return {
       async writingTemplateTask({ application }) {
@@ -134,11 +133,7 @@ export default class extends GeneratorBaseEntities {
               {
                 path: `${SERVER_MAIN_SRC_DIR}package/`,
                 renameTo: (ctx, file) => `${ctx.absolutePackageFolder}/${file}`,
-                templates: [
-                  'domain/enumeration/EntityAuditAction.java',
-                  'domain/EntityAuditEvent.java',
-                  'service/dto/AbstractAuditingDTO.java',
-                ],
+                templates: ['domain/enumeration/EntityAuditAction.java', 'service/dto/AbstractAuditingDTO.java'],
               },
             ],
           },
@@ -147,37 +142,13 @@ export default class extends GeneratorBaseEntities {
       },
     };
   }
-
-  get [POST_WRITING_PRIORITY]() {
-    return {
-      async postWritingEntitiesTask({ application: { absolutePackageTestFolder, packageName } }) {
-        this.editFile(`${absolutePackageTestFolder}TechnicalStructureTest.java`, contents =>
-          contents
-            .replace(
-              /import static com.tngtech.archunit.library.Architectures.layeredArchitecture;/,
-              `import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
-import static com.tngtech.archunit.core.domain.JavaClass.Predicates.type;
-import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
-import com.mycompany.myapp.audit.EntityAuditEventListener;
-import com.mycompany.myapp.domain.AbstractAuditingEntity;
-`
-            )
-            .replace(
-              /.ignoreDependency/,
-              `.ignoreDependency(resideInAPackage("${packageName}.audit"), alwaysTrue())
-        .ignoreDependency(type(AbstractAuditingEntity.class), type(EntityAuditEventListener.class))
-        .ignoreDependency`
-            )
-        );
-      },
-    };
-  }
+  */
 
   get [POST_WRITING_ENTITIES_PRIORITY]() {
     return {
       async postWritingEntitiesTask({ application: { absolutePackageFolder, packageName }, entities }) {
         for (const entity of entities.filter(e => !e.builtIn && e.enableAudit)) {
-          const { persistClass, restClass, entityPackage = '' } = entity;
+          const { persistClass, entityPackage = '' } = entity;
           const entityAbsoluteFolder = join(absolutePackageFolder, entityPackage);
           this.editFile(`${entityAbsoluteFolder}/domain/${persistClass}.java`, contents => {
             if (entityPackage) {
@@ -194,6 +165,7 @@ import ${packageName}.domain.AbstractAuditingEntity;`
             );
           });
 
+          /*
           if (entity.dto === 'mapstruct') {
             this.editFile(`${entityAbsoluteFolder}/service/dto/${restClass}.java`, contents => {
               if (entityPackage) {
@@ -207,6 +179,7 @@ import ${packageName}.domain.AbstractAuditingEntity;`
               return contents.replace(new RegExp(`public class ${restClass}`), `public class ${restClass} extends AbstractAuditingDTO`);
             });
           }
+          */
         }
       },
     };
