@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "chalk": "4.1.2",
-    "generator-jhipster": "github:mshima/generator-jhipster#skip_ci-entity_audit"
+    "generator-jhipster": "github:jhipster/generator-jhipster"
   },
   "devDependencies": {
     "ejs-lint": "1.2.2",
