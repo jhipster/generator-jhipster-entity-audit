@@ -123,27 +123,6 @@ export default class extends GeneratorBaseEntities {
     };
   }
 
-  /*
-  get [WRITING_PRIORITY]() {
-    return {
-      async writingTemplateTask({ application }) {
-        await this.writeFiles({
-          sections: {
-            common: [
-              {
-                path: `${SERVER_MAIN_SRC_DIR}package/`,
-                renameTo: (ctx, file) => `${ctx.absolutePackageFolder}/${file}`,
-                templates: ['domain/enumeration/EntityAuditAction.java', 'service/dto/AbstractAuditingDTO.java'],
-              },
-            ],
-          },
-          context: application,
-        });
-      },
-    };
-  }
-  */
-
   get [POST_WRITING_ENTITIES_PRIORITY]() {
     return {
       async postWritingEntitiesTask({ application: { absolutePackageFolder, packageName }, entities }) {
@@ -164,22 +143,6 @@ import ${packageName}.domain.AbstractAuditingEntity;`
               `public class ${persistClass} extends AbstractAuditingEntity`
             );
           });
-
-          /*
-          if (entity.dto === 'mapstruct') {
-            this.editFile(`${entityAbsoluteFolder}/service/dto/${restClass}.java`, contents => {
-              if (entityPackage) {
-                contents = contents.replace(
-                  /import java.io.Serializable;/,
-                  `import java.io.Serializable;
-  import ${packageName}.service.dto.AbstractAuditingDTO;`
-                );
-              }
-
-              return contents.replace(new RegExp(`public class ${restClass}`), `public class ${restClass} extends AbstractAuditingDTO`);
-            });
-          }
-          */
         }
       },
     };
