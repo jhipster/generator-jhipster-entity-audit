@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SubGenerator angular-audit of entity-audit JHipster blueprint run should succeed 1`] = `
+Object {
+  ".yo-rc.json": Object {
+    "stateCleared": "modified",
+  },
+  "package.json": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/entity-audit/entity-audit-event.model.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/entity-audit/entity-audit-modal.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/entity-audit/entity-audit-modal.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/entity-audit/entity-audit-routing.module.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/entity-audit/entity-audit.component.html": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/entity-audit/entity-audit.component.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/entity-audit/entity-audit.module.ts": Object {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/admin/entity-audit/entity-audit.service.ts": Object {
+    "stateCleared": "modified",
+  },
+}
+`;

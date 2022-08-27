@@ -1,0 +1,49 @@
+{
+    "global": {
+        "menu": {
+            "admin": {
+                "entityAudit": "Auditoria de Entidades"
+            }
+        }
+    },
+    "entityAudit": {
+        "home": {
+            "title": "Auditoria de Entidades",
+            "filter": "Filtro",
+            "entityOrTable": "Entidade/Tabela",
+            "limitTo": "Limitar a",
+            "loadChangeList": "Carregar lista de diferenças"
+        },
+        "result": {
+            "showInfo": "Últimas <strong>{{ limit }}</strong> mudanças para <strong>{{ entity }}</strong>",
+            "searchFieldLabel": "Filtro:",
+            "globalFilter": "Filtro Global",
+            "entityIdFilter": "Filtro de ID da entidade",
+            "tableHeader": {
+                "entityId": "ID da entidade",
+                "action": "Ação",
+                "version": "Versão",
+                "value": "Valor",
+                "modifiedDate": "Data da modificação",
+                "modifiedBy": "Modificado Por"
+            },
+            "tableBody": {
+                "field": "Campo",
+                "value": "Valor",
+                "viewDetails": "Ver Detalhes da Mudança"
+            },
+            "noDataFound": "Não encontrou registro para os filtros",
+            "firstAuditEntry": "There is no previous version available for this entry.\nThis is the first audit entry captured for this object."
+        },
+        "detail": {
+            "close": "Fechar",
+            "title": "Detalhes da Auditoria",
+            "action": "A ação {{action}} foi efetuada nos registros abaixo",
+            "old": "Valor Antigo/Removido",
+            "new": "Valor Novo/Adicionado",
+            "changedFields": "Campos Alterados",
+            "allFields": "Todos os Cmapos",
+            "done": "Pronto"
+        }
+    }
+}

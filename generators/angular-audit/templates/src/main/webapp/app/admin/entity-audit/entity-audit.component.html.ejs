@@ -1,0 +1,110 @@
+<div>
+  <h2<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.home.title"<% } %>>Entity Audit</h2>
+
+  <<%= jhiPrefixDashed %>-alert></<%= jhiPrefixDashed %>-alert>
+
+  <div>
+    <h4<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.home.filter"<% } %>>Filter</h4>
+
+    <form name="auditEventForm" class="form-inline" #auditEventForm="ngForm">
+      <div class="d-flex">
+        <label class="form-control-label mr-sm-2 col-2" for="entityName"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.home.entityOrTable"<% } %>>
+          Entity/Table
+        </label>
+        <select class="form-control mb-2 mr-sm-2 mb-sm-0" id="entityName"
+          name="entityName" required [(ngModel)]="selectedEntity"
+          #entityName="ngModel">
+          <option value="{{ null }}" selected>
+            Select
+          </option>
+          <option [value]="entityOption" *ngFor="let entityOption of entities">
+          {{ entityOption }}
+          </option>
+        </select>
+
+        <label class="form-control-label mr-sm-2 col-2" for="limit"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.home.limitTo"<% } %>>
+          Limit to
+        </label>
+        <select class="form-control mb-2 mr-sm-2 mb-sm-0" id="limit"
+          name="limit" required [(ngModel)]="selectedLimit">
+          <option [value]="limitOption" *ngFor="let limitOption of limits">
+          {{ limitOption }}
+          </option>
+        </select>
+
+        <button class="btn btn-primary float-right col-2" (click)="loadChanges()"
+          [disabled]="!auditEventForm.form.valid">
+          <fa-icon icon="sync"></fa-icon>
+          <span<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.home.loadChangeList"<% } %>>Load Change List</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div [hidden]="loading">
+      <div class="table-responsive mt-2" *ngIf="audits">
+      <p *ngIf="selectedEntity"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.showInfo" [translateValues]="{ limit: selectedLimit, entity: selectedEntity }"<% } %>>
+          Last <strong>{{ selectedLimit }}</strong>
+          Changes for <strong>{{ selectedEntity }}</strong>
+      </p>
+
+      <form class="form-inline mb-2">
+          <div class="form-group">
+          <label for="searchFieldEntityId"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.searchFieldLabel"<% } %>>
+              Filter:
+          </label>
+          <input type="text" class="form-control ml-2" id="searchFieldEntityId"
+              name="searchFieldEntityId"
+              placeholder="<% if (enableTranslation) { %>{{ 'entityAudit.result.entityIdFilter' | translate }}<% } else { %>entity id filter<% } %>"
+              [(ngModel)]="filterEntityId" />
+          </div>
+      </form>
+
+      <table class="table table-condensed table-striped table-bordered">
+          <thead>
+          <tr>
+              <th (click)="orderBy('entityId')"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.entityId"<% } %>>
+              Entity Id
+              </th>
+              <th (click)="orderBy('action')"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.action"<% } %>>
+              Action
+              </th>
+              <th (click)="orderBy('commitVersion')"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.version"<% } %>>
+              Version
+              </th>
+              <th<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.value"<% } %>>
+              Value
+              </th>
+              <th (click)="orderBy('modifiedDate')"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.modifiedDate"<% } %>>
+              Modified Date
+              </th>
+              <th (click)="orderBy('modifiedBy')"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.modifiedBy"<% } %>>
+              Modified By
+              </th>
+              <th><fa-icon icon="eye"></fa-icon></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let audit of getAudits(); trackBy: trackId">
+              <td>{{ audit.entityId }}</td>
+              <td>{{ audit.action }}</td>
+              <td>{{ audit.commitVersion }}</td>
+              <td><pre class="code">{{ audit.entityValue | json }}</pre></td>
+              <td>{{ audit.modifiedDate | date:'medium' }}</td>
+              <td>{{ audit.modifiedBy }}</td>
+              <td>
+              <button type="button" class="btn btn-info btn-xs"
+                  ngbTooltip="<% if (enableTranslation) { %>{{ 'entityAudit.result.tableBody.viewDetails' | translate }}<% } else { %>View Audit Change Details<% } %>"
+                  (click)=openChange(audit)>
+                  <fa-icon icon="eye"></fa-icon>
+              </button>
+              </td>
+          </tr>
+          </tbody>
+      </table>
+      </div>
+      <p *ngIf="!audits"<% if (enableTranslation) { %> <%= jhiPrefix %>Translate="entityAudit.result.noDataFound"<% } %> class="mt-2">
+      No Data found for the filters
+      </p>
+  </div>
+</div>

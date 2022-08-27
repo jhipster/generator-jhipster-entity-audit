@@ -1,0 +1,44 @@
+<div class="modal-header">
+  <h4 class="modal-title" <%= jhiPrefix %>Translate="entityAudit.detail.title">
+      Audit Details
+  </h4>
+  <button
+<%_ if (enableTranslation) { _%>
+          attr.aria-label="{{ 'entityAudit.detail.close' | translate }}"
+<%_ } else { _%>
+          aria-label="Close"
+<%_ } _%>
+          data-dismiss="modal" class="close" type="button"
+          (click)="activeModal.dismiss('closed')">
+      <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body pad">
+  <div>
+      <strong<% if (enableTranslation) { %>
+              <%= jhiPrefix %>Translate="entityAudit.detail.action"
+              [translateValues]="{ action: action }"<% } %>>
+          {{action}} action was performed on below data
+      </strong>
+      <br><br>
+
+      <del class="diff diff-key" <%= jhiPrefix %>Translate="entityAudit.detail.old">
+          Old/Removed value
+      </del>
+      &nbsp;
+      <ins class="diff diff-key" <%= jhiPrefix %>Translate="entityAudit.detail.new">
+          New/Added value
+      </ins>
+  </div>
+  <br>
+
+  <label <%= jhiPrefix %>Translate="entityAudit.detail.changedFields">Changed Fields</label>
+  <pre *ngIf="left && right" class="code" id="resultChanges" diff [left]="left" [right]="right"></pre>
+</div>
+<div class="modal-footer">
+  <button
+          data-dismiss="modal" class="btn btn-secondary float-left"
+          type="button" (click)="activeModal.dismiss('closed')">
+      Done
+  </button>
+</div>
