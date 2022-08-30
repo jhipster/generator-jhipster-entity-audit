@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import { join } from 'path';
 import { GeneratorBaseEntities, constants } from 'generator-jhipster';
 import {
@@ -7,7 +8,8 @@ import {
   PREPARING_PRIORITY,
   CONFIGURING_EACH_ENTITY_PRIORITY,
   PREPARING_EACH_ENTITY_PRIORITY,
-  POST_WRITING_ENTITIES_PRIORITY,
+  PREPARING_EACH_ENTITY_FIELD_PRIORITY,
+  WRITING_ENTITIES_PRIORITY,
 } from 'generator-jhipster/esm/priorities';
 
 const { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } = constants;
@@ -17,10 +19,10 @@ const COMMON_ATTRIBUTES = {
   autoGenerate: true,
   // Disables form editing
   readonly: true,
-  // Don't generate in entity
-  javaInherited: true,
   // Set an non nullable at db
   nullable: false,
+  // Identify the audit field.
+  auditField: true,
 };
 
 const ADDITIONAL_FIELDS = [
@@ -48,7 +50,9 @@ const ADDITIONAL_FIELDS = [
   },
 ];
 
-export default class extends GeneratorBaseEntities {
+/** @typedef {{ application: Object.<string, any> }} ApplicationTaskParam */
+
+export default class JavaAuditBlueprint extends GeneratorBaseEntities {
   constructor(args, opts, features) {
     super(args, opts, { taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
   }
@@ -57,6 +61,9 @@ export default class extends GeneratorBaseEntities {
     await this.dependsOnJHipster('bootstrap-application');
   }
 
+  /**
+   * @returns {Record<string, (this: this): any>}
+   */
   get [COMPOSING_PRIORITY]() {
     return {
       async composingTask() {
@@ -69,6 +76,9 @@ export default class extends GeneratorBaseEntities {
     };
   }
 
+  /**
+   * @returns {Record<string, (this: this, { application: any }): any>}
+   */
   get [LOADING_PRIORITY]() {
     return {
       prepareForTemplates({ application }) {
@@ -79,6 +89,8 @@ export default class extends GeneratorBaseEntities {
     };
   }
 
+  /** @typedef {(this: this, args: ApplicationTaskParam) => Promise<void>} ApplicationTask */
+  /** @returns {Record<string, ApplicationTask>} */
   get [PREPARING_PRIORITY]() {
     return {
       prepareForTemplates({ application }) {
@@ -96,6 +108,9 @@ export default class extends GeneratorBaseEntities {
     };
   }
 
+  /** @typedef {ApplicationTaskParam & { entityName: string, entityConfig: Object.<string, any>, entityStorage: import('yeoman-generator/lib/util/storage') }} ConfiguringEachEntityTaskParam */
+  /** @typedef {(this: this, args: ConfiguringEachEntityTaskParam) => Promise<void>} ConfiguringEachEntityTask */
+  /** @returns {Record<string, ConfiguringEachEntityTask>} */
   get [CONFIGURING_EACH_ENTITY_PRIORITY]() {
     return {
       async configureEntity({ entityName, entityConfig }) {
@@ -113,37 +128,64 @@ export default class extends GeneratorBaseEntities {
     };
   }
 
+  /** @typedef {ApplicationTaskParam & { entity: Object.<string, any> }} ApplicationEachEntityTaskParam */
+  /** @typedef {(this: this, args: ApplicationEachEntityTaskParam) => Promise<void>} PreparingEachEntityTask */
+  /** @returns {Record<string, PreparingEachEntityTask): any>} */
   get [PREPARING_EACH_ENTITY_PRIORITY]() {
     return {
       async prepareEntity({ application, entity }) {
         if (!entity.enableAudit) return;
 
-        entity.jhiTablePrefix = this.getTableName(application.jhiPrefix);
+        const { absolutePackageFolder, jhiPrefix } = application;
+        const { entityPackage } = entity;
+
+        entity.jhiTablePrefix = this.getTableName(jhiPrefix);
+        entity.entityAbsoluteFolder = absolutePackageFolder;
+        if (entityPackage) {
+          entity.entityAbsoluteFolder = join(absolutePackageFolder, entityPackage);
+        }
       },
     };
   }
 
-  get [POST_WRITING_ENTITIES_PRIORITY]() {
+  /** @typedef {ApplicationTaskParam & { entity: Object.<string, any>, field: Object.<string, any> }} ApplicationEachEntityTaskParam */
+  /** @typedef {(this: this, args: ApplicationEachEntityTaskParam) => Promise<void>} PreparingEachEntityTask */
+  /** @returns {Record<string, PreparingEachEntityTask): any>} */
+  get [PREPARING_EACH_ENTITY_FIELD_PRIORITY]() {
     return {
-      async postWritingEntitiesTask({ application: { absolutePackageFolder, packageName }, entities }) {
-        for (const entity of entities.filter(e => !e.builtIn && e.enableAudit)) {
-          const { persistClass, entityPackage = '' } = entity;
-          const entityAbsoluteFolder = join(absolutePackageFolder, entityPackage);
-          this.editFile(`${entityAbsoluteFolder}/domain/${persistClass}.java`, contents => {
-            if (entityPackage) {
-              contents = contents.replace(
-                /import java.io.Serializable;/,
-                `import java.io.Serializable;
-import ${packageName}.domain.AbstractAuditingEntity;`
-              );
-            }
+      async prepareEntity({ entity, field }) {
+        if (!entity.enableAudit) return;
 
-            return contents.replace(
-              new RegExp(`public class ${persistClass}`),
-              `public class ${persistClass} extends AbstractAuditingEntity`
-            );
-          });
+        if (field.blobContentTypeText) {
+          field.javaFieldType = 'String';
+        } else {
+          field.javaFieldType = field.fieldType;
         }
+      },
+    };
+  }
+
+  /** @typedef {ApplicationTaskParam & { entities: Object.<string, any>[] }} WritingEntitiesTaskParam */
+  /** @typedef {(this: this, args: WritingEntitiesTaskParam) => Promise<void>} WritingEntitiesTask */
+  /** @returns {Record<string, WritingEntitiesTask>} */
+  get [WRITING_ENTITIES_PRIORITY]() {
+    return {
+      async writingTemplateTask({ application, entities }) {
+        await Promise.all(
+          entities
+            .filter(e => !e.builtIn && e.enableAudit)
+            .map(e =>
+              this.writeFiles({
+                templates: [
+                  {
+                    sourceFile: `${SERVER_MAIN_SRC_DIR}package/domain/_entity_.java.jhi.entity_audit`,
+                    destinationFile: ctx => `${ctx.entityAbsoluteFolder}domain/${ctx.persistClass}.java.jhi.entity_audit`,
+                  },
+                ],
+                context: { ...application, ...e },
+              })
+            )
+        );
       },
     };
   }
