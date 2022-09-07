@@ -3,8 +3,8 @@
 > JHipster blueprint, entity-audit blueprint for JHipster
 
 [![NPM version][npm-image]][npm-url]
-[![Generator][github-generator-image]][github-generator-url]
-[![Integration Test][github-integration-image]][github-integration-url]
+[![Generator](https://github.com/hipster-labs/generator-jhipster-entity-audit/actions/workflows/generator.yml/badge.svg)](https://github.com/hipster-labs/generator-jhipster-entity-audit/actions/workflows/generator.yml)
+[![Integration Test](https://github.com/hipster-labs/generator-jhipster-entity-audit/actions/workflows/github-ci.yml/badge.svg)](https://github.com/hipster-labs/generator-jhipster-entity-audit/actions/workflows/github-ci.yml)
 
 # Introduction
 
@@ -43,16 +43,22 @@ npm install -g generator-jhipster-entity-audit
 To use this blueprint, run the below command
 
 ```bash
+jhipster-entity-audit
+```
+
+or
+
+```bash
 jhipster --blueprints entity-audit
 ```
 
 You can look for updated entity-audit blueprint specific options by running
 
 ```bash
-jhipster app --blueprints entity-audit --help
+jhipster-entity-audit app --help
 ```
 
-And looking for `(blueprint option: entity-audit)` like
+And looking for `(blueprint option: entity-audit)` options.
 
 ## Pre-release
 
@@ -65,7 +71,3 @@ jhipster --blueprints entity-audit --skip-jhipster-dependencies
 
 [npm-image]: https://img.shields.io/npm/v/generator-jhipster-entity-audit.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster-entity-audit
-[github-generator-image]: https://github.com/jhipster/generator-jhipster-entity-audit/actions/workflows/generator.yml/badge.svg
-[github-generator-url]: https://github.com/jhipster/generator-jhipster-entity-audit/actions/workflows/generator.yml
-[github-integration-image]: https://github.com/jhipster/generator-jhipster-entity-audit/actions/workflows/integration.yml/badge.svg
-[github-integration-url]: https://github.com/jhipster/generator-jhipster-entity-audit/actions/workflows/integration.yml
