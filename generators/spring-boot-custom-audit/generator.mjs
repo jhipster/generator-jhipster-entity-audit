@@ -85,9 +85,9 @@ export default class extends GeneratorBaseEntities {
   get [POST_WRITING_PRIORITY]() {
     return {
       async customizeArchTest({ application: { absolutePackageTestFolder, packageName } }) {
-        this.editFile(`${absolutePackageTestFolder}TechnicalStructureTest.java`, contents =>
-          contents
-            .replace(
+        this.editFile(`${absolutePackageTestFolder}TechnicalStructureTest.java`, contents => {
+          if (!contents.includes(".audit.EntityAuditEventListener;")) {
+            contents = contents.replace(
               /import static com.tngtech.archunit.library.Architectures.layeredArchitecture;/,
               `import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 import static com.tngtech.archunit.core.domain.JavaClass.Predicates.type;
@@ -95,24 +95,34 @@ import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPac
 import ${packageName}.audit.EntityAuditEventListener;
 import ${packageName}.domain.AbstractAuditingEntity;
 `
-            )
-            .replace(
+            );
+          }
+          if (!contents.includes(".ignoreDependency(type(AbstractAuditingEntity.class), type(EntityAuditEventListener.class))")) {
+            contents = contents.replace(
               /.ignoreDependency/,
               `.ignoreDependency(resideInAPackage("${packageName}.audit"), alwaysTrue())
         .ignoreDependency(type(AbstractAuditingEntity.class), type(EntityAuditEventListener.class))
         .ignoreDependency`
-            )
-        );
+            );
+          }
+          return contents;
+        });
       },
 
       async customizeAbstractAuditingEntity({ application: { absolutePackageFolder, cacheProvider, packageName, packageFolder } }) {
-        // add the new Listener to the 'AbstractAuditingEntity' class and add import
+        // add the new Listener to the 'AbstractAuditingEntity' class and add import if necessary
         this.editFile(`${absolutePackageFolder}domain/AbstractAuditingEntity.java`, contents => {
-          return contents.replace(/AuditingEntityListener.class/, '{AuditingEntityListener.class, EntityAuditEventListener.class}').replace(
-            /import org.springframework.data.jpa.domain.support.AuditingEntityListener;/,
-            `import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import ${packageName}.audit.EntityAuditEventListener;`
-          );
+          if (!contents.includes(", EntityAuditEventListener.class")) {
+            contents = contents.replace(/AuditingEntityListener.class/, '{AuditingEntityListener.class, EntityAuditEventListener.class}');
+          }
+          if (!contents.includes(".audit.EntityAuditEventListener;")) {
+            contents = contents.replace(
+              /import org.springframework.data.jpa.domain.support.AuditingEntityListener;/,
+              `import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+  import ${packageName}.audit.EntityAuditEventListener;`
+            );
+          }
+          return contents;
         });
 
         this.addEntryToCache(`${packageName}.domain.EntityAuditEvent.class.getName()`, packageFolder, cacheProvider);
