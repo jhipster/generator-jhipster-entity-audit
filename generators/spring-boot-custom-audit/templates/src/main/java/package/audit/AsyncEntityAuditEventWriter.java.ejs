@@ -1,10 +1,10 @@
-package com.mycompany.myapp.audit;
+package <%=packageName%>.audit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mycompany.myapp.domain.AbstractAuditingEntity;
-import com.mycompany.myapp.domain.EntityAuditEvent;
-import com.mycompany.myapp.domain.enumeration.EntityAuditAction;
-import com.mycompany.myapp.repository.EntityAuditEventRepository;
+import <%=packageName%>.domain.AbstractAuditingEntity;
+import <%=packageName%>.domain.EntityAuditEvent;
+import <%=packageName%>.domain.enumeration.EntityAuditAction;
+import <%=packageName%>.repository.EntityAuditEventRepository;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import org.slf4j.Logger;
