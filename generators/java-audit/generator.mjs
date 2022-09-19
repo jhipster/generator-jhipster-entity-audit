@@ -123,7 +123,9 @@ export default class JavaAuditBlueprint extends GeneratorBaseEntities {
         entityConfig.fields = entityConfig.fields.concat(fieldsToAdd);
 
         // Add to sharedEntities for compatibility.
-        this.configOptions.sharedEntities[entityName].fields.push(...fieldsToAdd);
+        if (this.configOptions.sharedEntities[entityName]) {
+          this.configOptions.sharedEntities[entityName].fields.push(...fieldsToAdd);
+        }
       },
     };
   }
