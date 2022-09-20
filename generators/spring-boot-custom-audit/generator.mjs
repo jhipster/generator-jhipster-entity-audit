@@ -86,7 +86,7 @@ export default class extends GeneratorBaseEntities {
     return {
       async customizeArchTest({ application: { absolutePackageTestFolder, packageName } }) {
         this.editFile(`${absolutePackageTestFolder}TechnicalStructureTest.java`, contents => {
-          if (!contents.includes(".audit.EntityAuditEventListener;")) {
+          if (!contents.includes('.audit.EntityAuditEventListener;')) {
             contents = contents.replace(
               /import static com.tngtech.archunit.library.Architectures.layeredArchitecture;/,
               `import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
@@ -97,7 +97,7 @@ import ${packageName}.domain.AbstractAuditingEntity;
 `
             );
           }
-          if (!contents.includes(".ignoreDependency(type(AbstractAuditingEntity.class), type(EntityAuditEventListener.class))")) {
+          if (!contents.includes('.ignoreDependency(type(AbstractAuditingEntity.class), type(EntityAuditEventListener.class))')) {
             contents = contents.replace(
               /.ignoreDependency/,
               `.ignoreDependency(resideInAPackage("${packageName}.audit"), alwaysTrue())
@@ -112,10 +112,10 @@ import ${packageName}.domain.AbstractAuditingEntity;
       async customizeAbstractAuditingEntity({ application: { absolutePackageFolder, cacheProvider, packageName, packageFolder } }) {
         // add the new Listener to the 'AbstractAuditingEntity' class and add import if necessary
         this.editFile(`${absolutePackageFolder}domain/AbstractAuditingEntity.java`, contents => {
-          if (!contents.includes(", EntityAuditEventListener.class")) {
+          if (!contents.includes(', EntityAuditEventListener.class')) {
             contents = contents.replace(/AuditingEntityListener.class/, '{AuditingEntityListener.class, EntityAuditEventListener.class}');
           }
-          if (!contents.includes(".audit.EntityAuditEventListener;")) {
+          if (!contents.includes('.audit.EntityAuditEventListener;')) {
             contents = contents.replace(
               /import org.springframework.data.jpa.domain.support.AuditingEntityListener;/,
               `import org.springframework.data.jpa.domain.support.AuditingEntityListener;
