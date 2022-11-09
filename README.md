@@ -65,7 +65,7 @@ And looking for `(blueprint option: entity-audit)` options.
 To use an unreleased version, install it using git.
 
 ```bash
-npm install -g jhipster/generator-jhipster-entity-audit#main
+npm install -g hipster-labs/generator-jhipster-entity-audit#main
 jhipster --blueprints entity-audit --skip-jhipster-dependencies
 ```
 
