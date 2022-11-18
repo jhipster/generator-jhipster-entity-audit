@@ -50,7 +50,7 @@ export class EntityAuditComponent implements OnInit {
             .subscribe(res => {
                 const data = res.body ?? [];
                 this.audits = data.map((it: EntityAuditEvent) => {
-                    it.entityValue = JSON.parse(it.entityValue  ?? '');
+                    it.entityValue = JSON.parse(it.entityValue  ?? '{}');
                     return it;
                 });
             });
