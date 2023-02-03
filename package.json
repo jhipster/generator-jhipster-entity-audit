@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster-entity-audit",
-  "version": "3.4.0",
+  "version": "4.0.0",
   "description": "JHipster module to enable entity audit and audit log page",
   "keywords": [
     "yeoman-generator",
