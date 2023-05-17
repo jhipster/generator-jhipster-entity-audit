@@ -74,11 +74,11 @@ public class AsyncEntityAuditEventWriter implements EntityAuditEventWriter {
         try {
             Field privateLongField = entityClass.getDeclaredField("id");
             privateLongField.setAccessible(true);
-            entityId = (Object) privateLongField.get(entity);
+            entityId = privateLongField.get(entity);
             privateLongField.setAccessible(false);
             entityData = objectMapper.writeValueAsString(entity);
         } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException | IOException e) {
-            log.error("Exception while getting entity ID and content {}", e);
+            log.error("Exception while getting entity ID and content", e);
             // returning null as we don't want to raise an application exception here
             return null;
         }
