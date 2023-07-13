@@ -37,7 +37,7 @@ public class EntityAuditEventListener extends AuditingEntityListener {
         try {
             entityAuditEventWriter.writeAuditEvent(target, action);
         } catch (Exception e) {
-            log.error("Exception while persisting delete audit entity {}", e);
+            log.error("Exception while persisting delete audit entity", e);
         }
     }
 
