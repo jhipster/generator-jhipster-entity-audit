@@ -1,28 +1,13 @@
-/* eslint-disable class-methods-use-this */
-import { GeneratorBaseEntities, constants } from 'generator-jhipster';
-import {
-  PRIORITY_PREFIX,
-  DEFAULT_PRIORITY,
-  WRITING_PRIORITY,
-  POST_WRITING_PRIORITY,
-  POST_WRITING_ENTITIES_PRIORITY,
-} from 'generator-jhipster/esm/priorities';
 import { join } from 'path';
-
+import BaseGenerator from 'generator-jhipster/generators/base-application';
 import { JAVERS_VERSION } from './constants.mjs';
 
-const { SERVER_MAIN_SRC_DIR } = constants;
-
-export default class extends GeneratorBaseEntities {
-  constructor(args, opts, features) {
-    super(args, opts, { taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
-  }
-
+export default class extends BaseGenerator {
   async _postConstruct() {
     await this.dependsOnJHipster('jhipster-entity-audit:java-audit');
   }
 
-  get [DEFAULT_PRIORITY]() {
+  get [BaseGenerator.DEFAULT]() {
     return {
       async defaultTask({ application, entities }) {
         application.auditedEntities = entities.map(e => e.persistClass);
@@ -30,7 +15,7 @@ export default class extends GeneratorBaseEntities {
     };
   }
 
-  get [WRITING_PRIORITY]() {
+  get [BaseGenerator.WRITING]() {
     return {
       async writingTemplateTask({ application }) {
         await this.writeFiles({
@@ -59,7 +44,7 @@ export default class extends GeneratorBaseEntities {
     };
   }
 
-  get [POST_WRITING_PRIORITY]() {
+  get [BaseGenerator.POST_WRITING]() {
     return {
       async postWritingTemplateTask({
         application: { absolutePackageFolder, buildToolMaven, buildToolGradle, databaseTypeSql, databaseTypeMongodb },
@@ -70,10 +55,10 @@ export default class extends GeneratorBaseEntities {
             .replace(
               /import org.springframework.data.annotation.CreatedBy;/,
               `import org.springframework.data.annotation.CreatedBy;
-import org.javers.core.metamodel.annotation.DiffIgnore;`
+import org.javers.core.metamodel.annotation.DiffIgnore;`,
             )
             .replace(/(\s*)@MappedSuperclass/, '$1@MappedSuperclass$1@DiffIgnore')
-            .replace(/\s*import com.fasterxml.jackson.annotation.JsonIgnore;/, '')
+            .replace(/\s*import com.fasterxml.jackson.annotation.JsonIgnore;/, ''),
         );
 
         // add required third party dependencies
@@ -94,7 +79,7 @@ import org.javers.core.metamodel.annotation.DiffIgnore;`
     };
   }
 
-  get [POST_WRITING_ENTITIES_PRIORITY]() {
+  get [BaseGenerator.POST_WRITING_ENTITIES]() {
     return {
       async postWritingEntitiesTask({ application: { absolutePackageFolder }, entities }) {
         for (const entity of entities.filter(e => !e.builtIn && e.enableAudit)) {
@@ -105,13 +90,13 @@ import org.javers.core.metamodel.annotation.DiffIgnore;`
               .replace(
                 /@Repository/,
                 `@Repository
-@JaversSpringDataAuditable`
+@JaversSpringDataAuditable`,
               )
               .replace(
                 /import org.springframework.stereotype.Repository;/,
                 `import org.javers.spring.annotation.JaversSpringDataAuditable;
-import org.springframework.stereotype.Repository;`
-              )
+import org.springframework.stereotype.Repository;`,
+              ),
           );
         }
       },

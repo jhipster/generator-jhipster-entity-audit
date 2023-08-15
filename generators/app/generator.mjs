@@ -1,38 +1,20 @@
 import chalk from 'chalk';
-import { GeneratorBaseEntities } from 'generator-jhipster';
-import { PRIORITY_PREFIX, PROMPTING_PRIORITY, COMPOSING_PRIORITY } from 'generator-jhipster/esm/priorities';
+import AppGenerator from 'generator-jhipster/generators/base-application';
 
-export default class extends GeneratorBaseEntities {
+export default class extends AppGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
-
-    this.jhipsterOptions({
-      auditFramework: {
-        desc: 'Audit framework',
-        type: String,
-        scope: 'blueprint',
-      },
-      auditPage: {
-        desc: 'Generate client page',
-        type: Boolean,
-        scope: 'blueprint',
-      },
-      auditedEntities: {
-        desc: 'Entities to be audited',
-        type: Array,
-      },
-    });
+    super(args, opts, features);
 
     if (this.options.help) return;
 
-    if (!this.options.jhipsterContext) {
+    if (!this.jhipsterContext) {
       throw new Error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints entity-audit')}`);
     }
 
     this.sbsBlueprint = true;
   }
 
-  get [PROMPTING_PRIORITY]() {
+  get [AppGenerator.PROMPTING]() {
     return {
       async promptingTemplateTask() {
         const firstRun = this.blueprintConfig.auditFramework === undefined;
@@ -61,7 +43,7 @@ export default class extends GeneratorBaseEntities {
               default: true,
             },
           ],
-          this.blueprintStorage
+          this.blueprintStorage,
         );
         if (firstRun && !this.options.auditedEntities) {
           const response = await this.prompt([
@@ -100,7 +82,7 @@ export default class extends GeneratorBaseEntities {
     };
   }
 
-  get [COMPOSING_PRIORITY]() {
+  get [AppGenerator.COMPOSING]() {
     return {
       async composingTask() {
         if (this.blueprintConfig.auditFramework && this.blueprintConfig.auditFramework !== 'no') {

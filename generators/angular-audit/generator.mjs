@@ -1,18 +1,11 @@
-import { GeneratorBaseEntities, constants } from 'generator-jhipster';
-import { PRIORITY_PREFIX, PREPARING_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY } from 'generator-jhipster/esm/priorities';
+import BaseGenerator from 'generator-jhipster/generators/base-application';
 
-const { CLIENT_MAIN_SRC_DIR } = constants;
-
-export default class extends GeneratorBaseEntities {
-  constructor(args, opts, features) {
-    super(args, opts, { taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
-  }
-
+export default class extends BaseGenerator {
   async _postConstruct() {
     await this.dependsOnJHipster('bootstrap-application');
   }
 
-  get [PREPARING_PRIORITY]() {
+  get [BaseGenerator.PREPARING]() {
     return {
       async preparingTemplateTask({ application }) {
         application.webappDir = CLIENT_MAIN_SRC_DIR;
@@ -20,7 +13,7 @@ export default class extends GeneratorBaseEntities {
     };
   }
 
-  get [WRITING_PRIORITY]() {
+  get [BaseGenerator.WRITING]() {
     return {
       async writingTemplateTask({ application }) {
         const { webappDir } = application;
@@ -48,7 +41,7 @@ export default class extends GeneratorBaseEntities {
     };
   }
 
-  get [POST_WRITING_PRIORITY]() {
+  get [BaseGenerator.POST_WRITING]() {
     return {
       async postWritingTemplateTask({ application: { enableTranslation, clientFramework } }) {
         this.packageJson.merge({

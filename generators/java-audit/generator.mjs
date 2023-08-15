@@ -1,18 +1,5 @@
-/* eslint-disable no-await-in-loop */
-import { join } from 'path';
-import { GeneratorBaseEntities, constants } from 'generator-jhipster';
-import {
-  PRIORITY_PREFIX,
-  COMPOSING_PRIORITY,
-  LOADING_PRIORITY,
-  PREPARING_PRIORITY,
-  CONFIGURING_EACH_ENTITY_PRIORITY,
-  PREPARING_EACH_ENTITY_PRIORITY,
-  PREPARING_EACH_ENTITY_FIELD_PRIORITY,
-  WRITING_ENTITIES_PRIORITY,
-} from 'generator-jhipster/esm/priorities';
-
-const { SERVER_MAIN_SRC_DIR, SERVER_TEST_SRC_DIR } = constants;
+import chalk from 'chalk';
+import BaseGenerator from 'generator-jhipster/generators/base-application';
 
 const COMMON_ATTRIBUTES = {
   // Hides form on create
@@ -50,21 +37,12 @@ const ADDITIONAL_FIELDS = [
   },
 ];
 
-/** @typedef {{ application: Object.<string, any> }} ApplicationTaskParam */
-
-export default class JavaAuditBlueprint extends GeneratorBaseEntities {
-  constructor(args, opts, features) {
-    super(args, opts, { taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
-  }
-
+export default class extends BaseGenerator {
   async _postConstruct() {
     await this.dependsOnJHipster('bootstrap-application');
   }
 
-  /**
-   * @returns {Record<string, (this: this): any>}
-   */
-  get [COMPOSING_PRIORITY]() {
+  get [BaseGenerator.COMPOSING]() {
     return {
       async composingTask() {
         if (this.blueprintConfig.auditFramework === 'javers') {
@@ -76,10 +54,7 @@ export default class JavaAuditBlueprint extends GeneratorBaseEntities {
     };
   }
 
-  /**
-   * @returns {Record<string, (this: this, { application: any }): any>}
-   */
-  get [LOADING_PRIORITY]() {
+  get [BaseGenerator.LOADING]() {
     return {
       prepareForTemplates({ application }) {
         const { auditFramework, auditPage } = this.blueprintConfig;
@@ -89,9 +64,7 @@ export default class JavaAuditBlueprint extends GeneratorBaseEntities {
     };
   }
 
-  /** @typedef {(this: this, args: ApplicationTaskParam) => Promise<void>} ApplicationTask */
-  /** @returns {Record<string, ApplicationTask>} */
-  get [PREPARING_PRIORITY]() {
+  get [BaseGenerator.PREPARING]() {
     return {
       prepareForTemplates({ application }) {
         const { auditFramework, packageFolder } = application;
@@ -108,10 +81,7 @@ export default class JavaAuditBlueprint extends GeneratorBaseEntities {
     };
   }
 
-  /** @typedef {ApplicationTaskParam & { entityName: string, entityConfig: Object.<string, any>, entityStorage: import('yeoman-generator/lib/util/storage') }} ConfiguringEachEntityTaskParam */
-  /** @typedef {(this: this, args: ConfiguringEachEntityTaskParam) => Promise<void>} ConfiguringEachEntityTask */
-  /** @returns {Record<string, ConfiguringEachEntityTask>} */
-  get [CONFIGURING_EACH_ENTITY_PRIORITY]() {
+  get [BaseGenerator.CONFIGURING_EACH_ENTITY]() {
     return {
       async configureEntity({ entityName, entityConfig }) {
         const { auditedEntities = [] } = this.options;
@@ -130,10 +100,7 @@ export default class JavaAuditBlueprint extends GeneratorBaseEntities {
     };
   }
 
-  /** @typedef {ApplicationTaskParam & { entity: Object.<string, any> }} ApplicationEachEntityTaskParam */
-  /** @typedef {(this: this, args: ApplicationEachEntityTaskParam) => Promise<void>} PreparingEachEntityTask */
-  /** @returns {Record<string, PreparingEachEntityTask): any>} */
-  get [PREPARING_EACH_ENTITY_PRIORITY]() {
+  get [BaseGenerator.PREPARING_EACH_ENTITY]() {
     return {
       async prepareEntity({ application, entity }) {
         if (!entity.enableAudit) return;
@@ -150,10 +117,7 @@ export default class JavaAuditBlueprint extends GeneratorBaseEntities {
     };
   }
 
-  /** @typedef {ApplicationTaskParam & { entity: Object.<string, any>, field: Object.<string, any> }} ApplicationEachEntityTaskParam */
-  /** @typedef {(this: this, args: ApplicationEachEntityTaskParam) => Promise<void>} PreparingEachEntityTask */
-  /** @returns {Record<string, PreparingEachEntityTask): any>} */
-  get [PREPARING_EACH_ENTITY_FIELD_PRIORITY]() {
+  get [BaseGenerator.PREPARING_EACH_ENTITY_FIELD]() {
     return {
       async prepareEntity({ entity, field }) {
         if (!entity.enableAudit) return;
@@ -167,10 +131,7 @@ export default class JavaAuditBlueprint extends GeneratorBaseEntities {
     };
   }
 
-  /** @typedef {ApplicationTaskParam & { entities: Object.<string, any>[] }} WritingEntitiesTaskParam */
-  /** @typedef {(this: this, args: WritingEntitiesTaskParam) => Promise<void>} WritingEntitiesTask */
-  /** @returns {Record<string, WritingEntitiesTask>} */
-  get [WRITING_ENTITIES_PRIORITY]() {
+  get [BaseGenerator.WRITING_ENTITIES]() {
     return {
       async writingTemplateTask({ application, entities }) {
         await Promise.all(
@@ -185,8 +146,8 @@ export default class JavaAuditBlueprint extends GeneratorBaseEntities {
                   },
                 ],
                 context: { ...application, ...e },
-              })
-            )
+              }),
+            ),
         );
       },
     };
