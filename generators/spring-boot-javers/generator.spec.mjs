@@ -14,9 +14,8 @@ describe('SubGenerator spring-boot-javers of entity-audit JHipster blueprint', (
         .withOptions({
           reproducible: true,
           defaults: true,
-          localConfig: {
-            baseName: 'jhipster',
-          },
+          baseName: 'jhipster',
+          ignoreNeedlesError: true,
         })
         .withLookups(lookups)
         .run();

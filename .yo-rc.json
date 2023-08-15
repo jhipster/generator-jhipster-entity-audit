@@ -3,6 +3,7 @@
     "additionalSubGenerators": "angular-audit,java-audit,spring-boot-custom-audit,spring-boot-javers",
     "baseName": "entity-audit",
     "cli": true,
+    "entities": [],
     "generators": {
       "angular-audit": {
         "command": false,
