@@ -14,6 +14,7 @@ describe('SubGenerator client of entity-audit JHipster blueprint', () => {
         .withOptions({
           reproducible: true,
           defaults: true,
+          ignoreNeedlesError: true,
           blueprint: 'entity-audit',
         })
         .withLookups(lookups)

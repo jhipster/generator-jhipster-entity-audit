@@ -15,7 +15,7 @@ describe('SubGenerator angular-audit of entity-audit JHipster blueprint', () => 
           reproducible: true,
           defaults: true,
           baseName: 'jhipster',
-          skipMenu: true,
+          ignoreNeedlesError: true,
         })
         .withLookups(lookups)
         .run();

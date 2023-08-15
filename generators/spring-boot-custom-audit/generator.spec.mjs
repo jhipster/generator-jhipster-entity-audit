@@ -15,9 +15,8 @@ describe('SubGenerator spring-boot-custom-audit of entity-audit JHipster bluepri
           reproducible: true,
           defaults: true,
           creationTimestamp: '2022-01-01',
-          localConfig: {
-            baseName: 'jhipster',
-          },
+          baseName: 'jhipster',
+          ignoreNeedlesError: true,
         })
         .withLookups(lookups)
         .run();

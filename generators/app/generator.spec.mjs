@@ -15,6 +15,7 @@ describe('SubGenerator app of entity-audit JHipster blueprint', () => {
           reproducible: true,
           defaults: true,
           creationTimestamp: '2022-01-01',
+          ignoreNeedlesError: true,
           blueprint: 'entity-audit',
         })
         .withLookups(lookups)

@@ -16,6 +16,7 @@ describe('SubGenerator java-audit of entity-audit JHipster blueprint', () => {
           defaults: true,
           baseName: 'jhipster',
           creationTimestamp: '2022-01-01',
+          ignoreNeedlesError: true,
         })
         .withLookups(lookups)
         .run();
