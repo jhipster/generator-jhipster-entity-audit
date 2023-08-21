@@ -1,17 +1,15 @@
-import chalk from 'chalk';
 import { existsSync } from 'fs';
-import { GeneratorBaseEntities, constants } from 'generator-jhipster';
-import { PRIORITY_PREFIX, PREPARING_PRIORITY, WRITING_PRIORITY } from 'generator-jhipster/esm/priorities';
+import chalk from 'chalk';
+import { TEMPLATES_MAIN_SOURCES_DIR } from 'generator-jhipster';
+import LanguagesGenerator from 'generator-jhipster/generators/languages';
 
-const { CLIENT_MAIN_SRC_DIR } = constants;
-
-export default class extends GeneratorBaseEntities {
+export default class extends LanguagesGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
+    super(args, opts, features);
 
     if (this.options.help) return;
 
-    if (!this.options.jhipsterContext) {
+    if (!this.jhipsterContext) {
       throw new Error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints entity-audit')}`);
     }
 
@@ -22,21 +20,18 @@ export default class extends GeneratorBaseEntities {
     await this.dependsOnJHipster('bootstrap-application');
   }
 
-  get [PREPARING_PRIORITY]() {
-    return {
-      async preparingTemplateTask({ application }) {
-        application.webappDir = CLIENT_MAIN_SRC_DIR;
-      },
-    };
-  }
-
-  get [WRITING_PRIORITY]() {
+  get [LanguagesGenerator.WRITING]() {
     return {
       async writingTemplateTask({ application: { languages = [], webappDir } }) {
+        if (!webappDir) {
+          throw new Error('webappDir is missing');
+        }
         const templates = languages.map(language => {
-          const sourceLanguage = existsSync(`${this.templatePath()}/src/main/webapp/i18n/${language}/entity-audit.json`) ? language : 'en';
+          const sourceLanguage = existsSync(`${this.templatePath()}/${TEMPLATES_MAIN_SOURCES_DIR}i18n/${language}/entity-audit.json`)
+            ? language
+            : 'en';
           return {
-            file: `${webappDir}i18n/${sourceLanguage}/entity-audit.json`,
+            file: `${TEMPLATES_MAIN_SOURCES_DIR}i18n/${sourceLanguage}/entity-audit.json`,
             renameTo: `${webappDir}i18n/${language}/entity-audit.json`,
             noEjs: true,
           };

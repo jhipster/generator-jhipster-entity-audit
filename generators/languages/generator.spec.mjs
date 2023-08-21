@@ -14,8 +14,9 @@ describe('SubGenerator languages of entity-audit JHipster blueprint', () => {
         .withOptions({
           reproducible: true,
           defaults: true,
-          blueprint: 'entity-audit',
           baseName: 'jhipster',
+          ignoreNeedlesError: true,
+          blueprint: 'entity-audit',
         })
         .withLookups(lookups)
         .run();

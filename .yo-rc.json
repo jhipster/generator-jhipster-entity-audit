@@ -29,6 +29,12 @@
         "sbs": null,
         "written": true
       },
+      "languages": {
+        "command": false,
+        "priorities": ["preparing", "writing"],
+        "sbs": true,
+        "written": true
+      },
       "spring-boot-custom-audit": {
         "command": false,
         "priorities": ["writing", "postWriting"],

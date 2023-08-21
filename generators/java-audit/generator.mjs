@@ -1,5 +1,6 @@
-import chalk from 'chalk';
+import { TEMPLATES_MAIN_SOURCES_DIR } from 'generator-jhipster';
 import BaseGenerator from 'generator-jhipster/generators/base-application';
+import { moveToJavaEntityPackageSrcDir } from 'generator-jhipster/generators/server/support';
 
 const COMMON_ATTRIBUTES = {
   // Hides form on create
@@ -67,16 +68,10 @@ export default class extends BaseGenerator {
   get [BaseGenerator.PREPARING]() {
     return {
       prepareForTemplates({ application }) {
-        const { auditFramework, packageFolder } = application;
+        const { auditFramework } = application;
         application.auditFrameworkCustom = auditFramework === 'custom';
         application.auditFrameworkJavers = auditFramework === 'javers';
         application.auditFrameworkAny = auditFramework && auditFramework !== 'no';
-        application.absolutePackageFolder = `${SERVER_MAIN_SRC_DIR}${packageFolder}/`;
-        application.absolutePackageTestFolder = `${SERVER_TEST_SRC_DIR}${packageFolder}/`;
-      },
-
-      async prepare({ application }) {
-        application.jhiTablePrefix = this.getTableName(application.jhiPrefix);
       },
     };
   }
@@ -91,42 +86,6 @@ export default class extends BaseGenerator {
         const fieldNames = entityConfig.fields.map(f => f.fieldName);
         const fieldsToAdd = ADDITIONAL_FIELDS.filter(f => !fieldNames.includes(f.fieldName)).map(f => ({ ...f }));
         entityConfig.fields = entityConfig.fields.concat(fieldsToAdd);
-
-        // Add to sharedEntities for compatibility.
-        if (this.configOptions.sharedEntities[entityName]) {
-          this.configOptions.sharedEntities[entityName].fields.push(...fieldsToAdd);
-        }
-      },
-    };
-  }
-
-  get [BaseGenerator.PREPARING_EACH_ENTITY]() {
-    return {
-      async prepareEntity({ application, entity }) {
-        if (!entity.enableAudit) return;
-
-        const { absolutePackageFolder, jhiPrefix } = application;
-        const { entityPackage } = entity;
-
-        entity.jhiTablePrefix = this.getTableName(jhiPrefix);
-        entity.entityAbsoluteFolder = absolutePackageFolder;
-        if (entityPackage) {
-          entity.entityAbsoluteFolder = join(absolutePackageFolder, entityPackage);
-        }
-      },
-    };
-  }
-
-  get [BaseGenerator.PREPARING_EACH_ENTITY_FIELD]() {
-    return {
-      async prepareEntity({ entity, field }) {
-        if (!entity.enableAudit) return;
-
-        if (field.blobContentTypeText) {
-          field.javaFieldType = 'String';
-        } else {
-          field.javaFieldType = field.fieldType;
-        }
       },
     };
   }
@@ -141,8 +100,9 @@ export default class extends BaseGenerator {
               this.writeFiles({
                 templates: [
                   {
-                    sourceFile: `${SERVER_MAIN_SRC_DIR}package/domain/_entity_.java.jhi.entity_audit`,
-                    destinationFile: ctx => `${ctx.entityAbsoluteFolder}domain/${ctx.persistClass}.java.jhi.entity_audit`,
+                    path: `${TEMPLATES_MAIN_SOURCES_DIR}package/`,
+                    renameTo: moveToJavaEntityPackageSrcDir,
+                    templates: ['domain/_PersistClass_.java.jhi.entity_audit'],
                   },
                 ],
                 context: { ...application, ...e },

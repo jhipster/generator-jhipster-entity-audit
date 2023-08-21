@@ -1,27 +1,19 @@
 import BaseGenerator from 'generator-jhipster/generators/base-application';
+import { clientApplicationTemplatesBlock } from 'generator-jhipster/generators/client/support';
 
 export default class extends BaseGenerator {
   async _postConstruct() {
     await this.dependsOnJHipster('bootstrap-application');
   }
 
-  get [BaseGenerator.PREPARING]() {
-    return {
-      async preparingTemplateTask({ application }) {
-        application.webappDir = CLIENT_MAIN_SRC_DIR;
-      },
-    };
-  }
-
   get [BaseGenerator.WRITING]() {
     return {
       async writingTemplateTask({ application }) {
-        const { webappDir } = application;
         await this.writeFiles({
           sections: {
             files: [
               {
-                path: `${webappDir}app/admin/entity-audit/`,
+                ...clientApplicationTemplatesBlock('admin/entity-audit/'),
                 templates: [
                   'entity-audit-event.model.ts',
                   'entity-audit-modal.component.html',

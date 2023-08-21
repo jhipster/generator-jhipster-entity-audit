@@ -1,5 +1,6 @@
 import { join } from 'path';
 import BaseGenerator from 'generator-jhipster/generators/base-application';
+import { javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
 import { JAVERS_VERSION } from './constants.mjs';
 
 export default class extends BaseGenerator {
@@ -22,14 +23,12 @@ export default class extends BaseGenerator {
           sections: {
             javersAudit: [
               {
-                path: `${SERVER_MAIN_SRC_DIR}package/`,
-                renameTo: (ctx, file) => `${ctx.absolutePackageFolder}/${file}`,
+                ...javaMainPackageTemplatesBlock(),
                 templates: ['config/audit/JaversAuthorProvider.java'],
               },
               {
                 condition: application.auditPage,
-                path: `${SERVER_MAIN_SRC_DIR}package/`,
-                renameTo: (ctx, file) => `${ctx.absolutePackageFolder}/${file}`,
+                ...javaMainPackageTemplatesBlock(),
                 templates: [
                   'web/rest/JaversEntityAuditResource.java',
                   'web/rest/dto/EntityAuditEvent.java',
@@ -47,10 +46,10 @@ export default class extends BaseGenerator {
   get [BaseGenerator.POST_WRITING]() {
     return {
       async postWritingTemplateTask({
-        application: { absolutePackageFolder, buildToolMaven, buildToolGradle, databaseTypeSql, databaseTypeMongodb },
+        application: { mainJavaPackageDir, buildToolMaven, buildToolGradle, databaseTypeSql, databaseTypeMongodb },
       }) {
         // add annotations for Javers to ignore fields in 'AbstractAuditingEntity' class
-        this.editFile(`${absolutePackageFolder}domain/AbstractAuditingEntity.java`, contents =>
+        this.editFile(`${mainJavaPackageDir}domain/AbstractAuditingEntity.java`, contents =>
           contents
             .replace(
               /import org.springframework.data.annotation.CreatedBy;/,
@@ -81,10 +80,10 @@ import org.javers.core.metamodel.annotation.DiffIgnore;`,
 
   get [BaseGenerator.POST_WRITING_ENTITIES]() {
     return {
-      async postWritingEntitiesTask({ application: { absolutePackageFolder }, entities }) {
+      async postWritingEntitiesTask({ application: { mainJavaPackageDir }, entities }) {
         for (const entity of entities.filter(e => !e.builtIn && e.enableAudit)) {
           const { persistClass, entityPackage = '' } = entity;
-          const entityAbsoluteFolder = join(absolutePackageFolder, entityPackage);
+          const entityAbsoluteFolder = join(mainJavaPackageDir, entityPackage);
           this.editFile(`${entityAbsoluteFolder}repository/${persistClass}Repository.java`, contents =>
             contents
               .replace(

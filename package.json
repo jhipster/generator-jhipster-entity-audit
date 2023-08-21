@@ -38,7 +38,7 @@
     "generators"
   ],
   "scripts": {
-    "ejslint": "ejslint generators/**/*.ejs && ejslint generators/**/*.ejs -d '&'",
+    "ejslint": "ejslint generators/**/*.ejs",
     "esmocha": "esmocha generators --no-insight --forbid-only",
     "lint": "eslint .",
     "lint-fix": "npm run ejslint && npm run lint -- --fix",
@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "chalk": "4.1.2",
-    "generator-jhipster": "github:jhipster/generator-jhipster#main"
+    "generator-jhipster": "github:mshima/generator-jhipster#skip_ci-exports"
   },
   "devDependencies": {
     "ejs-lint": "2.0.0",

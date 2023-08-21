@@ -1,5 +1,9 @@
-import chalk from 'chalk';
 import BaseGenerator from 'generator-jhipster/generators/base-application';
+import {
+  javaMainPackageTemplatesBlock,
+  javaTestPackageTemplatesBlock,
+  javaMainResourceTemplatesBlock,
+} from 'generator-jhipster/generators/java/support';
 
 export default class extends BaseGenerator {
   async _postConstruct() {
@@ -31,8 +35,7 @@ export default class extends BaseGenerator {
           sections: {
             customAudit: [
               {
-                path: `${SERVER_MAIN_SRC_DIR}package/`,
-                renameTo: (ctx, file) => `${ctx.absolutePackageFolder}/${file}`,
+                ...javaMainPackageTemplatesBlock(),
                 templates: [
                   'audit/AsyncEntityAuditEventWriter.java',
                   'audit/EntityAuditEventWriter.java',
@@ -43,12 +46,11 @@ export default class extends BaseGenerator {
                 ],
               },
               {
-                path: `${SERVER_TEST_SRC_DIR}package/`,
-                renameTo: (ctx, file) => `${ctx.absolutePackageTestFolder}/${file}`,
+                ...javaTestPackageTemplatesBlock(),
                 templates: ['audit/TestEntityAuditEventWriter.java'],
               },
               {
-                path: SERVER_MAIN_RES_DIR,
+                ...javaMainResourceTemplatesBlock(),
                 templates: [
                   {
                     file: `config/liquibase/changelog/EntityAuditEvent.xml`,
@@ -58,8 +60,7 @@ export default class extends BaseGenerator {
               },
               {
                 condition: application.auditPage,
-                path: `${SERVER_MAIN_SRC_DIR}/package/`,
-                renameTo: (ctx, file) => `${ctx.absolutePackageFolder}/${file}`,
+                ...javaMainPackageTemplatesBlock(),
                 templates: ['web/rest/EntityAuditResource.java'],
               },
             ],
@@ -72,8 +73,8 @@ export default class extends BaseGenerator {
 
   get [BaseGenerator.POST_WRITING]() {
     return {
-      async customizeArchTest({ application: { absolutePackageTestFolder, packageName } }) {
-        this.editFile(`${absolutePackageTestFolder}TechnicalStructureTest.java`, contents => {
+      async customizeArchTest({ application: { testJavaPackageDir, packageName } }) {
+        this.editFile(`${testJavaPackageDir}TechnicalStructureTest.java`, contents => {
           if (!contents.includes('.audit.EntityAuditEventListener;')) {
             contents = contents.replace(
               /import static com.tngtech.archunit.library.Architectures.layeredArchitecture;/,
@@ -97,9 +98,9 @@ import ${packageName}.domain.AbstractAuditingEntity;
         });
       },
 
-      async customizeAbstractAuditingEntity({ application: { absolutePackageFolder, cacheProvider, packageName, packageFolder } }) {
+      async customizeAbstractAuditingEntity({ application: { mainJavaPackageDir, cacheProvider, packageName, packageFolder } }) {
         // add the new Listener to the 'AbstractAuditingEntity' class and add import if necessary
-        this.editFile(`${absolutePackageFolder}domain/AbstractAuditingEntity.java`, contents => {
+        this.editFile(`${mainJavaPackageDir}domain/AbstractAuditingEntity.java`, contents => {
           if (!contents.includes(', EntityAuditEventListener.class')) {
             contents = contents.replace(/AuditingEntityListener.class/, '{AuditingEntityListener.class, EntityAuditEventListener.class}');
           }
