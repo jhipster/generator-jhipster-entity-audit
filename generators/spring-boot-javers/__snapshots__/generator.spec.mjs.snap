@@ -1,23 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SubGenerator spring-boot-javers of entity-audit JHipster blueprint run should succeed 1`] = `
-Object {
-  ".yo-rc.json": Object {
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/config/audit/JaversAuthorProvider.java": Object {
+  "src/main/java/com/mycompany/myapp/config/audit/JaversAuthorProvider.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/domain/AbstractAuditingEntity.java": Object {
+  "src/main/java/com/mycompany/myapp/domain/AbstractAuditingEntity.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/web/rest/JaversEntityAuditResource.java": Object {
+  "src/main/java/com/mycompany/myapp/web/rest/JaversEntityAuditResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/web/rest/dto/EntityAuditAction.java": Object {
+  "src/main/java/com/mycompany/myapp/web/rest/dto/EntityAuditAction.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/web/rest/dto/EntityAuditEvent.java": Object {
+  "src/main/java/com/mycompany/myapp/web/rest/dto/EntityAuditEvent.java": {
     "stateCleared": "modified",
   },
 }
