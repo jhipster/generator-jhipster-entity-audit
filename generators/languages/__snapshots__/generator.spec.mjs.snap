@@ -56,6 +56,9 @@ exports[`SubGenerator languages of entity-audit JHipster blueprint run should su
   "src/main/webapp/i18n/en/user-management.json": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/i18n/fr/entity-audit.json": {
+    "stateCleared": "modified",
+  },
   "src/test/resources/i18n/messages_en.properties": {
     "stateCleared": "modified",
   },

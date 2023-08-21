@@ -74,7 +74,7 @@ export default class extends BaseGenerator {
   get [BaseGenerator.POST_WRITING]() {
     return {
       async customizeArchTest({ application: { testJavaPackageDir, packageName } }) {
-        this.editFile(`${testJavaPackageDir}TechnicalStructureTest.java`, contents => {
+        this.editFile(`${testJavaPackageDir}TechnicalStructureTest.java`, { ignoreNonExisting: true }, contents => {
           if (!contents.includes('.audit.EntityAuditEventListener;')) {
             contents = contents.replace(
               /import static com.tngtech.archunit.library.Architectures.layeredArchitecture;/,
@@ -98,9 +98,9 @@ import ${packageName}.domain.AbstractAuditingEntity;
         });
       },
 
-      async customizeAbstractAuditingEntity({ application: { mainJavaPackageDir, cacheProvider, packageName, packageFolder } }) {
+      async customizeAbstractAuditingEntity({ source, application: { mainJavaPackageDir, packageName } }) {
         // add the new Listener to the 'AbstractAuditingEntity' class and add import if necessary
-        this.editFile(`${mainJavaPackageDir}domain/AbstractAuditingEntity.java`, contents => {
+        this.editFile(`${mainJavaPackageDir}domain/AbstractAuditingEntity.java`, { ignoreNonExisting: true }, contents => {
           if (!contents.includes(', EntityAuditEventListener.class')) {
             contents = contents.replace(/AuditingEntityListener.class/, '{AuditingEntityListener.class, EntityAuditEventListener.class}');
           }
@@ -114,15 +114,15 @@ import ${packageName}.domain.AbstractAuditingEntity;
           return contents;
         });
 
-        this.addEntryToCache(`${packageName}.domain.EntityAuditEvent.class.getName()`, packageFolder, cacheProvider);
+        source.addEntryToCache?.({ entry: `${packageName}.domain.EntityAuditEvent.class.getName()` });
       },
 
-      async addLiquibaseChangelog({ application: { entityAuditEventChangelogDate } }) {
-        this.addIncrementalChangelogToLiquibase(`${entityAuditEventChangelogDate}_added_entity_EntityAuditEvent`);
+      async addLiquibaseChangelog({ source, application: { entityAuditEventChangelogDate } }) {
+        source.addLiquibaseIncrementalChangelog?.(`${entityAuditEventChangelogDate}_added_entity_EntityAuditEvent`);
       },
 
-      async addEntityAuditEventToCache({ application: { cacheProvider, packageName, packageFolder } }) {
-        this.addEntryToCache(`${packageName}.domain.EntityAuditEvent.class.getName()`, packageFolder, cacheProvider);
+      async addEntityAuditEventToCache({ source, application: { packageName } }) {
+        source.addEntryToCache?.({ entry: `${packageName}.domain.EntityAuditEvent.class.getName()` });
       },
     };
   }

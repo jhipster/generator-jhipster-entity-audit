@@ -46,10 +46,11 @@ export default class extends BaseGenerator {
   get [BaseGenerator.POST_WRITING]() {
     return {
       async postWritingTemplateTask({
+        source,
         application: { mainJavaPackageDir, buildToolMaven, buildToolGradle, databaseTypeSql, databaseTypeMongodb },
       }) {
         // add annotations for Javers to ignore fields in 'AbstractAuditingEntity' class
-        this.editFile(`${mainJavaPackageDir}domain/AbstractAuditingEntity.java`, contents =>
+        this.editFile(`${mainJavaPackageDir}domain/AbstractAuditingEntity.java`, { ignoreNonExisting: true }, contents =>
           contents
             .replace(
               /import org.springframework.data.annotation.CreatedBy;/,
@@ -63,15 +64,33 @@ import org.javers.core.metamodel.annotation.DiffIgnore;`,
         // add required third party dependencies
         if (buildToolMaven) {
           if (databaseTypeMongodb) {
-            this.addMavenDependency('org.javers', 'javers-spring-boot-starter-mongo', JAVERS_VERSION);
+            source.addMavenDependency?.({
+              groupId: 'org.javers',
+              artifactId: 'javers-spring-boot-starter-mongo',
+              version: JAVERS_VERSION,
+            });
           } else if (databaseTypeSql) {
-            this.addMavenDependency('org.javers', 'javers-spring-boot-starter-sql', JAVERS_VERSION);
+            source.addMavenDependency?.({
+              groupId: 'org.javers',
+              artifactId: 'javers-spring-boot-starter-sql',
+              version: JAVERS_VERSION,
+            });
           }
         } else if (buildToolGradle) {
           if (databaseTypeMongodb) {
-            this.addGradleDependency('implementation', 'org.javers', 'javers-spring-boot-starter-mongo', JAVERS_VERSION);
+            source.addMavenDependency?.({
+              groupId: 'org.javers',
+              artifactId: 'javers-spring-boot-starter-mongo',
+              version: JAVERS_VERSION,
+              scope: 'implementation',
+            });
           } else if (databaseTypeSql) {
-            this.addGradleDependency('implementation', 'org.javers', 'javers-spring-boot-starter-sql', JAVERS_VERSION);
+            source.addMavenDependency?.({
+              groupId: 'org.javers',
+              artifactId: 'javers-spring-boot-starter-sql',
+              version: JAVERS_VERSION,
+              scope: 'implementation',
+            });
           }
         }
       },

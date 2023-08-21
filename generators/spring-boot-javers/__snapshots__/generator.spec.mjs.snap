@@ -8,9 +8,6 @@ exports[`SubGenerator spring-boot-javers of entity-audit JHipster blueprint run 
   "src/main/java/com/mycompany/myapp/config/audit/JaversAuthorProvider.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/domain/AbstractAuditingEntity.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/web/rest/JaversEntityAuditResource.java": {
     "stateCleared": "modified",
   },

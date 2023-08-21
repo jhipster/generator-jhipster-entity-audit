@@ -1,4 +1,4 @@
-import BaseGenerator from 'generator-jhipster/generators/base-application';
+import BaseGenerator from 'generator-jhipster/generators/angular';
 import { clientApplicationTemplatesBlock } from 'generator-jhipster/generators/client/support';
 
 export default class extends BaseGenerator {

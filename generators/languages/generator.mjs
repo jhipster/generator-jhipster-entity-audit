@@ -1,6 +1,6 @@
 import { existsSync } from 'fs';
 import chalk from 'chalk';
-import { TEMPLATES_MAIN_SOURCES_DIR } from 'generator-jhipster';
+import { TEMPLATES_WEBAPP_SOURCES_DIR } from 'generator-jhipster';
 import LanguagesGenerator from 'generator-jhipster/generators/languages';
 
 export default class extends LanguagesGenerator {
@@ -22,17 +22,17 @@ export default class extends LanguagesGenerator {
 
   get [LanguagesGenerator.WRITING]() {
     return {
-      async writingTemplateTask({ application: { languages = [], webappDir } }) {
-        if (!webappDir) {
-          throw new Error('webappDir is missing');
+      async writingTemplateTask({ application: { languages = [], clientSrcDir } }) {
+        if (!clientSrcDir) {
+          throw new Error('clientSrcDir is missing');
         }
         const templates = languages.map(language => {
-          const sourceLanguage = existsSync(`${this.templatePath()}/${TEMPLATES_MAIN_SOURCES_DIR}i18n/${language}/entity-audit.json`)
+          const sourceLanguage = existsSync(`${this.templatePath()}/${TEMPLATES_WEBAPP_SOURCES_DIR}i18n/${language}/entity-audit.json`)
             ? language
             : 'en';
           return {
-            file: `${TEMPLATES_MAIN_SOURCES_DIR}i18n/${sourceLanguage}/entity-audit.json`,
-            renameTo: `${webappDir}i18n/${language}/entity-audit.json`,
+            file: `${TEMPLATES_WEBAPP_SOURCES_DIR}i18n/${sourceLanguage}/entity-audit.json`,
+            renameTo: `${clientSrcDir}i18n/${language}/entity-audit.json`,
             noEjs: true,
           };
         });
