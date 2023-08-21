@@ -1,8 +1,18 @@
 import AppGenerator from 'generator-jhipster/generators/base-application';
+import command from './command.mjs';
 
 export default class extends AppGenerator {
   constructor(args, opts, features) {
     super(args, opts, { ...features, sbsBlueprint: true });
+  }
+
+  get [AppGenerator.INITIALIZING]() {
+    return this.asInitializingTaskGroup({
+      async initializeOptions() {
+        this.parseJHipsterArguments(command.arguments);
+        this.parseJHipsterOptions(command.options);
+      },
+    });
   }
 
   get [AppGenerator.PROMPTING]() {
