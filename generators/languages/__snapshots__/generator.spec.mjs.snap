@@ -1,62 +1,62 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`SubGenerator languages of entity-audit JHipster blueprint run should succeed 1`] = `
-Object {
-  ".yo-rc.json": Object {
+{
+  ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/resources/i18n/messages_en.properties": Object {
+  "src/main/resources/i18n/messages_en.properties": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/activate.json": Object {
+  "src/main/webapp/i18n/en/activate.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/configuration.json": Object {
+  "src/main/webapp/i18n/en/configuration.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/entity-audit.json": Object {
+  "src/main/webapp/i18n/en/entity-audit.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/error.json": Object {
+  "src/main/webapp/i18n/en/error.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/global.json": Object {
+  "src/main/webapp/i18n/en/global.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/health.json": Object {
+  "src/main/webapp/i18n/en/health.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/home.json": Object {
+  "src/main/webapp/i18n/en/home.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/login.json": Object {
+  "src/main/webapp/i18n/en/login.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/logs.json": Object {
+  "src/main/webapp/i18n/en/logs.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/metrics.json": Object {
+  "src/main/webapp/i18n/en/metrics.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/password.json": Object {
+  "src/main/webapp/i18n/en/password.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/register.json": Object {
+  "src/main/webapp/i18n/en/register.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/reset.json": Object {
+  "src/main/webapp/i18n/en/reset.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/sessions.json": Object {
+  "src/main/webapp/i18n/en/sessions.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/settings.json": Object {
+  "src/main/webapp/i18n/en/settings.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/user-management.json": Object {
+  "src/main/webapp/i18n/en/user-management.json": {
     "stateCleared": "modified",
   },
-  "src/test/resources/i18n/messages_en.properties": Object {
+  "src/test/resources/i18n/messages_en.properties": {
     "stateCleared": "modified",
   },
 }
