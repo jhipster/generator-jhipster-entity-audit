@@ -1,19 +1,10 @@
 import { existsSync } from 'fs';
-import chalk from 'chalk';
 import { TEMPLATES_WEBAPP_SOURCES_DIR } from 'generator-jhipster';
 import LanguagesGenerator from 'generator-jhipster/generators/languages';
 
 export default class extends LanguagesGenerator {
   constructor(args, opts, features) {
-    super(args, opts, features);
-
-    if (this.options.help) return;
-
-    if (!this.jhipsterContext) {
-      throw new Error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints entity-audit')}`);
-    }
-
-    this.sbsBlueprint = true;
+    super(args, opts, { ...features, sbsBlueprint: true });
   }
 
   async _postConstruct() {
