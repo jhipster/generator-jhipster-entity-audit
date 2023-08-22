@@ -1,2 +1,2 @@
 // eslint-disable-next-line import/prefer-default-export
-export const JAVERS_VERSION = '6.6.5';
+export const JAVERS_VERSION = '7.3.2';
