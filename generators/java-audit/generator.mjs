@@ -101,7 +101,7 @@ export default class extends BaseGenerator {
                 templates: [
                   {
                     path: `${TEMPLATES_MAIN_SOURCES_DIR}package/`,
-                    renameTo: moveToJavaEntityPackageSrcDir,
+                    renameTo: moveToJavaEntityPackageSrcDir(),
                     templates: ['domain/_PersistClass_.java.jhi.entity_audit'],
                   },
                 ],
