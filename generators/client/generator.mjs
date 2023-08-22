@@ -1,6 +1,6 @@
-import ClientGenerator from 'generator-jhipster/generators/base-application';
+import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 
-export default class extends ClientGenerator {
+export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
     super(args, opts, { ...features, sbsBlueprint: true });
   }
@@ -9,13 +9,13 @@ export default class extends ClientGenerator {
     await this.dependsOnJHipster('bootstrap-application');
   }
 
-  get [ClientGenerator.COMPOSING]() {
-    return {
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.asComposingTaskGroup({
       async composeTask() {
         if (this.blueprintConfig.auditPage && ['angularX', 'angular'].includes(this.jhipsterConfig.clientFramework)) {
           await this.composeWithJHipster('jhipster-entity-audit:angular-audit');
         }
       },
-    };
+    });
   }
 }

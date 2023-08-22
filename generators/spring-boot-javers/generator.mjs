@@ -1,14 +1,14 @@
 import { join } from 'path';
-import BaseGenerator from 'generator-jhipster/generators/base-application';
+import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import { javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
 import { getPomVersionProperties } from 'generator-jhipster/generators/server/support';
 
-export default class extends BaseGenerator {
+export default class extends BaseApplicationGenerator {
   async _postConstruct() {
     await this.dependsOnJHipster('jhipster-entity-audit:java-audit');
   }
 
-  get [BaseGenerator.PREPARING]() {
+  get [BaseApplicationGenerator.PREPARING]() {
     return this.asPreparingTaskGroup({
       async defaultTask({ application }) {
         const pomFile = this.readTemplate(this.templatePath('../resources/pom.xml'));
@@ -22,7 +22,7 @@ export default class extends BaseGenerator {
     });
   }
 
-  get [BaseGenerator.DEFAULT]() {
+  get [BaseApplicationGenerator.DEFAULT]() {
     return this.asDefaultTaskGroup({
       async defaultTask({ application, entities }) {
         application.auditedEntities = entities.map(e => e.persistClass);
@@ -30,8 +30,8 @@ export default class extends BaseGenerator {
     });
   }
 
-  get [BaseGenerator.WRITING]() {
-    return {
+  get [BaseApplicationGenerator.WRITING]() {
+    return this.asWritingTaskGroup({
       async writingTemplateTask({ application }) {
         await this.writeFiles({
           sections: {
@@ -54,10 +54,10 @@ export default class extends BaseGenerator {
           context: application,
         });
       },
-    };
+    });
   }
 
-  get [BaseGenerator.POST_WRITING]() {
+  get [BaseApplicationGenerator.POST_WRITING]() {
     return {
       async postWritingTemplateTask({
         source,
@@ -111,7 +111,7 @@ import org.javers.core.metamodel.annotation.DiffIgnore;`,
     };
   }
 
-  get [BaseGenerator.POST_WRITING_ENTITIES]() {
+  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
     return {
       async postWritingEntitiesTask({ application: { mainJavaPackageDir }, entities }) {
         for (const entity of entities.filter(e => !e.builtIn && e.enableAudit)) {

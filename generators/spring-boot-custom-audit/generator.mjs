@@ -1,35 +1,35 @@
-import BaseGenerator from 'generator-jhipster/generators/base-application';
+import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import {
   javaMainPackageTemplatesBlock,
   javaTestPackageTemplatesBlock,
   javaMainResourceTemplatesBlock,
 } from 'generator-jhipster/generators/java/support';
 
-export default class extends BaseGenerator {
+export default class extends BaseApplicationGenerator {
   async _postConstruct() {
     await this.dependsOnJHipster('jhipster-entity-audit:java-audit');
   }
 
-  get [BaseGenerator.CONFIGURING]() {
-    return {
+  get [BaseApplicationGenerator.CONFIGURING]() {
+    return this.asConfiguringTaskGroup({
       async configuringTask() {
         if (!this.blueprintConfig.entityAuditEventChangelogDate) {
           this.blueprintConfig.entityAuditEventChangelogDate = this.dateFormatForLiquibase();
         }
       },
-    };
+    });
   }
 
-  get [BaseGenerator.LOADING]() {
-    return {
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.asLoadingTaskGroup({
       async loadingTask({ application }) {
         application.entityAuditEventChangelogDate = this.blueprintConfig.entityAuditEventChangelogDate;
       },
-    };
+    });
   }
 
-  get [BaseGenerator.WRITING]() {
-    return {
+  get [BaseApplicationGenerator.WRITING]() {
+    return this.asWritingTaskGroup({
       async writingTask({ application }) {
         await this.writeFiles({
           sections: {
@@ -68,11 +68,11 @@ export default class extends BaseGenerator {
           context: application,
         });
       },
-    };
+    });
   }
 
-  get [BaseGenerator.POST_WRITING]() {
-    return {
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup({
       async customizeArchTest({ application: { testJavaPackageDir, packageName } }) {
         this.editFile(`${testJavaPackageDir}TechnicalStructureTest.java`, { ignoreNonExisting: true }, contents => {
           if (!contents.includes('.audit.EntityAuditEventListener;')) {
@@ -124,6 +124,6 @@ import ${packageName}.domain.AbstractAuditingEntity;
       async addEntityAuditEventToCache({ source, application: { packageName } }) {
         source.addEntryToCache?.({ entry: `${packageName}.domain.EntityAuditEvent.class.getName()` });
       },
-    };
+    });
   }
 }

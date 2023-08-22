@@ -1,13 +1,13 @@
-import BaseGenerator from 'generator-jhipster/generators/angular';
+import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import { clientApplicationTemplatesBlock } from 'generator-jhipster/generators/client/support';
 
-export default class extends BaseGenerator {
+export default class extends BaseApplicationGenerator {
   async _postConstruct() {
     await this.dependsOnJHipster('bootstrap-application');
   }
 
-  get [BaseGenerator.WRITING]() {
-    return {
+  get [BaseApplicationGenerator.WRITING]() {
+    return this.asWritingTaskGroup({
       cleanup() {
         // this.removeFile(`${application.srcMainWebapp}app/admin/entity-audit/entity-audit-routing.module.ts`);
         // this.removeFile(`${application.srcMainWebapp}app/admin/entity-audit/entity-audit.module.ts`);
@@ -36,11 +36,11 @@ export default class extends BaseGenerator {
           context: application,
         });
       },
-    };
+    });
   }
 
-  get [BaseGenerator.POST_WRITING]() {
-    return {
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup({
       async postWritingTemplateTask({ source }) {
         this.packageJson.merge({
           dependencies: {
@@ -61,6 +61,6 @@ export default class extends BaseGenerator {
           name: 'Entity Audit',
         });
       },
-    };
+    });
   }
 }

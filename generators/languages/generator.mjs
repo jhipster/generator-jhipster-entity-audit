@@ -1,8 +1,8 @@
 import { existsSync } from 'fs';
 import { TEMPLATES_WEBAPP_SOURCES_DIR } from 'generator-jhipster';
-import LanguagesGenerator from 'generator-jhipster/generators/languages';
+import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 
-export default class extends LanguagesGenerator {
+export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
     super(args, opts, { ...features, sbsBlueprint: true });
   }
@@ -11,8 +11,8 @@ export default class extends LanguagesGenerator {
     await this.dependsOnJHipster('bootstrap-application');
   }
 
-  get [LanguagesGenerator.WRITING]() {
-    return {
+  get [BaseApplicationGenerator.WRITING]() {
+    return this.asWritingTaskGroup({
       async writingTemplateTask({ application: { languages = [], clientSrcDir } }) {
         if (!clientSrcDir) {
           throw new Error('clientSrcDir is missing');
@@ -40,6 +40,6 @@ export default class extends LanguagesGenerator {
           });
         }
       },
-    };
+    });
   }
 }

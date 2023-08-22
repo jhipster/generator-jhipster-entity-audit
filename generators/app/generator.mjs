@@ -1,12 +1,12 @@
-import AppGenerator from 'generator-jhipster/generators/base-application';
+import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import command from './command.mjs';
 
-export default class extends AppGenerator {
+export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
     super(args, opts, { ...features, sbsBlueprint: true });
   }
 
-  get [AppGenerator.INITIALIZING]() {
+  get [BaseApplicationGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
       async initializeOptions() {
         this.parseJHipsterArguments(command.arguments);
@@ -15,8 +15,8 @@ export default class extends AppGenerator {
     });
   }
 
-  get [AppGenerator.PROMPTING]() {
-    return {
+  get [BaseApplicationGenerator.PROMPTING]() {
+    return this.asPromptingTaskGroup({
       async promptingTemplateTask() {
         const firstRun = this.blueprintConfig.auditFramework === undefined;
         await this.prompt(
@@ -80,16 +80,16 @@ export default class extends AppGenerator {
           this.auditedEntities = response.auditedEntities;
         }
       },
-    };
+    });
   }
 
-  get [AppGenerator.COMPOSING]() {
-    return {
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.asComposingTaskGroup({
       async composingTask() {
         if (this.blueprintConfig.auditFramework && this.blueprintConfig.auditFramework !== 'no') {
           await this.composeWithJHipster('jhipster-entity-audit:java-audit', { auditedEntities: this.auditedEntities });
         }
       },
-    };
+    });
   }
 }

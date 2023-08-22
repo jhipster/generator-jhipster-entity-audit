@@ -1,4 +1,4 @@
-import BaseGenerator from 'generator-jhipster/generators/base-application';
+import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import { javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
 
 const COMMON_ATTRIBUTES = {
@@ -37,13 +37,13 @@ const ADDITIONAL_FIELDS = [
   },
 ];
 
-export default class extends BaseGenerator {
+export default class extends BaseApplicationGenerator {
   async _postConstruct() {
     await this.dependsOnJHipster('bootstrap-application');
   }
 
-  get [BaseGenerator.COMPOSING]() {
-    return {
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.asComposingTaskGroup({
       async composingTask() {
         if (this.blueprintConfig.auditFramework === 'javers') {
           await this.composeWithJHipster('jhipster-entity-audit:spring-boot-javers');
@@ -51,32 +51,32 @@ export default class extends BaseGenerator {
           await this.composeWithJHipster('jhipster-entity-audit:spring-boot-custom-audit');
         }
       },
-    };
+    });
   }
 
-  get [BaseGenerator.LOADING]() {
-    return {
+  get [BaseApplicationGenerator.LOADING]() {
+    return this.asLoadingTaskGroup({
       prepareForTemplates({ application }) {
         const { auditFramework, auditPage } = this.blueprintConfig;
         application.auditFramework = auditFramework;
         application.auditPage = auditPage;
       },
-    };
+    });
   }
 
-  get [BaseGenerator.PREPARING]() {
-    return {
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.asPreparingTaskGroup({
       prepareForTemplates({ application }) {
         const { auditFramework } = application;
         application.auditFrameworkCustom = auditFramework === 'custom';
         application.auditFrameworkJavers = auditFramework === 'javers';
         application.auditFrameworkAny = auditFramework && auditFramework !== 'no';
       },
-    };
+    });
   }
 
-  get [BaseGenerator.CONFIGURING_EACH_ENTITY]() {
-    return {
+  get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
+    return this.asConfiguringEachEntityTaskGroup({
       async configureEntity({ entityName, entityConfig }) {
         const { auditedEntities = [] } = this.options;
         entityConfig.enableAudit = auditedEntities.includes(entityName) || entityConfig.enableAudit;
@@ -86,10 +86,10 @@ export default class extends BaseGenerator {
         const fieldsToAdd = ADDITIONAL_FIELDS.filter(f => !fieldNames.includes(f.fieldName)).map(f => ({ ...f }));
         entityConfig.fields = entityConfig.fields.concat(fieldsToAdd);
       },
-    };
+    });
   }
 
-  get [BaseGenerator.WRITING_ENTITIES]() {
+  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.asWritingEntitiesTaskGroup({
       async writingTemplateTask({ application, entities }) {
         await Promise.all(
