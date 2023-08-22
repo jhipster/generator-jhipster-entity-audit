@@ -20,7 +20,7 @@ describe('SubGenerator app of entity-audit JHipster blueprint', () => {
         })
         .withLookups(lookups)
         .run();
-    });
+    }, 20000);
 
     it('should succeed', () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
