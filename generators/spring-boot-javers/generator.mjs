@@ -1,19 +1,33 @@
 import { join } from 'path';
 import BaseGenerator from 'generator-jhipster/generators/base-application';
 import { javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
-import { JAVERS_VERSION } from './constants.mjs';
+import { getPomVersionProperties } from 'generator-jhipster/generators/server/support';
 
 export default class extends BaseGenerator {
   async _postConstruct() {
     await this.dependsOnJHipster('jhipster-entity-audit:java-audit');
   }
 
+  get [BaseGenerator.PREPARING]() {
+    return this.asPreparingTaskGroup({
+      async defaultTask({ application }) {
+        const pomFile = this.readTemplate(this.templatePath('../resources/pom.xml'));
+        // TODO use application.javaDependencies
+        const versions = getPomVersionProperties(pomFile);
+        application.javaDependencies = this.prepareDependencies({
+          ...application.javaDependencies,
+          ...versions,
+        });
+      },
+    });
+  }
+
   get [BaseGenerator.DEFAULT]() {
-    return {
+    return this.asDefaultTaskGroup({
       async defaultTask({ application, entities }) {
         application.auditedEntities = entities.map(e => e.persistClass);
       },
-    };
+    });
   }
 
   get [BaseGenerator.WRITING]() {
@@ -47,7 +61,7 @@ export default class extends BaseGenerator {
     return {
       async postWritingTemplateTask({
         source,
-        application: { mainJavaPackageDir, buildToolMaven, buildToolGradle, databaseTypeSql, databaseTypeMongodb },
+        application: { mainJavaPackageDir, buildToolMaven, buildToolGradle, databaseTypeSql, databaseTypeMongodb, javaDependencies },
       }) {
         // add annotations for Javers to ignore fields in 'AbstractAuditingEntity' class
         this.editFile(`${mainJavaPackageDir}domain/AbstractAuditingEntity.java`, { ignoreNonExisting: true }, contents =>
@@ -67,13 +81,13 @@ import org.javers.core.metamodel.annotation.DiffIgnore;`,
             source.addMavenDependency?.({
               groupId: 'org.javers',
               artifactId: 'javers-spring-boot-starter-mongo',
-              version: JAVERS_VERSION,
+              version: javaDependencies['javers-core'],
             });
           } else if (databaseTypeSql) {
             source.addMavenDependency?.({
               groupId: 'org.javers',
               artifactId: 'javers-spring-boot-starter-sql',
-              version: JAVERS_VERSION,
+              version: javaDependencies['javers-core'],
             });
           }
         } else if (buildToolGradle) {
@@ -81,14 +95,14 @@ import org.javers.core.metamodel.annotation.DiffIgnore;`,
             source.addMavenDependency?.({
               groupId: 'org.javers',
               artifactId: 'javers-spring-boot-starter-mongo',
-              version: JAVERS_VERSION,
+              version: javaDependencies['javers-core'],
               scope: 'implementation',
             });
           } else if (databaseTypeSql) {
             source.addMavenDependency?.({
               groupId: 'org.javers',
               artifactId: 'javers-spring-boot-starter-sql',
-              version: JAVERS_VERSION,
+              version: javaDependencies['javers-core'],
               scope: 'implementation',
             });
           }
