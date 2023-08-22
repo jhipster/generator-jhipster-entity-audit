@@ -1,13 +1,17 @@
 import { Component } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { InlineDiffComponent } from 'ngx-diff';
 
+import SharedModule from 'app/shared/shared.module';
 import { EntityAuditService } from './entity-audit.service';
 import { EntityAuditEvent } from './entity-audit-event.model';
 
 @Component({
+    standalone: true,
     selector: '<%= jhiPrefixDashed %>-entity-audit-modal',
     templateUrl: './entity-audit-modal.component.html',
+    imports: [SharedModule, InlineDiffComponent],
     styles: [`
         /* NOTE: for now the ::ng-deep shadow-piercing descendant combinator is
          * required because Angular defaults to emulated view encapsulation and
@@ -36,7 +40,7 @@ import { EntityAuditEvent } from './entity-audit-event.model';
         }
     `]
 })
-export class EntityAuditModalComponent {
+export default class EntityAuditModalComponent {
     action?: string;
     left?: string;
     right?: string;

@@ -9,6 +9,9 @@ export default class extends BaseGenerator {
   get [BaseGenerator.WRITING]() {
     return {
       async writingTemplateTask({ application }) {
+        this.removeFile(`${application.srcMainWebapp}app/admin/entity-audit/entity-audit-routing.module.ts`);
+        this.removeFile(`${application.srcMainWebapp}app/admin/entity-audit/entity-audit.module.ts`);
+
         await this.writeFiles({
           sections: {
             files: [
@@ -18,10 +21,8 @@ export default class extends BaseGenerator {
                   'entity-audit-event.model.ts',
                   'entity-audit-modal.component.html',
                   'entity-audit-modal.component.ts',
-                  'entity-audit-routing.module.ts',
                   'entity-audit.component.html',
                   'entity-audit.component.ts',
-                  'entity-audit.module.ts',
                   'entity-audit.service.ts',
                 ],
               },
@@ -35,15 +36,25 @@ export default class extends BaseGenerator {
 
   get [BaseGenerator.POST_WRITING]() {
     return {
-      async postWritingTemplateTask({ application: { enableTranslation, clientFramework } }) {
+      async postWritingTemplateTask({ source }) {
         this.packageJson.merge({
           dependencies: {
-            'ng-diff-match-patch': '3.0.1',
+            'ngx-diff': '5.0.0',
           },
         });
         if (this.options.skipMenu) return;
-        this.addAdminRoute('entity-audit', './entity-audit/entity-audit.module', 'EntityAuditModule', 'EntityAudit');
-        this.addElementToAdminMenu('admin/entity-audit', 'list-alt', enableTranslation, clientFramework, 'entityAudit', 'Entity Audit');
+        source.addAdminRoute?.({
+          route: 'entity-audit',
+          modulePath: './entity-audit/entity-audit.component',
+          title: 'entityAudit.home.title',
+          component: true,
+        });
+        source.addItemToAdminMenu?.({
+          icon: 'list-alt',
+          route: 'admin/entity-audit',
+          translationKey: 'entityAudit',
+          name: 'Entity Audit',
+        });
       },
     };
   }
