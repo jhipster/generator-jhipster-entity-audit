@@ -8,6 +8,11 @@ export default class extends BaseGenerator {
 
   get [BaseGenerator.WRITING]() {
     return {
+      cleanup() {
+        // this.removeFile(`${application.srcMainWebapp}app/admin/entity-audit/entity-audit-routing.module.ts`);
+        // this.removeFile(`${application.srcMainWebapp}app/admin/entity-audit/entity-audit.module.ts`);
+      },
+
       async writingTemplateTask({ application }) {
         this.removeFile(`${application.srcMainWebapp}app/admin/entity-audit/entity-audit-routing.module.ts`);
         this.removeFile(`${application.srcMainWebapp}app/admin/entity-audit/entity-audit.module.ts`);
