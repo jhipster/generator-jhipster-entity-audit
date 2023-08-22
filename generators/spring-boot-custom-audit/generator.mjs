@@ -118,7 +118,7 @@ import ${packageName}.domain.AbstractAuditingEntity;
       },
 
       async addLiquibaseChangelog({ source, application: { entityAuditEventChangelogDate } }) {
-        source.addLiquibaseIncrementalChangelog?.(`${entityAuditEventChangelogDate}_added_entity_EntityAuditEvent`);
+        source.addLiquibaseIncrementalChangelog?.({ changelogName: `${entityAuditEventChangelogDate}_added_entity_EntityAuditEvent` });
       },
 
       async addEntityAuditEventToCache({ source, application: { packageName } }) {
