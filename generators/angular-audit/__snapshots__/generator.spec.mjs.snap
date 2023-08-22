@@ -221,16 +221,10 @@ exports[`SubGenerator angular-audit of entity-audit JHipster blueprint run shoul
   "src/main/webapp/app/admin/entity-audit/entity-audit-modal.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/entity-audit/entity-audit-routing.module.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/entity-audit/entity-audit.component.html": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/entity-audit/entity-audit.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/entity-audit/entity-audit.module.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/entity-audit/entity-audit.service.ts": {
