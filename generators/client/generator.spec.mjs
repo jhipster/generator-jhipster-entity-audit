@@ -1,4 +1,4 @@
-import { before, describe, expect, it } from 'esmocha';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import { helpers, lookups } from '#test-utils';
 
@@ -8,7 +8,7 @@ const BLUEPRINT_NAMESPACE = `jhipster:${SUB_GENERATOR}`;
 describe('SubGenerator client of entity-audit JHipster blueprint', () => {
   describe('run', () => {
     let result;
-    before(async function () {
+    beforeAll(async function () {
       result = await helpers
         .create(BLUEPRINT_NAMESPACE)
         .withOptions({
