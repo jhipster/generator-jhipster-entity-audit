@@ -1,6 +1,5 @@
-import { TEMPLATES_MAIN_SOURCES_DIR } from 'generator-jhipster';
 import BaseGenerator from 'generator-jhipster/generators/base-application';
-import { moveToJavaEntityPackageSrcDir } from 'generator-jhipster/generators/server/support';
+import { javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
 
 const COMMON_ATTRIBUTES = {
   // Hides form on create
@@ -91,17 +90,16 @@ export default class extends BaseGenerator {
   }
 
   get [BaseGenerator.WRITING_ENTITIES]() {
-    return {
+    return this.asWritingEntitiesTaskGroup({
       async writingTemplateTask({ application, entities }) {
         await Promise.all(
           entities
             .filter(e => !e.builtIn && e.enableAudit)
             .map(e =>
               this.writeFiles({
-                templates: [
+                blocks: [
                   {
-                    path: `${TEMPLATES_MAIN_SOURCES_DIR}package/`,
-                    renameTo: moveToJavaEntityPackageSrcDir(),
+                    ...javaMainPackageTemplatesBlock(),
                     templates: ['domain/_PersistClass_.java.jhi.entity_audit'],
                   },
                 ],
@@ -110,6 +108,6 @@ export default class extends BaseGenerator {
             ),
         );
       },
-    };
+    });
   }
 }
