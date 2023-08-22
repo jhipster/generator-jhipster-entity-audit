@@ -73,7 +73,7 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '17'
       - name: 'SETUP: install generator-jhister-entity-audit'
         run: |
           npm ci --prod
