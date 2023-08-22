@@ -47,13 +47,13 @@
     "release:major": "npm version major -a -m \"Update to %s\" && npm run release",
     "release:minor": "npm version minor -a -m \"Update to %s\" && npm run release",
     "release:patch": "npm version patch -a -m \"Update to %s\" && npm run release",
-    "pretest": "npm run prettier:check && npm run lint",
+    "pretest": "npm run prettier-check && npm run lint",
     "test": "vitest run",
     "update-snapshot": "vitest run --update",
     "vitest": "vitest"
   },
   "dependencies": {
-    "generator-jhipster": "github:mshima/generator-jhipster#skip_ci-exports"
+    "generator-jhipster": "github:jhipster/generator-jhipster#main"
   },
   "devDependencies": {
     "ejs-lint": "2.0.0",
