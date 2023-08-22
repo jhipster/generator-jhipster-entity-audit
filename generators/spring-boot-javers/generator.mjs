@@ -92,14 +92,14 @@ import org.javers.core.metamodel.annotation.DiffIgnore;`,
           }
         } else if (buildToolGradle) {
           if (databaseTypeMongodb) {
-            source.addMavenDependency?.({
+            source.addGradleDependency?.({
               groupId: 'org.javers',
               artifactId: 'javers-spring-boot-starter-mongo',
               version: javaDependencies['javers-core'],
               scope: 'implementation',
             });
           } else if (databaseTypeSql) {
-            source.addMavenDependency?.({
+            source.addGradleDependency?.({
               groupId: 'org.javers',
               artifactId: 'javers-spring-boot-starter-sql',
               version: javaDependencies['javers-core'],
