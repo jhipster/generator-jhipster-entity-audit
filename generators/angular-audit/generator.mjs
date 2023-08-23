@@ -2,8 +2,21 @@ import BaseApplicationGenerator from 'generator-jhipster/generators/base-applica
 import { clientApplicationTemplatesBlock } from 'generator-jhipster/generators/client/support';
 
 export default class extends BaseApplicationGenerator {
+  ngxDiff;
+
   async _postConstruct() {
     await this.dependsOnJHipster('bootstrap-application');
+  }
+
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.asPreparingTaskGroup({
+      loadDependabot() {
+        const {
+          dependencies: { ['ngx-diff']: ngxDiff },
+        } = this.fs.readJSON(this.templatePath('../resources/package.json'));
+        this.ngxDiff = ngxDiff;
+      },
+    });
   }
 
   get [BaseApplicationGenerator.WRITING]() {
@@ -14,9 +27,6 @@ export default class extends BaseApplicationGenerator {
       },
 
       async writingTemplateTask({ application }) {
-        this.removeFile(`${application.srcMainWebapp}app/admin/entity-audit/entity-audit-routing.module.ts`);
-        this.removeFile(`${application.srcMainWebapp}app/admin/entity-audit/entity-audit.module.ts`);
-
         await this.writeFiles({
           sections: {
             files: [
@@ -44,7 +54,7 @@ export default class extends BaseApplicationGenerator {
       async postWritingTemplateTask({ source }) {
         this.packageJson.merge({
           dependencies: {
-            'ngx-diff': '5.0.0',
+            'ngx-diff':this.ngxDiff,
           },
         });
         if (this.options.skipMenu) return;
