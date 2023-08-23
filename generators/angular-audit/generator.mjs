@@ -54,7 +54,7 @@ export default class extends BaseApplicationGenerator {
       async postWritingTemplateTask({ source }) {
         this.packageJson.merge({
           dependencies: {
-            'ngx-diff':this.ngxDiff,
+            'ngx-diff': this.ngxDiff,
           },
         });
         if (this.options.skipMenu) return;
