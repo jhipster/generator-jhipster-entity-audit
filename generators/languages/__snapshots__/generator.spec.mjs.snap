@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SubGenerator languages of entity-audit JHipster blueprint run should succeed 1`] = `
+exports[`SubGenerator languages of entity-audit JHipster blueprint > run > should succeed 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -54,6 +54,9 @@ exports[`SubGenerator languages of entity-audit JHipster blueprint run should su
     "stateCleared": "modified",
   },
   "src/main/webapp/i18n/en/user-management.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/entity-audit.json": {
     "stateCleared": "modified",
   },
   "src/test/resources/i18n/messages_en.properties": {

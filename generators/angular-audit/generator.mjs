@@ -1,42 +1,43 @@
-import { GeneratorBaseEntities, constants } from 'generator-jhipster';
-import { PRIORITY_PREFIX, PREPARING_PRIORITY, WRITING_PRIORITY, POST_WRITING_PRIORITY } from 'generator-jhipster/esm/priorities';
+import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
+import { clientApplicationTemplatesBlock } from 'generator-jhipster/generators/client/support';
 
-const { CLIENT_MAIN_SRC_DIR } = constants;
-
-export default class extends GeneratorBaseEntities {
-  constructor(args, opts, features) {
-    super(args, opts, { taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
-  }
+export default class extends BaseApplicationGenerator {
+  ngxDiff;
 
   async _postConstruct() {
     await this.dependsOnJHipster('bootstrap-application');
   }
 
-  get [PREPARING_PRIORITY]() {
-    return {
-      async preparingTemplateTask({ application }) {
-        application.webappDir = CLIENT_MAIN_SRC_DIR;
+  get [BaseApplicationGenerator.PREPARING]() {
+    return this.asPreparingTaskGroup({
+      loadDependabot() {
+        const {
+          dependencies: { ['ngx-diff']: ngxDiff },
+        } = this.fs.readJSON(this.templatePath('../resources/package.json'));
+        this.ngxDiff = ngxDiff;
       },
-    };
+    });
   }
 
-  get [WRITING_PRIORITY]() {
-    return {
+  get [BaseApplicationGenerator.WRITING]() {
+    return this.asWritingTaskGroup({
+      cleanup() {
+        // this.removeFile(`${application.srcMainWebapp}app/admin/entity-audit/entity-audit-routing.module.ts`);
+        // this.removeFile(`${application.srcMainWebapp}app/admin/entity-audit/entity-audit.module.ts`);
+      },
+
       async writingTemplateTask({ application }) {
-        const { webappDir } = application;
         await this.writeFiles({
           sections: {
             files: [
               {
-                path: `${webappDir}app/admin/entity-audit/`,
+                ...clientApplicationTemplatesBlock('admin/entity-audit/'),
                 templates: [
                   'entity-audit-event.model.ts',
                   'entity-audit-modal.component.html',
                   'entity-audit-modal.component.ts',
-                  'entity-audit-routing.module.ts',
                   'entity-audit.component.html',
                   'entity-audit.component.ts',
-                  'entity-audit.module.ts',
                   'entity-audit.service.ts',
                 ],
               },
@@ -45,21 +46,31 @@ export default class extends GeneratorBaseEntities {
           context: application,
         });
       },
-    };
+    });
   }
 
-  get [POST_WRITING_PRIORITY]() {
-    return {
-      async postWritingTemplateTask({ application: { enableTranslation, clientFramework } }) {
+  get [BaseApplicationGenerator.POST_WRITING]() {
+    return this.asPostWritingTaskGroup({
+      async postWritingTemplateTask({ source }) {
         this.packageJson.merge({
           dependencies: {
-            'ng-diff-match-patch': '3.0.1',
+            'ngx-diff': this.ngxDiff,
           },
         });
         if (this.options.skipMenu) return;
-        this.addAdminRoute('entity-audit', './entity-audit/entity-audit.module', 'EntityAuditModule', 'EntityAudit');
-        this.addElementToAdminMenu('admin/entity-audit', 'list-alt', enableTranslation, clientFramework, 'entityAudit', 'Entity Audit');
+        source.addAdminRoute?.({
+          route: 'entity-audit',
+          modulePath: './entity-audit/entity-audit.component',
+          title: 'entityAudit.home.title',
+          component: true,
+        });
+        source.addItemToAdminMenu?.({
+          icon: 'list-alt',
+          route: 'admin/entity-audit',
+          translationKey: 'entityAudit',
+          name: 'Entity Audit',
+        });
       },
-    };
+    });
   }
 }

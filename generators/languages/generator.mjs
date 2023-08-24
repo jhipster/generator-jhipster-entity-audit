@@ -1,43 +1,29 @@
-import chalk from 'chalk';
 import { existsSync } from 'fs';
-import { GeneratorBaseEntities, constants } from 'generator-jhipster';
-import { PRIORITY_PREFIX, PREPARING_PRIORITY, WRITING_PRIORITY } from 'generator-jhipster/esm/priorities';
+import { TEMPLATES_WEBAPP_SOURCES_DIR } from 'generator-jhipster';
+import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 
-const { CLIENT_MAIN_SRC_DIR } = constants;
-
-export default class extends GeneratorBaseEntities {
+export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
-
-    if (this.options.help) return;
-
-    if (!this.options.jhipsterContext) {
-      throw new Error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints entity-audit')}`);
-    }
-
-    this.sbsBlueprint = true;
+    super(args, opts, { ...features, sbsBlueprint: true });
   }
 
   async _postConstruct() {
     await this.dependsOnJHipster('bootstrap-application');
   }
 
-  get [PREPARING_PRIORITY]() {
-    return {
-      async preparingTemplateTask({ application }) {
-        application.webappDir = CLIENT_MAIN_SRC_DIR;
-      },
-    };
-  }
-
-  get [WRITING_PRIORITY]() {
-    return {
-      async writingTemplateTask({ application: { languages = [], webappDir } }) {
+  get [BaseApplicationGenerator.WRITING]() {
+    return this.asWritingTaskGroup({
+      async writingTemplateTask({ application: { languages = [], clientSrcDir } }) {
+        if (!clientSrcDir) {
+          throw new Error('clientSrcDir is missing');
+        }
         const templates = languages.map(language => {
-          const sourceLanguage = existsSync(`${this.templatePath()}/src/main/webapp/i18n/${language}/entity-audit.json`) ? language : 'en';
+          const sourceLanguage = existsSync(`${this.templatePath()}/${TEMPLATES_WEBAPP_SOURCES_DIR}i18n/${language}/entity-audit.json`)
+            ? language
+            : 'en';
           return {
-            file: `${webappDir}i18n/${sourceLanguage}/entity-audit.json`,
-            renameTo: `${webappDir}i18n/${language}/entity-audit.json`,
+            file: `${TEMPLATES_WEBAPP_SOURCES_DIR}i18n/${sourceLanguage}/entity-audit.json`,
+            renameTo: `${clientSrcDir}i18n/${language}/entity-audit.json`,
             noEjs: true,
           };
         });
@@ -54,6 +40,6 @@ export default class extends GeneratorBaseEntities {
           });
         }
       },
-    };
+    });
   }
 }

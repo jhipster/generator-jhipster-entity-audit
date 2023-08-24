@@ -3,16 +3,17 @@
     "additionalSubGenerators": "angular-audit,java-audit,spring-boot-custom-audit,spring-boot-javers",
     "baseName": "entity-audit",
     "cli": true,
+    "entities": [],
     "generators": {
       "angular-audit": {
         "command": false,
-        "priorities": ["preparing", "writing"],
+        "priorities": ["writing", "postWriting"],
         "sbs": null,
         "written": true
       },
       "app": {
         "command": false,
-        "priorities": ["prompting", "loading", "preparing"],
+        "priorities": ["initializing", "prompting", "composing"],
         "sbs": true,
         "written": true
       },
@@ -24,19 +25,25 @@
       },
       "java-audit": {
         "command": false,
-        "priorities": ["composing", "writing"],
+        "priorities": ["composing", "loading", "preparing", "configuringEachEntity", "writingEntities"],
         "sbs": null,
+        "written": true
+      },
+      "languages": {
+        "command": false,
+        "priorities": ["writing"],
+        "sbs": true,
         "written": true
       },
       "spring-boot-custom-audit": {
         "command": false,
-        "priorities": ["writing", "postWriting"],
+        "priorities": ["configuring", "loading", "writing", "postWriting"],
         "sbs": null,
         "written": true
       },
       "spring-boot-javers": {
         "command": false,
-        "priorities": ["writing", "postWriting"],
+        "priorities": ["preparing", "default", "writing", "postWriting", "postWritingEntities"],
         "sbs": null,
         "written": true
       }

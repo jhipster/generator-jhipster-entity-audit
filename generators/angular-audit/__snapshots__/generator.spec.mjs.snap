@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SubGenerator angular-audit of entity-audit JHipster blueprint run should succeed 1`] = `
+exports[`SubGenerator angular-audit of entity-audit JHipster blueprint > run > should succeed 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",
@@ -17,16 +17,10 @@ exports[`SubGenerator angular-audit of entity-audit JHipster blueprint run shoul
   "src/main/webapp/app/admin/entity-audit/entity-audit-modal.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/entity-audit/entity-audit-routing.module.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/entity-audit/entity-audit.component.html": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/entity-audit/entity-audit.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/entity-audit/entity-audit.module.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/entity-audit/entity-audit.service.ts": {

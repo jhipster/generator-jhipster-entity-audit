@@ -1,4 +1,4 @@
-import { before, describe, expect, it } from 'esmocha';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import { helpers, lookups } from '#test-utils';
 
@@ -8,7 +8,7 @@ const SUB_GENERATOR_NAMESPACE = `jhipster-entity-audit:${SUB_GENERATOR}`;
 describe('SubGenerator java-audit of entity-audit JHipster blueprint', () => {
   describe('run', () => {
     let result;
-    before(async function () {
+    beforeAll(async function () {
       result = await helpers
         .create(SUB_GENERATOR_NAMESPACE)
         .withOptions({
@@ -16,6 +16,7 @@ describe('SubGenerator java-audit of entity-audit JHipster blueprint', () => {
           defaults: true,
           baseName: 'jhipster',
           creationTimestamp: '2022-01-01',
+          ignoreNeedlesError: true,
         })
         .withLookups(lookups)
         .run();

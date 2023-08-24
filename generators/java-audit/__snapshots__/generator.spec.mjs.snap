@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SubGenerator java-audit of entity-audit JHipster blueprint run should succeed 1`] = `
+exports[`SubGenerator java-audit of entity-audit JHipster blueprint > run > should succeed 1`] = `
 {
   ".yo-rc.json": {
     "stateCleared": "modified",

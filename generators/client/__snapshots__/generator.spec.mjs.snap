@@ -1,10 +1,7 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`SubGenerator client of entity-audit JHipster blueprint run should succeed 1`] = `
+exports[`SubGenerator client of entity-audit JHipster blueprint > run > should succeed 1`] = `
 {
-  ".browserslistrc": {
-    "stateCleared": "modified",
-  },
   ".editorconfig": {
     "stateCleared": "modified",
   },
@@ -56,13 +53,13 @@ exports[`SubGenerator client of entity-audit JHipster blueprint run should succe
   "src/main/resources/i18n/messages_en.properties": {
     "stateCleared": "modified",
   },
+  "src/main/resources/i18n/messages_fr.properties": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/404.html": {
     "stateCleared": "modified",
   },
   "src/main/webapp/WEB-INF/web.xml": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/account/account.module.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/account/account.route.ts": {
@@ -200,12 +197,6 @@ exports[`SubGenerator client of entity-audit JHipster blueprint run should succe
   "src/main/webapp/app/admin/configuration/configuration.model.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/configuration/configuration.module.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/configuration/configuration.route.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/configuration/configuration.service.spec.ts": {
     "stateCleared": "modified",
   },
@@ -221,12 +212,6 @@ exports[`SubGenerator client of entity-audit JHipster blueprint run should succe
   "src/main/webapp/app/admin/docs/docs.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/docs/docs.module.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/docs/docs.route.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/health/health.component.html": {
     "stateCleared": "modified",
   },
@@ -237,12 +222,6 @@ exports[`SubGenerator client of entity-audit JHipster blueprint run should succe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/health/health.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/health/health.module.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/health/health.route.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/health/health.service.spec.ts": {
@@ -270,12 +249,6 @@ exports[`SubGenerator client of entity-audit JHipster blueprint run should succe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/logs/logs.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/logs/logs.module.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/logs/logs.route.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/admin/logs/logs.service.spec.ts": {
@@ -350,12 +323,6 @@ exports[`SubGenerator client of entity-audit JHipster blueprint run should succe
   "src/main/webapp/app/admin/metrics/metrics.model.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/metrics/metrics.module.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/admin/metrics/metrics.route.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/admin/metrics/metrics.service.spec.ts": {
     "stateCleared": "modified",
   },
@@ -407,10 +374,10 @@ exports[`SubGenerator client of entity-audit JHipster blueprint run should succe
   "src/main/webapp/app/admin/user-management/user-management.model.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/user-management/user-management.module.ts": {
+  "src/main/webapp/app/admin/user-management/user-management.route.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/admin/user-management/user-management.route.ts": {
+  "src/main/webapp/app/app-page-title-strategy.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/app-routing.module.ts": {
@@ -560,12 +527,6 @@ exports[`SubGenerator client of entity-audit JHipster blueprint run should succe
   "src/main/webapp/app/home/home.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/home/home.module.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/home/home.route.ts": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/app/layouts/error/error.component.html": {
     "stateCleared": "modified",
   },
@@ -590,7 +551,13 @@ exports[`SubGenerator client of entity-audit JHipster blueprint run should succe
   "src/main/webapp/app/layouts/main/main.component.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/layouts/main/main.module.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/layouts/navbar/active-menu.directive.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/layouts/navbar/navbar-item.model.d.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/navbar/navbar.component.html": {
@@ -603,9 +570,6 @@ exports[`SubGenerator client of entity-audit JHipster blueprint run should succe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/navbar/navbar.component.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/layouts/navbar/navbar.route.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/layouts/profiles/page-ribbon.component.scss": {
@@ -633,12 +597,6 @@ exports[`SubGenerator client of entity-audit JHipster blueprint run should succe
     "stateCleared": "modified",
   },
   "src/main/webapp/app/login/login.model.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/login/login.module.ts": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/app/login/login.route.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/login/login.service.ts": {
@@ -686,6 +644,9 @@ exports[`SubGenerator client of entity-audit JHipster blueprint run should succe
   "src/main/webapp/app/shared/date/format-medium-datetime.pipe.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/date/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/filter/filter.component.html": {
     "stateCleared": "modified",
   },
@@ -698,7 +659,13 @@ exports[`SubGenerator client of entity-audit JHipster blueprint run should succe
   "src/main/webapp/app/shared/filter/filter.model.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/filter/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/language/find-language-from-key.pipe.ts": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/app/shared/language/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/language/translate.directive.spec.ts": {
@@ -710,16 +677,19 @@ exports[`SubGenerator client of entity-audit JHipster blueprint run should succe
   "src/main/webapp/app/shared/language/translation.module.ts": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/shared/pagination/index.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/shared/pagination/item-count.component.spec.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/pagination/item-count.component.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/shared-libs.module.ts": {
+  "src/main/webapp/app/shared/shared.module.ts": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/app/shared/shared.module.ts": {
+  "src/main/webapp/app/shared/sort/index.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/app/shared/sort/sort-by.directive.spec.ts": {
@@ -869,6 +839,54 @@ exports[`SubGenerator client of entity-audit JHipster blueprint run should succe
   "src/main/webapp/i18n/en/user-management.json": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/i18n/fr/activate.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/configuration.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/entity-audit.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/error.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/global.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/health.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/home.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/login.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/logs.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/metrics.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/password.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/register.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/reset.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/sessions.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/settings.json": {
+    "stateCleared": "modified",
+  },
+  "src/main/webapp/i18n/fr/user-management.json": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/index.html": {
     "stateCleared": "modified",
   },
@@ -876,9 +894,6 @@ exports[`SubGenerator client of entity-audit JHipster blueprint run should succe
     "stateCleared": "modified",
   },
   "src/main/webapp/manifest.webapp": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/polyfills.ts": {
     "stateCleared": "modified",
   },
   "src/main/webapp/robots.txt": {
@@ -891,6 +906,9 @@ exports[`SubGenerator client of entity-audit JHipster blueprint run should succe
     "stateCleared": "modified",
   },
   "src/test/resources/i18n/messages_en.properties": {
+    "stateCleared": "modified",
+  },
+  "src/test/resources/i18n/messages_fr.properties": {
     "stateCleared": "modified",
   },
   "tsconfig.app.json": {

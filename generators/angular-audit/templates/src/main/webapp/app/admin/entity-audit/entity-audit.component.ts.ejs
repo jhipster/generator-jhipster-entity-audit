@@ -1,15 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
 import { tap } from 'rxjs';
 
+import SharedModule from 'app/shared/shared.module';
 import { EntityAuditService } from './entity-audit.service';
 import { EntityAuditEvent } from './entity-audit-event.model';
-import { EntityAuditModalComponent } from './entity-audit-modal.component';
+import EntityAuditModalComponent from './entity-audit-modal.component';
 import { AlertService } from 'app/core/util/alert.service';
 
 @Component({
+    standalone: true,
     selector: '<%= jhiPrefixDashed %>-entity-audit',
     templateUrl: './entity-audit.component.html',
+    imports: [SharedModule, FormsModule, EntityAuditModalComponent],
     styles: [`
       .code {
         background: #dcdada;
@@ -17,7 +21,7 @@ import { AlertService } from 'app/core/util/alert.service';
       }
     `],
 })
-export class EntityAuditComponent implements OnInit {
+export default class EntityAuditComponent implements OnInit {
     audits: EntityAuditEvent[] = [];
     entities: string[] = [];
     selectedEntity?: string;

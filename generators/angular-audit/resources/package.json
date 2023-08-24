@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "ngx-diff": "5.0.0"
+  }
+}

@@ -1,39 +1,22 @@
-import chalk from 'chalk';
-import { GeneratorBaseEntities } from 'generator-jhipster';
-import { PRIORITY_PREFIX, PROMPTING_PRIORITY, COMPOSING_PRIORITY } from 'generator-jhipster/esm/priorities';
+import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
+import command from './command.mjs';
 
-export default class extends GeneratorBaseEntities {
+export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { taskPrefix: PRIORITY_PREFIX, unique: 'namespace', ...features });
-
-    this.jhipsterOptions({
-      auditFramework: {
-        desc: 'Audit framework',
-        type: String,
-        scope: 'blueprint',
-      },
-      auditPage: {
-        desc: 'Generate client page',
-        type: Boolean,
-        scope: 'blueprint',
-      },
-      auditedEntities: {
-        desc: 'Entities to be audited',
-        type: Array,
-      },
-    });
-
-    if (this.options.help) return;
-
-    if (!this.options.jhipsterContext) {
-      throw new Error(`This is a JHipster blueprint and should be used only like ${chalk.yellow('jhipster --blueprints entity-audit')}`);
-    }
-
-    this.sbsBlueprint = true;
+    super(args, opts, { ...features, sbsBlueprint: true });
   }
 
-  get [PROMPTING_PRIORITY]() {
-    return {
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.asInitializingTaskGroup({
+      async initializeOptions() {
+        this.parseJHipsterArguments(command.arguments);
+        this.parseJHipsterOptions(command.options);
+      },
+    });
+  }
+
+  get [BaseApplicationGenerator.PROMPTING]() {
+    return this.asPromptingTaskGroup({
       async promptingTemplateTask() {
         const firstRun = this.blueprintConfig.auditFramework === undefined;
         await this.prompt(
@@ -61,7 +44,7 @@ export default class extends GeneratorBaseEntities {
               default: true,
             },
           ],
-          this.blueprintStorage
+          this.blueprintStorage,
         );
         if (firstRun && !this.options.auditedEntities) {
           const response = await this.prompt([
@@ -97,16 +80,16 @@ export default class extends GeneratorBaseEntities {
           this.auditedEntities = response.auditedEntities;
         }
       },
-    };
+    });
   }
 
-  get [COMPOSING_PRIORITY]() {
-    return {
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.asComposingTaskGroup({
       async composingTask() {
         if (this.blueprintConfig.auditFramework && this.blueprintConfig.auditFramework !== 'no') {
           await this.composeWithJHipster('jhipster-entity-audit:java-audit', { auditedEntities: this.auditedEntities });
         }
       },
-    };
+    });
   }
 }

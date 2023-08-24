@@ -9,5 +9,7 @@ generators/java-audit/generator.spec.mjs skip
 generators/spring-boot-custom-audit/generator.spec.mjs skip
 generators/angular-audit/generator.mjs skip
 generators/app/generator.mjs skip
+generators/app/command.mjs skip
 generators/client/generator.mjs skip
 generators/java-audit/generator.mjs skip
+generators/languages/generator.mjs skip
