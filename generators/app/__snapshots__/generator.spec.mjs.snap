@@ -350,9 +350,6 @@ exports[`SubGenerator app of entity-audit JHipster blueprint > run > should succ
   "src/main/java/com/mycompany/myapp/web/rest/vm/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/resources/.h2.server.properties": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/banner.txt": {
     "stateCleared": "modified",
   },
