@@ -1,3 +1,4 @@
+import { readdir } from 'node:fs/promises';
 import BaseGenerator from 'generator-jhipster/generators/base';
 import command from './command.mjs';
 
@@ -8,10 +9,26 @@ export default class extends BaseGenerator {
     return this.asInitializingTaskGroup({
       async initializeOptions() {
         this.parseJHipsterArguments(command.arguments);
-        if (!this.sampleName.endsWith('.jdl')) {
+        if (this.sampleName && !this.sampleName.endsWith('.jdl')) {
           this.sampleName += '.jdl';
         }
         this.parseJHipsterOptions(command.options);
+      },
+    });
+  }
+
+  get [BaseGenerator.PROMPTING]() {
+    return this.asPromptingTaskGroup({
+      async askForSample() {
+        if (!this.sampleName) {
+          const answers = await this.prompt({
+            type: 'list',
+            name: 'sampleName',
+            message: 'which sample do you want to generate?',
+            choices: async () => readdir(this.templatePath('samples')),
+          });
+          this.sampleName = answers.sampleName;
+        }
       },
     });
   }
@@ -33,7 +50,6 @@ export default class extends BaseGenerator {
             skipJhipsterDependencies: true,
             insight: false,
             skipChecks: true,
-            skipInstall: true,
           },
         });
       },
