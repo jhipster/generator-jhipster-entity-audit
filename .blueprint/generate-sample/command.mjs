@@ -24,7 +24,6 @@ const command = {
   arguments: {
     sampleName: {
       type: String,
-      required: true,
     },
   },
   options: {},

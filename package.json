@@ -31,7 +31,7 @@
   },
   "main": "generators/app/index.js",
   "bin": {
-    "jhipster-entity-audit": "cli/cli.mjs"
+    "jhipster-entity-audit": "cli/cli.cjs"
   },
   "files": [
     "cli",
@@ -50,22 +50,22 @@
     "pretest": "npm run prettier-check && npm run lint",
     "test": "vitest run",
     "update-snapshot": "vitest run --update",
-    "vitest": "0.34.3"
+    "vitest": "vitest"
   },
   "dependencies": {
-    "generator-jhipster": "8.0.0-beta.3"
+    "generator-jhipster": "github:jhipster/generator-jhipster"
   },
   "devDependencies": {
     "ejs-lint": "2.0.0",
-    "eslint": "8.48.0",
+    "eslint": "8.49.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-import": "2.28.1",
     "eslint-plugin-mocha": "10.1.0",
     "eslint-plugin-prettier": "5.0.0",
     "prettier": "3.0.3",
-    "vitest": "0.34.3",
-    "yeoman-test": "8.0.0-rc.1"
+    "vitest": "0.34.4",
+    "yeoman-test": ">=8.0.0-rc.1"
   },
   "engines": {
     "node": "^18.13.0 || >= 20.2.0"

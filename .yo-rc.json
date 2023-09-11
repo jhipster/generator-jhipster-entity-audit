@@ -52,6 +52,7 @@
     "localBlueprint": false,
     "prettierDefaultIndent": 2,
     "projectName": "Entity Audit Application",
+    "sampleWritten": true,
     "skipCommitHook": true,
     "subGenerators": ["app", "client"]
   }
