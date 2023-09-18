@@ -8,7 +8,7 @@
 
     <properties>
         <!-- Dependency versions -->
-        <javers-core.version>7.3.2</javers-core.version>
+        <javers-core.version>7.3.3</javers-core.version>
     </properties>
 
     <dependencyManagement>
