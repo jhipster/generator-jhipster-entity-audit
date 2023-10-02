@@ -13,10 +13,12 @@ describe('SubGenerator spring-boot-custom-audit of entity-audit JHipster bluepri
         .withJHipsterConfig({}, [
           {
             name: 'Audited',
-            fields: [{
-              fieldName: 'name',
-              fieldType: 'String',
-            }],
+            fields: [
+              {
+                fieldName: 'name',
+                fieldType: 'String',
+              },
+            ],
           },
         ])
         .withOptions({
