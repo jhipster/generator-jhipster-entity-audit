@@ -4,7 +4,7 @@ import { clientApplicationTemplatesBlock } from 'generator-jhipster/generators/c
 export default class extends BaseApplicationGenerator {
   ngxDiff;
 
-  async _postConstruct() {
+  async beforeQueue() {
     await this.dependsOnJHipster('bootstrap-application');
   }
 

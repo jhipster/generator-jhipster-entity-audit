@@ -38,8 +38,8 @@ const ADDITIONAL_FIELDS = [
 ];
 
 export default class extends BaseApplicationGenerator {
-  async _postConstruct() {
-    await this.dependsOnJHipster('bootstrap-application');
+  async beforeQueue() {
+    await this.dependsOnJHipster('java');
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {

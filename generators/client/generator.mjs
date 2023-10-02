@@ -5,7 +5,7 @@ export default class extends BaseApplicationGenerator {
     super(args, opts, { ...features, sbsBlueprint: true });
   }
 
-  async _postConstruct() {
+  async beforeQueue() {
     await this.dependsOnJHipster('bootstrap-application');
   }
 
