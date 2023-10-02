@@ -665,6 +665,9 @@ exports[`SubGenerator app of entity-audit JHipster blueprint > run > should succ
   "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.html": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.spec.ts": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/app/admin/metrics/blocks/metrics-modal-threads/metrics-modal-threads.component.ts": {
     "stateCleared": "modified",
   },
