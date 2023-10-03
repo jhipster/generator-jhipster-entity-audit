@@ -92,20 +92,22 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.asWritingEntitiesTaskGroup({
       async writingTemplateTask({ application, entities }) {
-        await Promise.all(
-          entities
-            .filter(e => !e.builtIn && e.enableAudit)
-            .map(e =>
-              this.writeFiles({
-                blocks: [
-                  {
-                    ...javaMainPackageTemplatesBlock(),
-                    templates: ['domain/_PersistClass_.java.jhi.entity_audit'],
-                  },
-                ],
-                context: { ...application, ...e },
-              }),
-            ),
+        console.log(
+          await Promise.all(
+            entities
+              .filter(e => !e.builtIn && !e.skipServer && e.enableAudit)
+              .map(e =>
+                this.writeFiles({
+                  blocks: [
+                    javaMainPackageTemplatesBlock({
+                      relativePath: '_entityPackage_',
+                      templates: ['domain/_persistClass_.java.jhi.entity_audit'],
+                    }),
+                  ],
+                  context: { ...application, ...e },
+                }),
+              ),
+          ),
         );
       },
     });

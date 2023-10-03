@@ -27,7 +27,7 @@ export default class extends BaseApplicationGenerator {
       async composingTask() {
         if (this.blueprintConfig.auditFramework && this.blueprintConfig.auditFramework !== 'no') {
           const auditedEntities = this.updateType === 'all' ? this.getExistingEntities().map(e => e.name) : this.auditedEntities;
-          await this.composeWithJHipster('jhipster-entity-audit:java-audit', { auditedEntities });
+          await this.composeWithJHipster('jhipster-entity-audit:java-audit', { generatorOptions: { auditedEntities } });
         }
       },
     });

@@ -58,7 +58,7 @@ const command = {
         type: Array,
       },
       prompt: gen => ({
-        when: answers => answers.updateType !== 'all',
+        when: answers => gen.blueprintConfig.auditFramework === undefined && answers.updateType !== 'all',
         type: 'checkbox',
         message: 'Please choose the entities to be audited',
         choices: gen.getExistingEntities().map(e => e.name),
