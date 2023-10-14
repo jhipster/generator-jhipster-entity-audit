@@ -23,6 +23,9 @@ exports[`SubGenerator spring-boot-custom-audit of entity-audit JHipster blueprin
   "src/main/java/com/mycompany/myapp/audit/package-info.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/domain/Audited.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/domain/EntityAuditEvent.java": {
     "stateCleared": "modified",
   },
@@ -54,6 +57,9 @@ exports[`SubGenerator spring-boot-custom-audit of entity-audit JHipster blueprin
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/audit/TestEntityAuditEventWriter.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AuditedTest.java": {
     "stateCleared": "modified",
   },
 }
