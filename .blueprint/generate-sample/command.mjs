@@ -27,7 +27,7 @@ const command = {
     },
   },
   options: {},
-  import: [GENERATOR_APP, `jhipster-entity-audit:${GENERATOR_APP}`],
+  import: [GENERATOR_APP, `jhipster-entity-audit:${GENERATOR_APP}`, `jhipster-entity-audit:server`],
 };
 
 export default command;
