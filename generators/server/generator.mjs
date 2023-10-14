@@ -16,7 +16,9 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.PROMPTING]() {
     return this.asPromptingTaskGroup({
-      async promptingTemplateTask() {
+      async promptingTemplateTask({ control }) {
+        if (control.existingProject && !this.options.askAnswered) return;
+
         await this.prompt(this.prepareQuestions(command.configs));
       },
     });

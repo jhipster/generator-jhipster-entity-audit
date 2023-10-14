@@ -11,12 +11,6 @@
         "sbs": null,
         "written": true
       },
-      "app": {
-        "command": false,
-        "priorities": ["initializing", "prompting", "composing"],
-        "sbs": true,
-        "written": true
-      },
       "client": {
         "command": false,
         "priorities": ["composing"],
@@ -32,6 +26,12 @@
       "languages": {
         "command": false,
         "priorities": ["writing"],
+        "sbs": true,
+        "written": true
+      },
+      "server": {
+        "command": false,
+        "priorities": ["initializing", "prompting", "composing"],
         "sbs": true,
         "written": true
       },
