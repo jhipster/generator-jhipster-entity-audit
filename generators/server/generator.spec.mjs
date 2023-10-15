@@ -23,5 +23,8 @@ describe('SubGenerator server of entity-audit JHipster blueprint', () => {
     it('should succeed', () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
     });
+    it('should not write audit files', () => {
+      expect(result.getStateSnapshot('**/audit/**')).toMatchObject({});
+    });
   });
 });
