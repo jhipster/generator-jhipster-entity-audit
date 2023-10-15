@@ -38,11 +38,14 @@ const command = {
       },
       scope: 'blueprint',
     },
-    updateType: {
+    auditUpdateType: {
+      cli: {
+        type: String,
+      },
       prompt: generator => ({
-        when: () => generator.blueprintConfig.auditFramework === undefined,
+        when: answers => (generator.initialRun || generator.options.askAnswered) && ['javers', 'custom'].includes(answers.auditFramework),
         type: 'list',
-        name: 'updateType',
+        name: 'auditUpdateType',
         message: 'Do you want to enable audit for all existing entities?',
         choices: [
           { name: 'Yes, update all', value: 'all' },
@@ -58,10 +61,11 @@ const command = {
         type: Array,
       },
       prompt: gen => ({
-        when: answers => gen.blueprintConfig.auditFramework === undefined && answers.updateType !== 'all',
+        when: answers => answers.auditUpdateType === 'selected',
         type: 'checkbox',
         message: 'Please choose the entities to be audited',
         choices: gen.getExistingEntities().map(e => e.name),
+        default: [],
       }),
       scope: 'generator',
     },
