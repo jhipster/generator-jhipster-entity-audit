@@ -4,7 +4,7 @@ import { javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/jav
 import { getPomVersionProperties } from 'generator-jhipster/generators/server/support';
 
 export default class extends BaseApplicationGenerator {
-  async _postConstruct() {
+  async beforeQueue() {
     await this.dependsOnJHipster('jhipster-entity-audit:java-audit');
   }
 

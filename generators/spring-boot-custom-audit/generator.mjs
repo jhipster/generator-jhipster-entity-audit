@@ -6,7 +6,7 @@ import {
 } from 'generator-jhipster/generators/java/support';
 
 export default class extends BaseApplicationGenerator {
-  async _postConstruct() {
+  async beforeQueue() {
     await this.dependsOnJHipster('jhipster-entity-audit:java-audit');
   }
 

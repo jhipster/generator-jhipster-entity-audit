@@ -20,7 +20,6 @@
 const defaultCommands = {
   'generate-sample': {
     desc: 'Generate a test sample',
-    blueprint: '@jhipster/jhipster-dev',
   },
 };
 

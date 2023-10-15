@@ -10,7 +10,17 @@ describe('SubGenerator spring-boot-custom-audit of entity-audit JHipster bluepri
     beforeAll(async function () {
       await helpers
         .run(SUB_GENERATOR_NAMESPACE)
-        .withJHipsterConfig()
+        .withJHipsterConfig({}, [
+          {
+            name: 'Audited',
+            fields: [
+              {
+                fieldName: 'name',
+                fieldType: 'String',
+              },
+            ],
+          },
+        ])
         .withOptions({
           creationTimestamp: '2022-01-01',
           ignoreNeedlesError: true,

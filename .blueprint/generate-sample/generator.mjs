@@ -50,8 +50,12 @@ export default class extends BaseGenerator {
             skipJhipsterDependencies: true,
             insight: false,
             skipChecks: true,
+            skipInstall: true,
           },
         });
+      },
+      async jhipsterInfo() {
+        await this.composeWithJHipster('info');
       },
     });
   }

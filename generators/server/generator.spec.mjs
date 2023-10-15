@@ -2,10 +2,10 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 import { defaultHelpers as helpers, result } from 'generator-jhipster/testing';
 
-const SUB_GENERATOR = 'app';
+const SUB_GENERATOR = 'server';
 const BLUEPRINT_NAMESPACE = `jhipster:${SUB_GENERATOR}`;
 
-describe('SubGenerator app of entity-audit JHipster blueprint', () => {
+describe('SubGenerator server of entity-audit JHipster blueprint', () => {
   describe('run', () => {
     beforeAll(async function () {
       await helpers
@@ -22,6 +22,9 @@ describe('SubGenerator app of entity-audit JHipster blueprint', () => {
 
     it('should succeed', () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
+    });
+    it('should not write audit files', () => {
+      expect(result.getStateSnapshot('**/audit/**')).toMatchObject({});
     });
   });
 });

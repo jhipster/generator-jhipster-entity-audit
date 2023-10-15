@@ -38,8 +38,8 @@ const ADDITIONAL_FIELDS = [
 ];
 
 export default class extends BaseApplicationGenerator {
-  async _postConstruct() {
-    await this.dependsOnJHipster('bootstrap-application');
+  async beforeQueue() {
+    await this.dependsOnJHipster('java');
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
@@ -94,14 +94,14 @@ export default class extends BaseApplicationGenerator {
       async writingTemplateTask({ application, entities }) {
         await Promise.all(
           entities
-            .filter(e => !e.builtIn && e.enableAudit)
+            .filter(e => !e.builtIn && !e.skipServer && e.enableAudit)
             .map(e =>
               this.writeFiles({
                 blocks: [
-                  {
-                    ...javaMainPackageTemplatesBlock(),
-                    templates: ['domain/_PersistClass_.java.jhi.entity_audit'],
-                  },
+                  javaMainPackageTemplatesBlock({
+                    relativePath: '_entityPackage_',
+                    templates: ['domain/_persistClass_.java.jhi.entity_audit'],
+                  }),
                 ],
                 context: { ...application, ...e },
               }),
