@@ -90,7 +90,7 @@ jobs:
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
       - name: 'PROJECT: generate'
-        run: 'JHI_PROFILE=${{ matrix.profile }} jhipster-entity-audit generate-sample ${{ matrix.suite }} --build ${{ matrix.build-tool }} --audit-framework ${{ matrix.audit-framework }} --audit-page --no-insight --skip-git --skip-commit-hook --skip-jhipster-dependencies --no-cypress-audit'
+        run: 'JHI_PROFILE=${{ matrix.profile }} jhipster-entity-audit generate-sample ${{ matrix.suite }} --build ${{ matrix.build-tool }} --audit-framework ${{ matrix.audit-framework }} --audit-page --no-insight --skip-git --skip-commit-hook --skip-jhipster-dependencies --no-cypress-audit --audit-update-type all'
       - name: 'TESTS: backend tests'
         run: npm run ci:backend:test
       - name: 'TESTS: frontend tests'
