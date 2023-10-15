@@ -27,7 +27,11 @@ const command = {
     },
   },
   options: {},
-  import: [GENERATOR_APP, `jhipster-entity-audit:${GENERATOR_APP}`, `jhipster-entity-audit:server`],
+  import: [
+    GENERATOR_APP,
+    // Add blueprint server generator because RC.1 is not loading blueprints options for blueprint generator command.
+    `jhipster-entity-audit:server`,
+  ],
 };
 
 export default command;
