@@ -10,7 +10,18 @@ describe('SubGenerator java-audit of entity-audit JHipster blueprint', () => {
     beforeAll(async function () {
       await helpers
         .run(SUB_GENERATOR_NAMESPACE)
-        .withJHipsterConfig()
+        .withJHipsterConfig({}, [
+          {
+            name: 'Audited',
+            enableAudit: true,
+            fields: [
+              {
+                fieldName: 'name',
+                fieldType: 'String',
+              },
+            ],
+          },
+        ])
         .withOptions({
           creationTimestamp: '2022-01-01',
           ignoreNeedlesError: true,
@@ -21,6 +32,10 @@ describe('SubGenerator java-audit of entity-audit JHipster blueprint', () => {
 
     it('should succeed', () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
+    });
+    it('entities should extend AbstractAuditingEntity', () => {
+      // TODO remove jhi extension
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Audited.java.jhi', ' AbstractAuditingEntity<');
     });
   });
 });
