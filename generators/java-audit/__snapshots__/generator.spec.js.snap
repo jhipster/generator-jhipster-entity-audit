@@ -23,5 +23,8 @@ exports[`SubGenerator java-audit of entity-audit JHipster blueprint > run > shou
   "src/test/java/com/mycompany/myapp/domain/AuditedTest.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/AuditedTestSamples.java": {
+    "stateCleared": "modified",
+  },
 }
 `;
