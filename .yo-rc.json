@@ -54,6 +54,6 @@
     "projectName": "Entity Audit Application",
     "sampleWritten": true,
     "skipCommitHook": true,
-    "subGenerators": ["app", "client"]
+    "subGenerators": ["client", "server"]
   }
 }

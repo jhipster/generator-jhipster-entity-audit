@@ -20,7 +20,7 @@ exports[`SubGenerator server of entity-audit JHipster blueprint > run > should s
   ".husky/pre-commit": {
     "stateCleared": "modified",
   },
-  ".lintstagedrc.js": {
+  ".lintstagedrc.cjs": {
     "stateCleared": "modified",
   },
   ".mvn/jvm.config": {
