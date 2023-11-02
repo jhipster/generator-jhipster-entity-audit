@@ -1,5 +1,5 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
-import command from './command.mjs';
+import command from './command.js';
 
 export default class extends BaseApplicationGenerator {
   initialRun;
