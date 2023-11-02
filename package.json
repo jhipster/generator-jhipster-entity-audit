@@ -26,9 +26,6 @@
     "url": "http://deepu105.github.io"
   },
   "type": "module",
-  "imports": {
-    "#test-utils": "./test/utils.mjs"
-  },
   "main": "generators/app/index.js",
   "bin": {
     "jhipster-entity-audit": "cli/cli.cjs"
