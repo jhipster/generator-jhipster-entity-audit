@@ -3,6 +3,7 @@ import command from './command.js';
 
 export default class extends BaseApplicationGenerator {
   initialRun;
+  auditedEntities;
 
   constructor(args, opts, features) {
     super(args, opts, { ...features, sbsBlueprint: true });
