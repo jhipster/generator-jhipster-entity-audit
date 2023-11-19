@@ -78,8 +78,8 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
     return this.asConfiguringEachEntityTaskGroup({
       async configureEntity({ entityName, entityConfig }) {
-        const { auditedEntities = [] } = this.options;
-        entityConfig.enableAudit = auditedEntities.includes(entityName) || entityConfig.enableAudit;
+        const { auditedEntities } = this.options;
+        entityConfig.enableAudit = auditedEntities?.includes(entityName) || entityConfig.enableAudit;
         if (!entityConfig.enableAudit) return;
 
         const fieldNames = entityConfig.fields.map(f => f.fieldName);
