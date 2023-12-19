@@ -49,6 +49,7 @@
       }
     },
     "jhipsterVersion": "7.9.2",
+    "js": true,
     "localBlueprint": false,
     "prettierDefaultIndent": 2,
     "projectName": "Entity Audit Application",
