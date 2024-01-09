@@ -1,0 +1,49 @@
+{
+    "global": {
+        "menu": {
+            "admin": {
+                "entityAudit": "Entity Audit"
+            }
+        }
+    },
+    "entityAudit": {
+        "home": {
+            "title": "Entity Audits",
+            "filter": "Filter",
+            "entityOrTable": "Entity/Tabelle",
+            "limitTo": "Einschränken auf",
+            "loadChangeList": "Lade Änderungsliste"
+        },
+        "result": {
+            "showInfo": "Letzte <strong>{{ limit }}</strong> Änderungen für <strong>{{ entity }}</strong>",
+            "searchFieldLabel": "Filter:",
+            "globalFilter": "globaler Filter",
+            "entityIdFilter": "entity id Filter",
+            "tableHeader": {
+                "entityId": "Entity Id",
+                "action": "Aktion",
+                "version": "Version",
+                "value": "Wert",
+                "modifiedDate": "Änderungsdatum",
+                "modifiedBy": "Geändert von"
+            },
+            "tableBody": {
+                "field": "Feld",
+                "value": "Wert",
+                "viewDetails": "Audit-Änderungsdetails ansehen"
+            },
+            "noDataFound": "Keine Daten für Filter gefunden",
+            "firstAuditEntry": "Für diesen Eintrag ist keine vorherige Version verfügbar.\nDies ist der erste Audit-Eintrag für dieses Objekt."
+        },
+        "detail": {
+            "close": "Schließen",
+            "title": "Audit-Details",
+            "action": "{{action}} Aktion wurde auf untenstehende Daten angewendet",
+            "old": "Alter/entfernter Wert",
+            "new": "Neuer/hinzugefügter Wert",
+            "changedFields": "Geänderte Felder",
+            "allFields": "Alle Felder",
+            "done": "Fertig"
+        }
+    }
+}
