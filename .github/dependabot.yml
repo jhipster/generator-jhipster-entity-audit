@@ -20,6 +20,15 @@
 version: 2
 updates:
   - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'daily'
+      time: '12:00'
+    versioning-strategy: increase
+    labels:
+      - 'theme: dependencies'
+
+  - package-ecosystem: 'npm'
     directory: '/generators/angular-audit/resources/'
     schedule:
       interval: 'daily'
