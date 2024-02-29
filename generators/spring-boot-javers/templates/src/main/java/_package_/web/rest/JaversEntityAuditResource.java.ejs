@@ -77,8 +77,7 @@ public class JaversEntityAuditResource {
 
         Class entityTypeToFetch = Class.forName("<%=packageName%>.domain." + entityType);
         QueryBuilder jqlQuery = QueryBuilder.byClass(entityTypeToFetch)
-                                            .limit(limit)
-                                            .withNewObjectChanges(true);
+                                            .limit(limit);
 
         List<CdoSnapshot> snapshots =  javers.findSnapshots(jqlQuery.build());
 
@@ -116,8 +115,7 @@ public class JaversEntityAuditResource {
 
         QueryBuilder jqlQuery = QueryBuilder.byInstanceId(entityId, entityTypeToFetch)
                                            .limit(1)
-                                           .withVersion(commitVersion - 1)
-                                           .withNewObjectChanges(true);
+                                           .withVersion(commitVersion - 1);
 
         EntityAuditEvent prev = EntityAuditEvent.fromJaversSnapshot(javers.findSnapshots(jqlQuery.build()).get(0));
 
