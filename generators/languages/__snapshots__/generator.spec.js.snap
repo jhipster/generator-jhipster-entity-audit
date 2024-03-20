@@ -11,6 +11,9 @@ exports[`SubGenerator languages of entity-audit JHipster blueprint > run > shoul
   "src/main/webapp/i18n/en/activate.json": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/i18n/en/adminAuthority.json": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/i18n/en/configuration.json": {
     "stateCleared": "modified",
   },

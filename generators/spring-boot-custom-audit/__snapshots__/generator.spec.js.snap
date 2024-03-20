@@ -26,6 +26,9 @@ exports[`SubGenerator spring-boot-custom-audit of entity-audit JHipster blueprin
   "src/main/java/com/mycompany/myapp/domain/Audited.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/domain/Authority.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/domain/EntityAuditEvent.java": {
     "stateCleared": "modified",
   },
@@ -59,10 +62,25 @@ exports[`SubGenerator spring-boot-custom-audit of entity-audit JHipster blueprin
   "src/test/java/com/mycompany/myapp/audit/TestEntityAuditEventWriter.java": {
     "stateCleared": "modified",
   },
+  "src/test/java/com/mycompany/myapp/domain/AssertUtils.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AuditedAsserts.java": {
+    "stateCleared": "modified",
+  },
   "src/test/java/com/mycompany/myapp/domain/AuditedTest.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/AuditedTestSamples.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AuthorityAsserts.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AuthorityTest.java": {
+    "stateCleared": "modified",
+  },
+  "src/test/java/com/mycompany/myapp/domain/AuthorityTestSamples.java": {
     "stateCleared": "modified",
   },
 }
