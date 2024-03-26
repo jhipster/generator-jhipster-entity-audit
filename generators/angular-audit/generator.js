@@ -1,4 +1,5 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
+import { createNeedleCallback } from 'generator-jhipster/generators/base/support';
 import { clientApplicationTemplatesBlock } from 'generator-jhipster/generators/client/support';
 
 export default class extends BaseApplicationGenerator {
@@ -15,6 +16,17 @@ export default class extends BaseApplicationGenerator {
           dependencies: { ['ngx-diff']: ngxDiff },
         } = this.fs.readJSON(this.templatePath('../resources/package.json'));
         this.ngxDiff = ngxDiff;
+      },
+      addNeedles({ application, source }) {
+        source.addVendorSCSSStyle = ({ style, comment }) =>
+          this.editFile(
+            `${application.clientSrcDir}content/scss/vendor.scss`,
+            createNeedleCallback({
+              needle: 'scss-add-vendor',
+              contentToAdd: `${comment ? `${comment}\n` : ''}${style}`,
+              contentToCheck: style,
+            }),
+          );
       },
     });
   }
@@ -70,6 +82,7 @@ export default class extends BaseApplicationGenerator {
           translationKey: 'entityAudit',
           name: 'Entity Audit',
         });
+        source.addVendorSCSSStyle({ style: "@import 'ngx-diff/styles/default-theme';" });
       },
     });
   }

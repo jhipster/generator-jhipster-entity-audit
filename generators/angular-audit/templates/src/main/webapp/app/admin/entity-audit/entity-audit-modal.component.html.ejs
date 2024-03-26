@@ -33,7 +33,7 @@
   <br>
 
   <label <%= jhiPrefix %>Translate="entityAudit.detail.changedFields">Changed Fields</label>
-  <inline-diff *ngIf="left && right" class="code" [oldText]="left" [newText]="right" />
+  <ngx-unified-diff *ngIf="left && right" class="ngx-diff-light-theme" [before]="left" [after]="right" />
 </div>
 <div class="modal-footer">
   <button
