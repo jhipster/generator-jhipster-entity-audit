@@ -76,7 +76,7 @@ export default class EntityAuditComponent implements OnInit {
             <%_ } _%>
             });
         } else {
-            const modalRef = this.modalService.open(EntityAuditModalComponent);
+            const modalRef = this.modalService.open(EntityAuditModalComponent, { size: 'lg' });
             modalRef.componentInstance.openChange(audit);
         }
     }
