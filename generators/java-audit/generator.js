@@ -120,4 +120,25 @@ export default class extends BaseApplicationGenerator {
       },
     });
   }
+
+  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+    return {
+      async postWritingEntitiesTask({ application: { mainJavaPackageDir, testJavaPackageDir }, entities }) {
+        for (const entity of entities.filter(e => !e.builtIn && e.enableAudit)) {
+          const { persistClass, entityPackage = '' } = entity;
+          this.editFile(`${testJavaPackageDir}${entityPackage}/domain/${persistClass}Asserts.java`, contents =>
+            contents
+              .replace(
+                `.satisfies(e -> assertThat(e.getLastModifiedBy()).as("check lastModifiedBy").isEqualTo(actual.getLastModifiedBy()))`,
+                '',
+              )
+              .replace(
+                '.satisfies(e -> assertThat(e.getLastModifiedDate()).as("check lastModifiedDate").isEqualTo(actual.getLastModifiedDate()))',
+                '',
+              ),
+          );
+        }
+      },
+    };
+  }
 }
