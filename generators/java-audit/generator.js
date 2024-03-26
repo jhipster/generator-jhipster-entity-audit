@@ -89,6 +89,16 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.asConfiguringEachEntityTaskGroup({
+      async configureEntity({ entity }) {
+        if (entity.enableAudit) {
+          entity.requiresPersistableImplementation = true;
+        }
+      },
+    });
+  }
+
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.asWritingEntitiesTaskGroup({
       async writingTemplateTask({ application, entities }) {
@@ -109,5 +119,26 @@ export default class extends BaseApplicationGenerator {
         );
       },
     });
+  }
+
+  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+    return {
+      async postWritingEntitiesTask({ application: { testJavaPackageDir }, entities }) {
+        for (const entity of entities.filter(e => !e.builtIn && e.enableAudit)) {
+          const { persistClass, entityPackage = '' } = entity;
+          this.editFile(`${testJavaPackageDir}${entityPackage}/domain/${persistClass}Asserts.java`, contents =>
+            contents
+              .replace(
+                `.satisfies(e -> assertThat(e.getLastModifiedBy()).as("check lastModifiedBy").isEqualTo(actual.getLastModifiedBy()))`,
+                '',
+              )
+              .replace(
+                '.satisfies(e -> assertThat(e.getLastModifiedDate()).as("check lastModifiedDate").isEqualTo(actual.getLastModifiedDate()))',
+                '',
+              ),
+          );
+        }
+      },
+    };
   }
 }
