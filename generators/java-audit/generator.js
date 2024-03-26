@@ -89,6 +89,16 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
+  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.asConfiguringEachEntityTaskGroup({
+      async configureEntity({ entity }) {
+        if (entity.enableAudit) {
+          entity.requiresPersistableImplementation = true;
+        }
+      },
+    });
+  }
+
   get [BaseApplicationGenerator.WRITING_ENTITIES]() {
     return this.asWritingEntitiesTaskGroup({
       async writingTemplateTask({ application, entities }) {
