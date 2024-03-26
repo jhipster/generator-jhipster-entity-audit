@@ -12,12 +12,8 @@ export default class extends BaseApplicationGenerator {
     return this.asPreparingTaskGroup({
       async defaultTask({ application }) {
         const pomFile = this.readTemplate(this.templatePath('../resources/pom.xml'));
-        // TODO use application.javaDependencies
         const versions = getPomVersionProperties(pomFile);
-        application.javaDependencies = this.prepareDependencies({
-          ...application.javaDependencies,
-          ...versions,
-        });
+        Object.assign(application.javaDependencies, this.prepareDependencies(versions));
       },
     });
   }
