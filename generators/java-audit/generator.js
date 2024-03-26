@@ -123,7 +123,7 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
     return {
-      async postWritingEntitiesTask({ application: { mainJavaPackageDir, testJavaPackageDir }, entities }) {
+      async postWritingEntitiesTask({ application: { testJavaPackageDir }, entities }) {
         for (const entity of entities.filter(e => !e.builtIn && e.enableAudit)) {
           const { persistClass, entityPackage = '' } = entity;
           this.editFile(`${testJavaPackageDir}${entityPackage}/domain/${persistClass}Asserts.java`, contents =>
