@@ -54,19 +54,18 @@ jobs:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
       #----------------------------------------------------------------------
-      - name: 'SETUP: create app folder'
-        run: mkdir app
-        working-directory: ${{ github.workspace }}
+      - uses: jhipster/actions/create-app-path@v0
+      - uses: jhipster/actions/setup-git@v0
       - name: 'SETUP: checkout generator-jhipster-entity-audit'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: generator-jhipster-entity-audit
           fetch-depth: 2
       - name: 'SETUP: setup node'
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
-      - uses: actions/setup-java@v3
+          node-version: 20
+      - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -79,7 +78,7 @@ jobs:
         id: get-date
         run: echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
       - name: 'SETUP: load cache'
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.npm
@@ -90,7 +89,11 @@ jobs:
       # Install JHipster and generate project+entities
       #----------------------------------------------------------------------
       - name: 'PROJECT: generate'
-        run: 'JHI_PROFILE=${{ matrix.profile }} jhipster-entity-audit generate-sample ${{ matrix.suite }} --build ${{ matrix.build-tool }} --audit-framework ${{ matrix.audit-framework }} --audit-page --no-insight --skip-git --skip-commit-hook --skip-jhipster-dependencies --no-cypress-audit --audit-update-type all'
+        run: 'jhipster-entity-audit generate-sample ${{ matrix.suite }} --build ${{ matrix.build-tool }} --audit-framework ${{ matrix.audit-framework }} --audit-page --no-insight --skip-commit-hook --skip-jhipster-dependencies --no-cypress-audit --audit-update-type all'
+      - uses: jhipster/actions/compare-sample@v0
+        with:
+          generator-path: generator-jhipster-entity-audit
+          cmd: 'jhipster-entity-audit generate-sample ${{ matrix.suite }} --build ${{ matrix.build-tool }} --audit-framework ${{ matrix.audit-framework }} --audit-page --no-insight --skip-git --skip-commit-hook --skip-jhipster-dependencies --no-cypress-audit --audit-update-type all --skip-install'
       - name: 'TESTS: backend tests'
         run: npm run ci:backend:test
       - name: 'TESTS: frontend tests'
@@ -99,10 +102,8 @@ jobs:
         run: npm run ci:e2e:package
       - name: 'TESTS: start docker dependencies'
         run: npm run ci:e2e:prepare
-        if: matrix.e2e != 'false'
       - name: 'TESTS: run e2e'
         run: npm run ci:e2e:run --if-present
-        if: matrix.e2e != 'false'
   check-applications:
     permissions:
       contents: none
