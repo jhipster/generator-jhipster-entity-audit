@@ -6,6 +6,7 @@ application {
     devDatabaseType h2Disk
     enableHibernateCache false
     enableTranslation false
+    jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     testFrameworks [cypress]
   }
 
@@ -13,12 +14,14 @@ application {
 }
 
 @EnableAudit
+@ChangelogDate(20240000000000)
 entity Blog {
   name String required minlength(3)
   handle String required minlength(2)
 }
 
 @EnableAudit
+@ChangelogDate(20240000000100)
 entity Post {
   title String required
   content TextBlob required
@@ -26,6 +29,7 @@ entity Post {
 }
 
 @EnableAudit
+@ChangelogDate(20240000000300)
 entity Tag {
   name String required minlength(2)
 }
