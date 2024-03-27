@@ -14,6 +14,7 @@ describe('SubGenerator angular-audit of entity-audit JHipster blueprint', () => 
         .withOptions({
           ignoreNeedlesError: true,
         })
+        .withMockedSource()
         .withJHipsterLookup()
         .withParentBlueprintLookup();
     });
