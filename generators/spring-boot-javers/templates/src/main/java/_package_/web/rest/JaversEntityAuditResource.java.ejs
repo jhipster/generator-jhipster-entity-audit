@@ -85,7 +85,7 @@ public class JaversEntityAuditResource {
         throws ClassNotFoundException {
         log.debug("REST request to get a page of EntityAuditEvents");
 
-        var entityTypeToFetch = Class.forName("<%=packageName%>.domain." + entityType);
+        var entityTypeToFetch = Class.forName("<%=packageName%>." + entityType);
         QueryBuilder jqlQuery = QueryBuilder.byClass(entityTypeToFetch)
                                             .limit(limit);
 
@@ -121,7 +121,7 @@ public class JaversEntityAuditResource {
                                                            @RequestParam(value = "commitVersion") Long commitVersion)
         throws ClassNotFoundException {
 
-        var entityTypeToFetch = Class.forName("<%- packageName %>.domain." + qualifiedName);
+        var entityTypeToFetch = Class.forName("<%- packageName %>." + qualifiedName);
         var entityInformation = JpaEntityInformationSupport.getEntityInformation(entityTypeToFetch, manager);
         var id = conversionService.convert(entityId, entityInformation.getIdType());
 
