@@ -13,9 +13,12 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.asWritingTaskGroup({
-      async writingTemplateTask({ application: { languages = [], clientSrcDir } }) {
+      async writingTemplateTask({ application: { languages = [], nativeLanguage, clientSrcDir } }) {
         if (!clientSrcDir) {
           throw new Error('clientSrcDir is missing');
+        }
+        if (!languages.includes(nativeLanguage)) {
+          languages.unshift(nativeLanguage);
         }
         const templates = languages.map(language => {
           const sourceLanguage = existsSync(`${this.templatePath()}/${TEMPLATES_WEBAPP_SOURCES_DIR}i18n/${language}/entity-audit.json`)
