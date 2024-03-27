@@ -121,7 +121,7 @@ public class JaversEntityAuditResource {
                                                            @RequestParam(value = "commitVersion") Long commitVersion)
         throws ClassNotFoundException {
 
-        var entityTypeToFetch = Class.forName("com.mycompany.myapp.domain." + qualifiedName);
+        var entityTypeToFetch = Class.forName("<%- packageName %>.domain." + qualifiedName);
         var entityInformation = JpaEntityInformationSupport.getEntityInformation(entityTypeToFetch, manager);
         var id = conversionService.convert(entityId, entityInformation.getIdType());
 
