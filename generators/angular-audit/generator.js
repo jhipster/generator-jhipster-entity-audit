@@ -18,15 +18,17 @@ export default class extends BaseApplicationGenerator {
         this.ngxDiff = ngxDiff;
       },
       addNeedles({ application, source }) {
-        source.addVendorSCSSStyle = ({ style, comment }) =>
-          this.editFile(
-            `${application.clientSrcDir}content/scss/vendor.scss`,
-            createNeedleCallback({
-              needle: 'scss-add-vendor',
-              contentToAdd: `${comment ? `${comment}\n` : ''}${style}`,
-              contentToCheck: style,
-            }),
-          );
+        source.addVendorSCSSStyle =
+          source.addVendorSCSSStyle ??
+          (({ style, comment }) =>
+            this.editFile(
+              `${application.clientSrcDir}content/scss/vendor.scss`,
+              createNeedleCallback({
+                needle: 'scss-add-vendor',
+                contentToAdd: `${comment ? `${comment}\n` : ''}${style}`,
+                contentToCheck: style,
+              }),
+            ));
       },
     });
   }
