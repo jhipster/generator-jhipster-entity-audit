@@ -82,7 +82,7 @@ export default class extends BaseApplicationGenerator {
           translationKey: 'entityAudit',
           name: 'Entity Audit',
         });
-        source.addVendorSCSSStyle({ style: "@import 'ngx-diff/styles/default-theme';" });
+        source.addVendorSCSSStyle({ style: "// @import 'ngx-diff/styles/default-theme';" });
       },
     });
   }
