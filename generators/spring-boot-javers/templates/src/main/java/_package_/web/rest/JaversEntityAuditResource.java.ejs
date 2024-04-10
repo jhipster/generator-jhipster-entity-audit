@@ -5,15 +5,19 @@ import <%=packageName%>.security.AuthoritiesConstants;
 
 import tech.jhipster.web.util.PaginationUtil;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.javers.core.Javers;
 import org.javers.core.metamodel.object.CdoSnapshot;
 import org.javers.repository.jql.QueryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,10 +43,16 @@ public class JaversEntityAuditResource {
 
     private final Logger log = LoggerFactory.getLogger(JaversEntityAuditResource.class);
 
+    @PersistenceContext
+    private EntityManager manager;
+
     private final Javers javers;
 
-    public JaversEntityAuditResource(Javers javers) {
+    private final ConversionService conversionService;
+
+    public JaversEntityAuditResource(Javers javers, ConversionService conversionService) {
         this.javers = javers;
+        this.conversionService = conversionService;
     }
 
     /**
@@ -75,7 +85,7 @@ public class JaversEntityAuditResource {
         throws ClassNotFoundException {
         log.debug("REST request to get a page of EntityAuditEvents");
 
-        Class entityTypeToFetch = Class.forName("<%=packageName%>.domain." + entityType);
+        var entityTypeToFetch = Class.forName("<%=packageName%>." + entityType);
         QueryBuilder jqlQuery = QueryBuilder.byClass(entityTypeToFetch)
                                             .limit(limit);
 
@@ -111,13 +121,12 @@ public class JaversEntityAuditResource {
                                                            @RequestParam(value = "commitVersion") Long commitVersion)
         throws ClassNotFoundException {
 
-        Class entityTypeToFetch = Class.forName("<%=packageName%>.domain." + qualifiedName);
+        var entityTypeToFetch = Class.forName("<%- packageName %>." + qualifiedName);
+        var entityInformation = JpaEntityInformationSupport.getEntityInformation(entityTypeToFetch, manager);
+        var id = conversionService.convert(entityId, entityInformation.getIdType());
 
-        QueryBuilder jqlQuery = QueryBuilder.byInstanceId(entityId, entityTypeToFetch)
-                                           .limit(1)
-                                           .withVersion(commitVersion - 1);
-
-        EntityAuditEvent prev = EntityAuditEvent.fromJaversSnapshot(javers.findSnapshots(jqlQuery.build()).get(0));
+        var jqlQuery = QueryBuilder.byInstanceId(id, entityTypeToFetch).limit(1).withVersion(commitVersion - 1);
+        var prev = EntityAuditEvent.fromJaversSnapshot(javers.findSnapshots(jqlQuery.build()).get(0));
 
         return new ResponseEntity<>(prev, HttpStatus.OK);
 
