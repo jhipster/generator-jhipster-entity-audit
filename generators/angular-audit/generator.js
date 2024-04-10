@@ -67,7 +67,7 @@ export default class extends BaseApplicationGenerator {
         source.addItemToAdminMenu?.({
           icon: 'list-alt',
           route: 'admin/entity-audit',
-          translationKey: 'entityAudit',
+          translationKey: 'global.menu.admin.entityAudit',
           name: 'Entity Audit',
         });
       },
