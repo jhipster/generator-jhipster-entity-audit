@@ -1,16 +1,14 @@
 <div>
-  <h2 <%= jhiPrefix %>Translate="entityAudit.home.title">Entity Audit</h2>
+  <h2>__jhiTranslateTag__('entityAudit.home.title')</h2>
 
   <jhi-alert></jhi-alert>
 
   <div>
-    <h4 <%= jhiPrefix %>Translate="entityAudit.home.filter">Filter</h4>
+    <h4>__jhiTranslateTag__('entityAudit.home.filter')</h4>
 
     <form name="auditEventForm" class="form-inline" #auditEventForm="ngForm">
       <div class="d-flex">
-        <label class="form-control-label mr-sm-2 col-2" for="entityName" <%= jhiPrefix %>Translate="entityAudit.home.entityOrTable">
-          Entity/Table
-        </label>
+        <label class="form-control-label mr-sm-2 col-2" for="entityName">__jhiTranslateTag__('entityAudit.home.entityOrTable')</label>
         <select
           class="form-control mb-2 mr-sm-2 mb-sm-0"
           id="entityName"
@@ -26,7 +24,7 @@
           }
         </select>
 
-        <label class="form-control-label mr-sm-2 col-2" for="limit" <%= jhiPrefix %>Translate="entityAudit.home.limitTo"> Limit to </label>
+        <label class="form-control-label mr-sm-2 col-2" for="limit">__jhiTranslateTag__('entityAudit.home.limitTo')</label>
         <select
           class="form-control mb-2 mr-sm-2 mb-sm-0"
           id="limit"
@@ -42,7 +40,7 @@
 
         <button class="btn btn-primary float-right col-2" (click)="loadChanges()" [disabled]="!auditEventForm.form.valid">
           <fa-icon icon="sync"></fa-icon>
-          <span <%= jhiPrefix %>Translate="entityAudit.home.loadChangeList">Load Change List</span>
+          <span>__jhiTranslateTag__('entityAudit.home.loadChangeList')</span>
         </button>
       </div>
     </form>
@@ -57,7 +55,7 @@
 
         <form class="form-inline mb-2">
           <div class="form-group">
-            <label for="searchFieldEntityId" <%= jhiPrefix %>Translate="entityAudit.result.searchFieldLabel"> Filter: </label>
+            <label for="searchFieldEntityId">__jhiTranslateTag__('entityAudit.result.searchFieldLabel')</label>
             <input
               type="text"
               class="form-control ml-2"
@@ -73,12 +71,12 @@
         <table class="table table-condensed table-striped table-bordered">
           <thead>
             <tr>
-              <th (click)="orderBy('entityId')" <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.entityId">Entity Id</th>
-              <th (click)="orderBy('action')" <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.action">Action</th>
-              <th (click)="orderBy('commitVersion')" <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.version">Version</th>
-              <th <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.value">Value</th>
-              <th (click)="orderBy('modifiedDate')" <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.modifiedDate">Modified Date</th>
-              <th (click)="orderBy('modifiedBy')" <%= jhiPrefix %>Translate="entityAudit.result.tableHeader.modifiedBy">Modified By</th>
+              <th (click)="orderBy('entityId')">__jhiTranslateTag__('entityAudit.result.tableHeader.entityId')</th>
+              <th (click)="orderBy('action')">__jhiTranslateTag__('entityAudit.result.tableHeader.action')</th>
+              <th (click)="orderBy('commitVersion')">__jhiTranslateTag__('entityAudit.result.tableHeader.version')</th>
+              <th>__jhiTranslateTag__('entityAudit.result.tableHeader.value')</th>
+              <th (click)="orderBy('modifiedDate')">__jhiTranslateTag__('entityAudit.result.tableHeader.modifiedDate')</th>
+              <th (click)="orderBy('modifiedBy')">__jhiTranslateTag__('entityAudit.result.tableHeader.modifiedBy')</th>
               <th><fa-icon icon="eye"></fa-icon></th>
             </tr>
           </thead>
@@ -109,7 +107,7 @@
         </table>
       </div>
     } @else {
-      <p <%= jhiPrefix %>Translate="entityAudit.result.noDataFound" class="mt-2">No Data found for the filters</p>
+      <p class="mt-2">__jhiTranslateTag__('entityAudit.result.noDataFound')</p>
     }
   </div>
 </div>

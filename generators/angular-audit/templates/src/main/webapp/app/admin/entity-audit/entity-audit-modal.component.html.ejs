@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title" <%= jhiPrefix %>Translate="entityAudit.detail.title">Audit Details</h4>
+  <h4 class="modal-title">__jhiTranslateTag__('entityAudit.detail.title')</h4>
 
   <span class="btn btn-close" data-dismiss="modal" aria-hidden="true" (click)="activeModal.dismiss('closed')"></span>
 </div>
@@ -10,13 +10,13 @@
     </strong>
     <br /><br />
 
-    <del class="ngx-diff-light-theme" <%= jhiPrefix %>Translate="entityAudit.detail.old"> Old/Removed value </del>
+    <del class="ngx-diff-light-theme">__jhiTranslateTag__('entityAudit.detail.old')</del>
     &nbsp;
-    <ins class="ngx-diff-light-theme" <%= jhiPrefix %>Translate="entityAudit.detail.new"> New/Added value </ins>
+    <ins class="ngx-diff-light-theme">__jhiTranslateTag__('entityAudit.detail.new')</ins>
   </div>
   <br />
 
-  <label <%= jhiPrefix %>Translate="entityAudit.detail.changedFields">Changed Fields</label>
+  <label>__jhiTranslateTag__('entityAudit.detail.changedFields')</label>
   <ngx-unified-diff *ngIf="left && right" class="ngx-diff-light-theme" [before]="left" [after]="right" />
 </div>
 <div class="modal-footer">
