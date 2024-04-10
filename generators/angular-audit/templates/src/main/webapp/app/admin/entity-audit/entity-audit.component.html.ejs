@@ -49,9 +49,7 @@
   <div [hidden]="loading()">
     @if (audits().length > 0) {
       <div class="table-responsive mt-2">
-        <p <%= jhiPrefix %>Translate="entityAudit.result.showInfo" [translateValues]="{ limit: selectedLimit(), entity: selectedEntity() }">
-          Last <strong>{{ selectedLimit() }}</strong> Changes for <strong>{{ selectedEntity() }}</strong>
-        </p>
+        <p>__jhiTranslateTag__('entityAudit.result.showInfo', { "limit": "selectedLimit()", "entity": "selectedEntity()" })</p>
 
         <form class="form-inline mb-2">
           <div class="form-group">

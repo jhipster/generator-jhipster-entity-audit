@@ -5,9 +5,7 @@
 </div>
 <div class="modal-body pad">
   <div>
-    <strong <%= jhiPrefix %>Translate="entityAudit.detail.action" [translateValues]="{ action: action }">
-      {{ action }} action was performed on below data
-    </strong>
+    <strong>__jhiTranslateTag__('entityAudit.detail.action', { "action": "action" })</strong>
     <br /><br />
 
     <del class="ngx-diff-light-theme">__jhiTranslateTag__('entityAudit.detail.old')</del>
@@ -24,9 +22,6 @@
     data-dismiss="modal"
     class="btn btn-secondary float-left"
     type="button"
-    <%= jhiPrefix %>Translate="entityAudit.detail.close"
     (click)="activeModal.dismiss('closed')"
-  >
-      Close
-  </button>
+  >__jhiTranslateTag__('entityAudit.detail.close')</button>
 </div>
