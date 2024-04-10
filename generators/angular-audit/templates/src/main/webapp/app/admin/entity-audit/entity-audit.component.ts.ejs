@@ -30,9 +30,7 @@ export default class EntityAuditComponent implements OnInit {
   selectedLimit = signal(this.limits[0]);
   loading = signal(false);
   filterEntityId = signal('');
-  private _audits = signal<EntityAuditEvent[]>([]);
-  private orderProp = signal<keyof EntityAuditEvent>('entityId');
-  private ascending = signal(true);
+
   audits = computed(() => {
     const filterEntityId = this.filterEntityId();
     const orderProp = this.orderProp();
@@ -51,6 +49,10 @@ export default class EntityAuditComponent implements OnInit {
         return ascending ? 1 : -1;
       });
   });
+
+  private _audits = signal<EntityAuditEvent[]>([]);
+  private orderProp = signal<keyof EntityAuditEvent>('entityId');
+  private ascending = signal(true);
 
   private modalService = inject(NgbModal);
   private service = inject(EntityAuditService);
