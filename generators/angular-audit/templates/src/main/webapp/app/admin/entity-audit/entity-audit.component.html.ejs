@@ -47,7 +47,7 @@
   </div>
 
   <div [hidden]="loading()">
-    @if (audits().length > 0) {
+    @if (audits().length > 0 || filterEntityId()) {
       <div class="table-responsive mt-2">
         <p>__jhiTranslateTag__('entityAudit.result.showInfo', { "limit": "selectedLimit()", "entity": "selectedEntity()" })</p>
 
