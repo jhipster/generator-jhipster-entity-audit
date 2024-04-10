@@ -1,44 +1,27 @@
 <div class="modal-header">
-  <h4 class="modal-title" <%= jhiPrefix %>Translate="entityAudit.detail.title">
-      Audit Details
-  </h4>
-  <button
-<%_ if (enableTranslation) { _%>
-          attr.aria-label="{{ 'entityAudit.detail.close' | translate }}"
-<%_ } else { _%>
-          aria-label="Close"
-<%_ } _%>
-          data-dismiss="modal" class="close" type="button"
-          (click)="activeModal.dismiss('closed')">
-      <span aria-hidden="true">&times;</span>
-  </button>
+  <h4 class="modal-title">__jhiTranslateTag__('entityAudit.detail.title')</h4>
+
+  <span class="btn btn-close" data-dismiss="modal" aria-hidden="true" (click)="activeModal.dismiss('closed')"></span>
 </div>
 <div class="modal-body pad">
   <div>
-      <strong<% if (enableTranslation) { %>
-              <%= jhiPrefix %>Translate="entityAudit.detail.action"
-              [translateValues]="{ action: action }"<% } %>>
-          {{action}} action was performed on below data
-      </strong>
-      <br><br>
+    <strong>__jhiTranslateTag__('entityAudit.detail.action', { "action": "action" })</strong>
+    <br /><br />
 
-      <del class="diff diff-key" <%= jhiPrefix %>Translate="entityAudit.detail.old">
-          Old/Removed value
-      </del>
-      &nbsp;
-      <ins class="diff diff-key" <%= jhiPrefix %>Translate="entityAudit.detail.new">
-          New/Added value
-      </ins>
+    <del class="ngx-diff-light-theme">__jhiTranslateTag__('entityAudit.detail.old')</del>
+    &nbsp;
+    <ins class="ngx-diff-light-theme">__jhiTranslateTag__('entityAudit.detail.new')</ins>
   </div>
-  <br>
+  <br />
 
-  <label <%= jhiPrefix %>Translate="entityAudit.detail.changedFields">Changed Fields</label>
-  <inline-diff *ngIf="left && right" class="code" [oldText]="left" [newText]="right" />
+  <label>__jhiTranslateTag__('entityAudit.detail.changedFields')</label>
+  <ngx-unified-diff *ngIf="left && right" class="ngx-diff-light-theme" [before]="left" [after]="right" />
 </div>
 <div class="modal-footer">
   <button
-          data-dismiss="modal" class="btn btn-secondary float-left"
-          type="button" (click)="activeModal.dismiss('closed')">
-      Done
-  </button>
+    data-dismiss="modal"
+    class="btn btn-secondary float-left"
+    type="button"
+    (click)="activeModal.dismiss('closed')"
+  >__jhiTranslateTag__('entityAudit.detail.close')</button>
 </div>

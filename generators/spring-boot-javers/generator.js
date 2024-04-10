@@ -21,7 +21,9 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.DEFAULT]() {
     return this.asDefaultTaskGroup({
       async defaultTask({ application, entities }) {
-        application.auditedEntities = entities.map(e => e.persistClass);
+        application.auditedEntities = entities
+          .filter(e => e.enableAudit)
+          .map(e => `${e.entityPackage ? `${e.entityPackage}.` : ''}domain.${e.persistClass}`);
       },
     });
   }
