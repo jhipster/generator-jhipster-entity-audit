@@ -50,7 +50,7 @@
     "vitest": "vitest"
   },
   "dependencies": {
-    "generator-jhipster": "8.3.0"
+    "generator-jhipster": "8.4.0"
   },
   "devDependencies": {
     "ejs-lint": "2.0.0",
@@ -61,7 +61,7 @@
     "eslint-plugin-mocha": "10.1.0",
     "eslint-plugin-prettier": "5.1.3",
     "prettier": "3.2.5",
-    "vitest": "1.4.0",
+    "vitest": "1.5.2",
     "yeoman-test": ">=8.0.0-rc.1"
   },
   "engines": {
