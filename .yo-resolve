@@ -1,2 +1,2 @@
-!package.json skip
-
+generators/** skip
+README.md skip

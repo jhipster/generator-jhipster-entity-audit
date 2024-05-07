@@ -15,7 +15,6 @@
   ],
   "rules": {
     "func-names": "off",
-    "import/no-unresolved": "off",
     "no-restricted-syntax": [
       "error",
       {

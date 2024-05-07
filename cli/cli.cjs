@@ -26,7 +26,7 @@ const blueprint = packageFolderName.startsWith('jhipster-') ? `generator-${packa
       console.log('===================== JHipster entity-audit =====================');
       console.log('');
     },
-    lookups: [{ packagePaths: [packagePath], lookups: ['generators'] }],
+    lookups: [{ packagePaths: [packagePath] }],
   }).catch(done);
 
   process.on('unhandledRejection', up => {
