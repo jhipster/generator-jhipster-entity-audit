@@ -4,6 +4,7 @@ import BaseGenerator from 'generator-jhipster/generators/base';
 
 export default class extends BaseGenerator {
   sampleName;
+  all;
 
   constructor(args, opts, features) {
     super(args, opts, { ...features, jhipsterBootstrap: false });
@@ -25,15 +26,7 @@ export default class extends BaseGenerator {
   get [BaseGenerator.PROMPTING]() {
     return this.asPromptingTaskGroup({
       async askForSample() {
-        if (!this.sampleName) {
-          const answers = await this.prompt({
-            type: 'list',
-            name: 'sampleName',
-            message: 'which sample do you want to generate?',
-            choices: async () => readdir(this.templatePath('samples')),
-          });
-          this.sampleName = answers.sampleName;
-        }
+        await this.promptCurrentJHipsterCommand();
       },
     });
   }
@@ -41,7 +34,11 @@ export default class extends BaseGenerator {
   get [BaseGenerator.WRITING]() {
     return this.asWritingTaskGroup({
       async copySample() {
-        this.copyTemplate(`samples/${this.sampleName}`, this.sampleName, { noGlob: true });
+        if (this.all) {
+          this.copyTemplate('samples/*.jdl', '');
+        } else {
+          this.copyTemplate(`samples/${this.sampleName}`, this.sampleName, { noGlob: true });
+        }
       },
     });
   }
@@ -53,13 +50,13 @@ export default class extends BaseGenerator {
         const projectVersion = `${packageJson.version}-git`;
 
         await this.composeWithJHipster('jdl', {
-          generatorArgs: [this.sampleName],
+          generatorArgs: this.all ? await readdir(this.templatePath('samples')) : [this.sampleName],
           generatorOptions: {
             skipJhipsterDependencies: true,
             insight: false,
             skipChecks: true,
-            skipInstall: true,
             projectVersion,
+            ...(this.all ? { workspaces: true, monorepository: true } : { skipInstall: true }),
           },
         });
       },
