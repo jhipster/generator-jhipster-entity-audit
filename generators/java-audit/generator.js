@@ -1,5 +1,5 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
-import { javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
+import { addJavaAnnotation, addJavaImport, javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
 
 const COMMON_ATTRIBUTES = {
   // Hides form on create
@@ -71,6 +71,18 @@ export default class extends BaseApplicationGenerator {
         application.auditFrameworkCustom = auditFramework === 'custom';
         application.auditFrameworkJavers = auditFramework === 'javers';
         application.auditFrameworkAny = auditFramework && auditFramework !== 'no';
+      },
+      editJavaFile({ source }) {
+        source.editJavaFile =
+          source.editJavaFile ??
+          ((file, { staticImports = [], imports = [], annotations = [] }, ...editFileCallback) =>
+            this.editFile(
+              file,
+              ...staticImports.map(classPath => addJavaImport(classPath, { staticImport: true })),
+              ...imports.map(classPath => addJavaImport(classPath)),
+              ...annotations.map(annotation => addJavaAnnotation(annotation)),
+              ...editFileCallback,
+            ));
       },
     });
   }
