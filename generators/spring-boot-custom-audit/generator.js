@@ -8,6 +8,7 @@ import {
 export default class extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster('jhipster-entity-audit:java-audit');
+    await this.dependsOnJHipster('spring-boot');
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
@@ -34,8 +35,7 @@ export default class extends BaseApplicationGenerator {
         await this.writeFiles({
           sections: {
             customAudit: [
-              {
-                ...javaMainPackageTemplatesBlock(),
+              javaMainPackageTemplatesBlock({
                 templates: [
                   'audit/AsyncEntityAuditEventWriter.java',
                   'audit/EntityAuditEventWriter.java',
@@ -44,25 +44,22 @@ export default class extends BaseApplicationGenerator {
                   'domain/enumeration/EntityAuditAction.java',
                   'repository/EntityAuditEventRepository.java',
                 ],
-              },
-              {
-                ...javaTestPackageTemplatesBlock(),
+              }),
+              javaTestPackageTemplatesBlock({
                 templates: ['audit/TestEntityAuditEventWriter.java'],
-              },
-              {
-                ...javaMainResourceTemplatesBlock(),
+              }),
+              javaMainResourceTemplatesBlock({
                 templates: [
                   {
                     file: `config/liquibase/changelog/EntityAuditEvent.xml`,
                     renameTo: `config/liquibase/changelog/${application.entityAuditEventChangelogDate}_added_entity_EntityAuditEvent.xml`,
                   },
                 ],
-              },
-              {
+              }),
+              javaMainPackageTemplatesBlock({
                 condition: application.auditPage,
-                ...javaMainPackageTemplatesBlock(),
                 templates: ['web/rest/EntityAuditResource.java'],
-              },
+              }),
             ],
           },
           context: application,
@@ -73,46 +70,42 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
-      async customizeArchTest({ application: { testJavaPackageDir, packageName } }) {
-        this.editFile(`${testJavaPackageDir}TechnicalStructureTest.java`, { ignoreNonExisting: true }, contents => {
-          if (!contents.includes('.audit.EntityAuditEventListener;')) {
-            contents = contents.replace(
-              /import static com.tngtech.archunit.library.Architectures.layeredArchitecture;/,
-              `import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
-import static com.tngtech.archunit.core.domain.JavaClass.Predicates.type;
-import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
-import ${packageName}.audit.EntityAuditEventListener;
-import ${packageName}.domain.AbstractAuditingEntity;
-`,
-            );
-          }
-          if (!contents.includes('.ignoreDependency(type(AbstractAuditingEntity.class), type(EntityAuditEventListener.class))')) {
-            contents = contents.replace(
-              /.ignoreDependency/,
-              `.ignoreDependency(resideInAPackage("${packageName}.audit"), alwaysTrue())
+      async customizeArchTest({ application: { testJavaPackageDir, packageName }, source }) {
+        source.editJavaFile(
+          `${testJavaPackageDir}TechnicalStructureTest.java`,
+          {
+            staticImports: [
+              'com.tngtech.archunit.core.domain.JavaClass.Predicates.type',
+              'com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage',
+            ],
+            imports: [`${packageName}.audit.EntityAuditEventListener`, `${packageName}.domain.AbstractAuditingEntity`],
+          },
+          contents => {
+            if (!contents.includes('.ignoreDependency(type(AbstractAuditingEntity.class), type(EntityAuditEventListener.class))')) {
+              contents = contents.replace(
+                /.ignoreDependency/,
+                `.ignoreDependency(resideInAPackage("${packageName}.audit"), alwaysTrue())
         .ignoreDependency(type(AbstractAuditingEntity.class), type(EntityAuditEventListener.class))
         .ignoreDependency`,
-            );
-          }
-          return contents;
-        });
+              );
+            }
+            return contents;
+          },
+        );
       },
 
       async customizeAbstractAuditingEntity({ source, application: { mainJavaPackageDir, packageName } }) {
         // add the new Listener to the 'AbstractAuditingEntity' class and add import if necessary
-        this.editFile(`${mainJavaPackageDir}domain/AbstractAuditingEntity.java`, { ignoreNonExisting: true }, contents => {
-          if (!contents.includes(', EntityAuditEventListener.class')) {
-            contents = contents.replace(/AuditingEntityListener.class/, '{AuditingEntityListener.class, EntityAuditEventListener.class}');
-          }
-          if (!contents.includes('.audit.EntityAuditEventListener;')) {
-            contents = contents.replace(
-              /import org.springframework.data.jpa.domain.support.AuditingEntityListener;/,
-              `import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-  import ${packageName}.audit.EntityAuditEventListener;`,
-            );
-          }
-          return contents;
-        });
+        source.editJavaFile(
+          `${mainJavaPackageDir}domain/AbstractAuditingEntity.java`,
+          { imports: [`${packageName}.audit.EntityAuditEventListener`] },
+          contents => {
+            if (!contents.includes(', EntityAuditEventListener.class')) {
+              contents = contents.replace(/AuditingEntityListener.class/, '{AuditingEntityListener.class, EntityAuditEventListener.class}');
+            }
+            return contents;
+          },
+        );
 
         source.addEntryToCache?.({ entry: `${packageName}.domain.EntityAuditEvent.class.getName()` });
       },

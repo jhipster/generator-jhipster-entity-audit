@@ -1,6 +1,6 @@
 import { join } from 'path';
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
-import { addJavaAnnotation, addJavaImport, javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
+import { javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
 import { getPomVersionProperties } from 'generator-jhipster/generators/server/support';
 
 export default class extends BaseApplicationGenerator {
@@ -15,18 +15,6 @@ export default class extends BaseApplicationGenerator {
         const pomFile = this.readTemplate(this.templatePath('../resources/pom.xml'));
         const versions = getPomVersionProperties(pomFile);
         Object.assign(application.javaDependencies, this.prepareDependencies(versions));
-      },
-      source({ source }) {
-        source.editJavaFile =
-          source.editJavaFile ??
-          ((file, { staticImports = [], imports = [], annotations = [] }, ...editFileCallback) =>
-            this.editFile(
-              file,
-              ...staticImports.map(classPath => addJavaImport(classPath, { staticImport: true })),
-              ...imports.map(classPath => addJavaImport(classPath)),
-              ...annotations.map(annotation => addJavaAnnotation(annotation)),
-              ...editFileCallback,
-            ));
       },
     });
   }
