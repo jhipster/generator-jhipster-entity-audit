@@ -1,11 +1,12 @@
 import { join } from 'path';
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
-import { javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
+import { addJavaAnnotation, addJavaImport, javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
 import { getPomVersionProperties } from 'generator-jhipster/generators/server/support';
 
 export default class extends BaseApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnJHipster('jhipster-entity-audit:java-audit');
+    await this.dependsOnJHipster('spring-boot');
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
@@ -14,6 +15,18 @@ export default class extends BaseApplicationGenerator {
         const pomFile = this.readTemplate(this.templatePath('../resources/pom.xml'));
         const versions = getPomVersionProperties(pomFile);
         Object.assign(application.javaDependencies, this.prepareDependencies(versions));
+      },
+      source({ source }) {
+        source.editJavaFile =
+          source.editJavaFile ??
+          ((file, { staticImports = [], imports = [], annotations = [] }, ...editFileCallback) =>
+            this.editFile(
+              file,
+              ...staticImports.map(classPath => addJavaImport(classPath, { staticImport: true })),
+              ...imports.map(classPath => addJavaImport(classPath)),
+              ...annotations.map(annotation => addJavaAnnotation(annotation)),
+              ...editFileCallback,
+            ));
       },
     });
   }
@@ -32,23 +45,19 @@ export default class extends BaseApplicationGenerator {
     return this.asWritingTaskGroup({
       async writingTemplateTask({ application }) {
         await this.writeFiles({
-          sections: {
-            javersAudit: [
-              {
-                ...javaMainPackageTemplatesBlock(),
-                templates: ['config/audit/JaversAuthorProvider.java'],
-              },
-              {
-                condition: application.auditPage,
-                ...javaMainPackageTemplatesBlock(),
-                templates: [
-                  'web/rest/JaversEntityAuditResource.java',
-                  'web/rest/dto/EntityAuditEvent.java',
-                  'web/rest/dto/EntityAuditAction.java',
-                ],
-              },
-            ],
-          },
+          blocks: [
+            javaMainPackageTemplatesBlock({
+              templates: ['config/audit/JaversAuthorProvider.java'],
+            }),
+            javaMainPackageTemplatesBlock({
+              condition: application.auditPage,
+              templates: [
+                'web/rest/JaversEntityAuditResource.java',
+                'web/rest/dto/EntityAuditEvent.java',
+                'web/rest/dto/EntityAuditAction.java',
+              ],
+            }),
+          ],
           context: application,
         });
       },
@@ -56,80 +65,43 @@ export default class extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING]() {
-    return {
-      async postWritingTemplateTask({
-        source,
-        application: { mainJavaPackageDir, buildToolMaven, buildToolGradle, databaseTypeSql, databaseTypeMongodb, javaDependencies },
-      }) {
+    return this.asPostWritingTaskGroup({
+      async postWritingTemplateTask({ source, application }) {
+        const { mainJavaPackageDir, databaseTypeSql, databaseTypeMongodb, javaDependencies } = application;
         // add annotations for Javers to ignore fields in 'AbstractAuditingEntity' class
-        this.editFile(`${mainJavaPackageDir}domain/AbstractAuditingEntity.java`, { ignoreNonExisting: true }, contents =>
-          contents
-            .replace(
-              /import org.springframework.data.annotation.CreatedBy;/,
-              `import org.springframework.data.annotation.CreatedBy;
-import org.javers.core.metamodel.annotation.DiffIgnore;`,
-            )
-            .replace(/(\s*)@MappedSuperclass/, '$1@MappedSuperclass$1@DiffIgnore')
-            .replace(/\s*import com.fasterxml.jackson.annotation.JsonIgnore;/, ''),
+        source.editJavaFile(
+          `${mainJavaPackageDir}domain/AbstractAuditingEntity.java`,
+          { annotations: [{ annotation: 'DiffIgnore', package: 'org.javers.core.metamodel.annotation' }] },
+          contents => contents.replace(/\s*import com.fasterxml.jackson.annotation.JsonIgnore;/, ''),
         );
 
         // add required third party dependencies
-        if (buildToolMaven) {
-          if (databaseTypeMongodb) {
-            source.addMavenDependency?.({
-              groupId: 'org.javers',
-              artifactId: 'javers-spring-boot-starter-mongo',
-              version: javaDependencies['javers-core'],
-            });
-          } else if (databaseTypeSql) {
-            source.addMavenDependency?.({
-              groupId: 'org.javers',
-              artifactId: 'javers-spring-boot-starter-sql',
-              version: javaDependencies['javers-core'],
-            });
-          }
-        } else if (buildToolGradle) {
-          if (databaseTypeMongodb) {
-            source.addGradleDependency?.({
-              groupId: 'org.javers',
-              artifactId: 'javers-spring-boot-starter-mongo',
-              version: javaDependencies['javers-core'],
-              scope: 'implementation',
-            });
-          } else if (databaseTypeSql) {
-            source.addGradleDependency?.({
-              groupId: 'org.javers',
-              artifactId: 'javers-spring-boot-starter-sql',
-              version: javaDependencies['javers-core'],
-              scope: 'implementation',
-            });
-          }
+        if (databaseTypeMongodb || databaseTypeSql) {
+          source.addJavaDefinition?.({
+            dependencies: [
+              {
+                groupId: 'org.javers',
+                artifactId: databaseTypeMongodb ? 'javers-spring-boot-starter-mongo' : 'javers-spring-boot-starter-sql',
+                version: javaDependencies['javers-core'],
+              },
+            ],
+          });
         }
       },
-    };
+    });
   }
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
-    return {
-      async postWritingEntitiesTask({ application: { mainJavaPackageDir }, entities }) {
+    return this.asPostWritingEntitiesTaskGroup({
+      async postWritingEntitiesTask({ application: { mainJavaPackageDir }, entities, source }) {
         for (const entity of entities.filter(e => !e.builtIn && e.enableAudit)) {
           const { persistClass, entityPackage = '' } = entity;
           const entityAbsoluteFolder = join(mainJavaPackageDir, entityPackage);
-          this.editFile(`${entityAbsoluteFolder}repository/${persistClass}Repository.java`, contents =>
-            contents
-              .replace(
-                /@Repository/,
-                `@Repository
-@JaversSpringDataAuditable`,
-              )
-              .replace(
-                /import org.springframework.stereotype.Repository;/,
-                `import org.javers.spring.annotation.JaversSpringDataAuditable;
-import org.springframework.stereotype.Repository;`,
-              ),
-          );
+          source.editJavaFile(`${entityAbsoluteFolder}repository/${persistClass}Repository.java`, {
+            annotations: [{ annotation: 'JaversSpringDataAuditable', package: 'org.javers.spring.annotation' }],
+          });
         }
       },
-    };
+    });
   }
 }
