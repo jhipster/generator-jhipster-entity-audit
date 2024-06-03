@@ -65,6 +65,7 @@
     "yeoman-test": ">=8.2.0"
   },
   "engines": {
+    "generator-jhipster": "^8.5.0",
     "node": "^18.13.0 || >= 20.6.1"
   }
 }
