@@ -34,7 +34,7 @@ permissions:
   contents: read
 jobs:
   applications:
-    name: ${{ matrix.audit-framework }} ${{ matrix.build-tool }}) ${{ matrix.suite }} (${{ matrix.os }}
+    name: ${{ matrix.audit-framework }}, ${{ matrix.build-tool }}, ${{ matrix.suite }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -49,7 +49,7 @@ jobs:
         build-tool: [maven, gradle]
         audit-framework: [custom, javers]
         suite:
-          - postgresql-mvc-jwt
+          - postgresql-mvc-jwt.jdl
     steps:
       #----------------------------------------------------------------------
       # Install all tools and check configuration
