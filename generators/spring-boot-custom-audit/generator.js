@@ -1,9 +1,6 @@
+import { JAVA_MAIN_RESOURCES_DIR } from 'generator-jhipster';
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
-import {
-  javaMainPackageTemplatesBlock,
-  javaTestPackageTemplatesBlock,
-  javaMainResourceTemplatesBlock,
-} from 'generator-jhipster/generators/java/support';
+import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
 
 export default class extends BaseApplicationGenerator {
   async beforeQueue() {
@@ -48,14 +45,15 @@ export default class extends BaseApplicationGenerator {
               javaTestPackageTemplatesBlock({
                 templates: ['audit/TestEntityAuditEventWriter.java'],
               }),
-              javaMainResourceTemplatesBlock({
+              {
+                path: JAVA_MAIN_RESOURCES_DIR,
                 templates: [
                   {
                     file: `config/liquibase/changelog/EntityAuditEvent.xml`,
                     renameTo: `config/liquibase/changelog/${application.entityAuditEventChangelogDate}_added_entity_EntityAuditEvent.xml`,
                   },
                 ],
-              }),
+              },
               javaMainPackageTemplatesBlock({
                 condition: application.auditPage,
                 templates: ['web/rest/EntityAuditResource.java'],
