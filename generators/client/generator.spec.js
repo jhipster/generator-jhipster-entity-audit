@@ -13,7 +13,7 @@ describe('SubGenerator client of entity-audit JHipster blueprint', () => {
         .withJHipsterConfig()
         .withOptions({
           ignoreNeedlesError: true,
-          blueprint: 'entity-audit',
+          blueprint: ['entity-audit'],
         })
         .withJHipsterLookup()
         .withParentBlueprintLookup();

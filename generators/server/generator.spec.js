@@ -14,7 +14,7 @@ describe('SubGenerator server of entity-audit JHipster blueprint', () => {
         .withOptions({
           creationTimestamp: '2022-01-01',
           ignoreNeedlesError: true,
-          blueprint: 'entity-audit',
+          blueprint: ['entity-audit'],
         })
         .withJHipsterLookup()
         .withParentBlueprintLookup();
