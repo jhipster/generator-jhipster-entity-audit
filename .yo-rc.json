@@ -49,9 +49,10 @@
       }
     },
     "githubWorkflows": true,
-    "jhipsterVersion": "7.9.2",
+    "jhipsterVersion": "8.7.1",
     "js": true,
     "localBlueprint": false,
+    "packageJsonType": "module",
     "prettierDefaultIndent": 2,
     "projectName": "Entity Audit Application",
     "sampleWritten": true,

@@ -1,7 +1,6 @@
-/**
- * @type {import('generator-jhipster').JHipsterCommandDefinition}
- */
-const command = {
+import { asCommand } from 'generator-jhipster';
+
+export default asCommand({
   options: {},
   configs: {
     auditFramework: {
@@ -70,6 +69,4 @@ const command = {
       scope: 'generator',
     },
   },
-};
-
-export default command;
+});
