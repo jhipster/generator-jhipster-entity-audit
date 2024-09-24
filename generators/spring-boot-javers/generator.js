@@ -4,6 +4,10 @@ import { javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/jav
 import { getPomVersionProperties } from 'generator-jhipster/generators/server/support';
 
 export default class extends BaseApplicationGenerator {
+  constructor(args, opts, features) {
+    super(args, opts, { ...features, queueCommandTasks: true });
+  }
+
   async beforeQueue() {
     await this.dependsOnJHipster('jhipster-entity-audit:java-audit');
     await this.dependsOnJHipster('spring-boot');

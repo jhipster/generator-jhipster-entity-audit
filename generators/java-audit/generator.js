@@ -38,6 +38,10 @@ const ADDITIONAL_FIELDS = [
 ];
 
 export default class extends BaseApplicationGenerator {
+  constructor(args, opts, features) {
+    super(args, opts, { ...features, queueCommandTasks: true });
+  }
+
   async beforeQueue() {
     await this.dependsOnJHipster('java');
   }

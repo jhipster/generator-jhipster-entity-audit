@@ -1,29 +1,17 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
-import command from './command.js';
 
 export default class extends BaseApplicationGenerator {
   initialRun;
   auditedEntities;
 
   constructor(args, opts, features) {
-    super(args, opts, { ...features, sbsBlueprint: true });
+    super(args, opts, { ...features, queueCommandTasks: true, sbsBlueprint: true });
   }
 
   get [BaseApplicationGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
       setInitialRun() {
         this.initialRun = this.blueprintConfig.auditFramework === undefined;
-      },
-      async initializeOptions() {
-        this.parseJHipsterCommand(command);
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PROMPTING]() {
-    return this.asPromptingTaskGroup({
-      async promptingTemplateTask() {
-        await this.prompt(this.prepareQuestions(command.configs));
       },
     });
   }
