@@ -3,8 +3,8 @@
 > JHipster blueprint, entity-audit blueprint for JHipster
 
 [![NPM version][npm-image]][npm-url]
-[![Generator](https://github.com/hipster-labs/generator-jhipster-entity-audit/actions/workflows/generator.yml/badge.svg)](https://github.com/hipster-labs/generator-jhipster-entity-audit/actions/workflows/generator.yml)
-[![Integration Test](https://github.com/hipster-labs/generator-jhipster-entity-audit/actions/workflows/samples.yml/badge.svg)](https://github.com/hipster-labs/generator-jhipster-entity-audit/actions/workflows/samples.yml)
+[![Generator][github-generator-image]][github-generator-url]
+[![Samples][github-samples-image]][github-samples-url]
 
 # Introduction
 
@@ -26,9 +26,9 @@ The blueprint will add [spring-boot integration for javers](http://javers.org/do
 
 # Prerequisites
 
-As this is a [JHipster](https://www.jhipster.tech/) blueprint, we expect you have JHipster and its related tools already installed:
+As this is a [JHipster](https://www.jhipster.tech/) blueprint, we expect you have JHipster basic knowledge:
 
-- [Installing JHipster](https://www.jhipster.tech/installation/)
+- [JHipster](https://www.jhipster.tech/)
 
 # Installation
 
@@ -58,7 +58,7 @@ You can look for updated entity-audit blueprint specific options by running
 jhipster-entity-audit app --help
 ```
 
-And looking for `(blueprint option: entity-audit)` options.
+And looking for `(blueprint option: entity-audit)` like
 
 ## Pre-release
 
@@ -71,3 +71,7 @@ jhipster --blueprints entity-audit --skip-jhipster-dependencies
 
 [npm-image]: https://img.shields.io/npm/v/generator-jhipster-entity-audit.svg
 [npm-url]: https://npmjs.org/package/generator-jhipster-entity-audit
+[github-generator-image]: https://github.com/jhipster/generator-jhipster-entity-audit/actions/workflows/generator.yml/badge.svg
+[github-generator-url]: https://github.com/jhipster/generator-jhipster-entity-audit/actions/workflows/generator.yml
+[github-samples-image]: https://github.com/jhipster/generator-jhipster-entity-audit/actions/workflows/samples.yml/badge.svg
+[github-samples-url]: https://github.com/jhipster/generator-jhipster-entity-audit/actions/workflows/samples.yml

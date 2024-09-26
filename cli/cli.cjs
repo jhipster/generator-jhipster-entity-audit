@@ -23,10 +23,11 @@ const blueprint = packageFolderName.startsWith('jhipster-') ? `generator-${packa
       [blueprint]: version,
     },
     printBlueprintLogo: () => {
-      console.log('===================== JHipster entity-audit =====================');
+      console.log('===================== JHipster Entity Audit =====================');
       console.log('');
     },
     lookups: [{ packagePaths: [packagePath] }],
+    ...require('./cli-customizations.cjs'),
   }).catch(done);
 
   process.on('unhandledRejection', up => {
