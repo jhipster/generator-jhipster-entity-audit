@@ -10,6 +10,20 @@
 
 This is a [JHipster](https://www.jhipster.tech/) blueprint, that is meant to be used in a JHipster application.
 
+You can choose to enable audit for all entities or choose the entities to be audited from a list during generation.
+
+The blueprint will extend the selected entities with `AbstractAuditingEntity` to enable audits, hence make sure that your entities doesn't have any super class.
+
+This will also add new columns to the entities, so it is ideal to recreate the tables if you are enabling this for existing entities or use incremental changelog.
+
+The Audit log page is optional and can be added by choosing the option while running the generator.
+
+### Javers integration
+
+When using sql or mongodb you can use [Javers](http://javers.org/) for entity auditing.
+
+The blueprint will add [spring-boot integration for javers](http://javers.org/documentation/spring-boot-integration/). Each repository is annotated with the required `@JaversSpringDataAuditable` annotation. The new class `JaversAuthorProvider` provides javers with the correct user modifying an entity.
+
 # Prerequisites
 
 As this is a [JHipster](https://www.jhipster.tech/) blueprint, we expect you have JHipster basic knowledge:
