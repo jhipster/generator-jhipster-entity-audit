@@ -2,6 +2,7 @@
   "generator-jhipster": {
     "additionalSubGenerators": "angular-audit,java-audit,spring-boot-custom-audit,spring-boot-javers",
     "baseName": "entity-audit",
+    "caret": true,
     "cli": true,
     "entities": [],
     "generators": {
