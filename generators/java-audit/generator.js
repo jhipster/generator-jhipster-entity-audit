@@ -38,6 +38,9 @@ const ADDITIONAL_FIELDS = [
 ];
 
 export default class extends BaseApplicationGenerator {
+  auditUpdateType;
+  auditedEntities;
+
   constructor(args, opts, features) {
     super(args, opts, { ...features, queueCommandTasks: true });
   }
@@ -53,6 +56,8 @@ export default class extends BaseApplicationGenerator {
           await this.composeWithJHipster('jhipster-entity-audit:spring-boot-javers');
         } else if (this.blueprintConfig.auditFramework === 'custom') {
           await this.composeWithJHipster('jhipster-entity-audit:spring-boot-custom-audit');
+        } else {
+          this.cancelCancelableTasks();
         }
       },
     });
@@ -94,7 +99,7 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
     return this.asConfiguringEachEntityTaskGroup({
       async configureEntity({ entityName, entityConfig }) {
-        const { auditedEntities } = this.options;
+        const auditedEntities = this.auditUpdateType === 'all' ? this.getExistingEntities().map(e => e.name) : this.auditedEntities;
         entityConfig.enableAudit = auditedEntities?.includes(entityName) || entityConfig.enableAudit;
         if (!entityConfig.enableAudit) return;
 
