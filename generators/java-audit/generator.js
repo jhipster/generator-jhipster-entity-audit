@@ -49,6 +49,14 @@ export default class extends BaseApplicationGenerator {
     await this.dependsOnJHipster('java');
   }
 
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.asInitializingTaskGroup({
+      setInitialRun() {
+        this.initialRun = this.blueprintConfig.auditFramework === undefined;
+      },
+    });
+  }
+
   get [BaseApplicationGenerator.COMPOSING]() {
     return this.asComposingTaskGroup({
       async composingTask() {
