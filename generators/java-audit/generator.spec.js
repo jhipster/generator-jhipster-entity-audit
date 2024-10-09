@@ -11,26 +11,22 @@ describe('SubGenerator java-audit of entity-audit JHipster blueprint', () => {
       beforeAll(async function () {
         await helpers
           .run(SUB_GENERATOR_NAMESPACE)
-          .withJHipsterConfig(
+          .withJHipsterConfig({}, [
             {
-              auditFramework,
+              name: 'Audited',
+              enableAudit: true,
+              fields: [
+                {
+                  fieldName: 'name',
+                  fieldType: 'String',
+                },
+              ],
             },
-            [
-              {
-                name: 'Audited',
-                enableAudit: true,
-                fields: [
-                  {
-                    fieldName: 'name',
-                    fieldType: 'String',
-                  },
-                ],
-              },
-            ],
-          )
+          ])
           .withOptions({
             creationTimestamp: '2022-01-01',
             ignoreNeedlesError: true,
+            auditFramework,
           })
           .withJHipsterLookup()
           .withParentBlueprintLookup();
@@ -39,9 +35,15 @@ describe('SubGenerator java-audit of entity-audit JHipster blueprint', () => {
       it('should succeed', () => {
         expect(result.getStateSnapshot()).toMatchSnapshot();
       });
-      it('entities should extend AbstractAuditingEntity', () => {
-        result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Audited.java', ' AbstractAuditingEntity<');
-      });
+      if (auditFramework) {
+        it('entities should extend AbstractAuditingEntity', () => {
+          result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Audited.java', ' AbstractAuditingEntity<');
+        });
+      } else {
+        it('entities should not extend AbstractAuditingEntity', () => {
+          result.assertNoFileContent('src/main/java/com/mycompany/myapp/domain/Audited.java', ' AbstractAuditingEntity<');
+        });
+      }
     });
   }
 });

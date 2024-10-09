@@ -21,6 +21,10 @@ export default asCommand({
           name: 'Javers auditing framework (works with SQL and MongoDB)',
           value: 'javers',
         },
+        {
+          name: 'No auditing framework',
+          value: 'no',
+        },
       ],
       scope: 'blueprint',
     },

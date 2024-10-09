@@ -9,7 +9,7 @@ describe('SubGenerator server of entity-audit JHipster blueprint', () => {
   describe('run', () => {
     beforeAll(async function () {
       await helpers
-        .run(BLUEPRINT_NAMESPACE)
+        .runJHipster(SUB_GENERATOR)
         .withJHipsterConfig()
         .withOptions({
           creationTimestamp: '2022-01-01',
@@ -17,6 +17,7 @@ describe('SubGenerator server of entity-audit JHipster blueprint', () => {
           blueprint: ['entity-audit'],
         })
         .withJHipsterLookup()
+        .withParentBlueprintLookup()
         .withMockedGenerators(['jhipster-entity-audit:java-audit']);
     });
 

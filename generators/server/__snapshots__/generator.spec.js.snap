@@ -371,6 +371,9 @@ exports[`SubGenerator server of entity-audit JHipster blueprint > run > should s
   "src/main/webapp/i18n/en/configuration.json": {
     "stateCleared": "modified",
   },
+  "src/main/webapp/i18n/en/entity-audit.json": {
+    "stateCleared": "modified",
+  },
   "src/main/webapp/i18n/en/error.json": {
     "stateCleared": "modified",
   },
