@@ -51,8 +51,8 @@ export default class EntityAuditComponent implements OnInit {
   });
 
   private _audits = signal<EntityAuditEvent[]>([]);
-  private orderProp = signal<keyof EntityAuditEvent>('entityId');
-  private ascending = signal(true);
+  private orderProp = signal<keyof EntityAuditEvent>('modifiedDate');
+  private ascending = signal(false);
 
   private modalService = inject(NgbModal);
   private service = inject(EntityAuditService);
