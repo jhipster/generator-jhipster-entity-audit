@@ -1,13 +1,22 @@
 package <%=packageName%>.web.rest.dto;
 
-import org.javers.core.metamodel.object.CdoSnapshot;
+import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.Instant;
-import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import org.javers.core.metamodel.object.CdoSnapshot;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class EntityAuditEvent implements Serializable{
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class EntityAuditEvent implements Serializable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(EntityAuditEvent.class);
 
     private static final long serialVersionUID = 1L;
 
@@ -144,20 +153,14 @@ public class EntityAuditEvent implements Serializable{
         entityAuditEvent.setModifiedBy(snapshot.getCommitMetadata().getAuthor());
 
         if (snapshot.getState().getPropertyNames().size() > 0) {
-            int count = 0;
-            StringBuilder sb = new StringBuilder("{");
+            final Map<String, Object> map = new HashMap<>();
+            snapshot.getState().mapProperties((key, value) -> map.put(key, value != null ? value.toString() : null));
 
-            for (String s:snapshot.getState().getPropertyNames()) {
-                count++;
-                Object propertyValue = snapshot.getPropertyValue(s);
-                sb.append("\"" + s + "\": \"" + propertyValue + "\"");
-                if (count < snapshot.getState().getPropertyNames().size()) {
-                  sb.append(",");
-                }
-             }
-
-             sb.append("}");
-             entityAuditEvent.setEntityValue(sb.toString());
+            try {
+                entityAuditEvent.setEntityValue(new ObjectMapper().writeValueAsString(map));
+            } catch (JsonProcessingException e) {
+                LOG.error("Error while producing entityValue JSON string", e);
+            }
         }
         LocalDateTime localTime = snapshot.getCommitMetadata().getCommitDate();
 
