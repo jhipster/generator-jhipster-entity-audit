@@ -10,7 +10,10 @@ describe('SubGenerator java-audit of entity-audit JHipster blueprint', () => {
     beforeAll(async function () {
       await helpers
         .run(SUB_GENERATOR_NAMESPACE)
-        .withJHipsterConfig({}, [
+        .withJHipsterConfig(
+          {
+            auditFramework: 'javers',
+          }, [
           {
             name: 'Audited',
             enableAudit: true,
