@@ -116,18 +116,6 @@ exports[`SubGenerator server of entity-audit JHipster blueprint > run > should s
   "src/main/java/com/mycompany/myapp/aop/logging/package-info.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/audit/AsyncEntityAuditEventWriter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/audit/EntityAuditEventListener.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/audit/EntityAuditEventWriter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/audit/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/ApplicationProperties.java": {
     "stateCleared": "modified",
   },
@@ -182,16 +170,7 @@ exports[`SubGenerator server of entity-audit JHipster blueprint > run > should s
   "src/main/java/com/mycompany/myapp/domain/Authority.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/domain/EntityAuditEvent.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/domain/User.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/domain/enumeration/EntityAuditAction.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/domain/enumeration/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/package-info.java": {
@@ -207,9 +186,6 @@ exports[`SubGenerator server of entity-audit JHipster blueprint > run > should s
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/repository/AuthorityRepository.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/repository/EntityAuditEventRepository.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/repository/UserRepository.java": {
@@ -287,9 +263,6 @@ exports[`SubGenerator server of entity-audit JHipster blueprint > run > should s
   "src/main/java/com/mycompany/myapp/web/rest/AuthorityResource.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/web/rest/EntityAuditResource.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/web/rest/PublicUserResource.java": {
     "stateCleared": "modified",
   },
@@ -353,9 +326,6 @@ exports[`SubGenerator server of entity-audit JHipster blueprint > run > should s
   "src/main/resources/config/liquibase/changelog/00000000000000_initial_schema.xml": {
     "stateCleared": "modified",
   },
-  "src/main/resources/config/liquibase/changelog/20220101000100_added_entity_EntityAuditEvent.xml": {
-    "stateCleared": "modified",
-  },
   "src/main/resources/config/liquibase/data/authority.csv": {
     "stateCleared": "modified",
   },
@@ -401,9 +371,6 @@ exports[`SubGenerator server of entity-audit JHipster blueprint > run > should s
   "src/main/webapp/i18n/en/configuration.json": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/entity-audit.json": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/i18n/en/error.json": {
     "stateCleared": "modified",
   },
@@ -447,9 +414,6 @@ exports[`SubGenerator server of entity-audit JHipster blueprint > run > should s
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/TechnicalStructureTest.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/audit/TestEntityAuditEventWriter.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/AsyncSyncConfiguration.java": {

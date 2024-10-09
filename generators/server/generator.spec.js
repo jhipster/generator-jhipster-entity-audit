@@ -17,11 +17,14 @@ describe('SubGenerator server of entity-audit JHipster blueprint', () => {
           blueprint: ['entity-audit'],
         })
         .withJHipsterLookup()
-        .withParentBlueprintLookup();
+        .withMockedGenerators(['jhipster-entity-audit:java-audit']);
     });
 
     it('should succeed', () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
+    });
+    it('should compose with jhipster-entity-audit:java-audit', () => {
+      result.assertGeneratorComposedOnce('jhipster-entity-audit:java-audit');
     });
     it('should not write audit files', () => {
       expect(result.getStateSnapshot('**/audit/**')).toMatchObject({});
