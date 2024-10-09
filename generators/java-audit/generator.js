@@ -65,7 +65,7 @@ export default class extends BaseApplicationGenerator {
         } else if (this.blueprintConfig.auditFramework === 'custom') {
           await this.composeWithJHipster('jhipster-entity-audit:spring-boot-custom-audit');
         } else {
-          this.cancelCancelableTasks();
+          this.cancelCancellableTasks();
         }
       },
     });
