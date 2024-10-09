@@ -34,7 +34,6 @@ describe('SubGenerator java-audit of entity-audit JHipster blueprint', () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
     });
     it('entities should extend AbstractAuditingEntity', () => {
-      // TODO remove jhi extension
       result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Audited.java', ' AbstractAuditingEntity<');
     });
   });
