@@ -24,6 +24,7 @@ describe('SubGenerator spring-boot-custom-audit of entity-audit JHipster bluepri
         .withOptions({
           creationTimestamp: '2022-01-01',
           ignoreNeedlesError: true,
+          auditFramework: 'custom',
         })
         .withJHipsterLookup()
         .withParentBlueprintLookup();

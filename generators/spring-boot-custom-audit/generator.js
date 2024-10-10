@@ -8,8 +8,8 @@ export default class extends BaseApplicationGenerator {
   }
 
   async beforeQueue() {
+    await this.dependsOnBootstrapApplicationBase();
     await this.dependsOnJHipster('jhipster-entity-audit:java-audit');
-    await this.dependsOnJHipster('spring-boot');
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {
