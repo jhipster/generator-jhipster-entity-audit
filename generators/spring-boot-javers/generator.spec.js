@@ -13,6 +13,7 @@ describe('SubGenerator spring-boot-javers of entity-audit JHipster blueprint', (
         .withJHipsterConfig()
         .withOptions({
           ignoreNeedlesError: true,
+          auditFramework: 'javers',
         })
         .withJHipsterLookup()
         .withParentBlueprintLookup();

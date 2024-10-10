@@ -3,9 +3,13 @@ import BaseApplicationGenerator from 'generator-jhipster/generators/base-applica
 import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
 
 export default class extends BaseApplicationGenerator {
+  constructor(args, opts, features) {
+    super(args, opts, { ...features, queueCommandTasks: true });
+  }
+
   async beforeQueue() {
+    await this.dependsOnBootstrapApplicationBase();
     await this.dependsOnJHipster('jhipster-entity-audit:java-audit');
-    await this.dependsOnJHipster('spring-boot');
   }
 
   get [BaseApplicationGenerator.CONFIGURING]() {

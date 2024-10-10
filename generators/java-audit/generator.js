@@ -1,5 +1,5 @@
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
-import { addJavaAnnotation, addJavaImport, javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
+import { javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
 
 const COMMON_ATTRIBUTES = {
   // Hides form on create
@@ -38,8 +38,23 @@ const ADDITIONAL_FIELDS = [
 ];
 
 export default class extends BaseApplicationGenerator {
+  auditUpdateType;
+  auditedEntities;
+
+  constructor(args, opts, features) {
+    super(args, opts, { ...features, queueCommandTasks: true });
+  }
+
   async beforeQueue() {
-    await this.dependsOnJHipster('java');
+    await this.dependsOnJHipster('jhipster:java:domain');
+  }
+
+  get [BaseApplicationGenerator.INITIALIZING]() {
+    return this.asInitializingTaskGroup({
+      setInitialRun() {
+        this.initialRun = this.blueprintConfig.auditFramework === undefined;
+      },
+    });
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
@@ -49,40 +64,9 @@ export default class extends BaseApplicationGenerator {
           await this.composeWithJHipster('jhipster-entity-audit:spring-boot-javers');
         } else if (this.blueprintConfig.auditFramework === 'custom') {
           await this.composeWithJHipster('jhipster-entity-audit:spring-boot-custom-audit');
+        } else {
+          this.cancelCancellableTasks();
         }
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.LOADING]() {
-    return this.asLoadingTaskGroup({
-      prepareForTemplates({ application }) {
-        const { auditFramework, auditPage } = this.blueprintConfig;
-        application.auditFramework = auditFramework;
-        application.auditPage = auditPage;
-      },
-    });
-  }
-
-  get [BaseApplicationGenerator.PREPARING]() {
-    return this.asPreparingTaskGroup({
-      prepareForTemplates({ application }) {
-        const { auditFramework } = application;
-        application.auditFrameworkCustom = auditFramework === 'custom';
-        application.auditFrameworkJavers = auditFramework === 'javers';
-        application.auditFrameworkAny = auditFramework && auditFramework !== 'no';
-      },
-      editJavaFile({ source }) {
-        source.editJavaFile =
-          source.editJavaFile ??
-          ((file, { staticImports = [], imports = [], annotations = [] }, ...editFileCallback) =>
-            this.editFile(
-              file,
-              ...staticImports.map(classPath => addJavaImport(classPath, { staticImport: true })),
-              ...imports.map(classPath => addJavaImport(classPath)),
-              ...annotations.map(annotation => addJavaAnnotation(annotation)),
-              ...editFileCallback,
-            ));
       },
     });
   }
@@ -90,7 +74,7 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
     return this.asConfiguringEachEntityTaskGroup({
       async configureEntity({ entityName, entityConfig }) {
-        const { auditedEntities } = this.options;
+        const auditedEntities = this.auditUpdateType === 'all' ? this.getExistingEntities().map(e => e.name) : this.auditedEntities;
         entityConfig.enableAudit = auditedEntities?.includes(entityName) || entityConfig.enableAudit;
         if (!entityConfig.enableAudit) return;
 
