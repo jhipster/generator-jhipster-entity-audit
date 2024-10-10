@@ -11,13 +11,13 @@
     "Entity Audit",
     "Javers"
   ],
-  "homepage": "https://github.com/hipster-labs/generator-jhipster-entity-audit",
+  "homepage": "https://github.com/jhipster/generator-jhipster-entity-audit",
   "bugs": {
-    "url": "https://github.com/hipster-labs/generator-jhipster-entity-audit/issues"
+    "url": "https://github.com/jhipster/generator-jhipster-entity-audit/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hipster-labs/generator-jhipster-entity-audit.git"
+    "url": "git+https://github.com/jhipster/generator-jhipster-entity-audit.git"
   },
   "license": "Apache-2.0",
   "author": {
