@@ -1,0 +1,20 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`generator - github-build-matrix > with samples > should match matrix value 1`] = `
+{
+  "include": [
+    {
+      "default-environment": "prod",
+      "java-version": "17",
+      "job-name": "postgresql-mvc-jwt",
+      "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
+      "node-version": "22.12.0",
+      "npm-version": "11.0.0",
+      "os": "ubuntu-latest",
+      "sample": "postgresql-mvc-jwt",
+      "sample-type": "jdl",
+      "samples-group": "samples",
+    },
+  ],
+}
+`;
