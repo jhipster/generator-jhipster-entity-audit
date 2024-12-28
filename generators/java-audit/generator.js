@@ -73,10 +73,18 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
     return this.asConfiguringEachEntityTaskGroup({
-      async configureEntity({ entityName, entityConfig }) {
-        const auditedEntities = this.auditUpdateType === 'all' ? this.getExistingEntities().map(e => e.name) : this.auditedEntities;
-        entityConfig.enableAudit = auditedEntities?.includes(entityName) || entityConfig.enableAudit;
-        if (!entityConfig.enableAudit) return;
+      async configureEntity({ entityName, entityConfig, entityStorage }) {
+        entityConfig.annotations ??= {};
+        if (entityConfig.enableAudit !== undefined) {
+          entityConfig.annotations.enableAudit ??= entityConfig.enableAudit;
+          delete entityConfig.enableAudit;
+        }
+        if (entityConfig.annotations.enableAudit === undefined) {
+          const auditedEntities = this.auditUpdateType === 'all' ? this.getExistingEntities().map(e => e.name) : this.auditedEntities;
+          entityConfig.annotations.enableAudit = auditedEntities?.includes(entityName);
+          entityStorage.save();
+        }
+        if (!entityConfig.annotations.enableAudit) return;
 
         const fieldNames = entityConfig.fields.map(f => f.fieldName);
         const fieldsToAdd = ADDITIONAL_FIELDS.filter(f => !fieldNames.includes(f.fieldName)).map(f => ({ ...f }));
