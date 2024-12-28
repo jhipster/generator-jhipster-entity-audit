@@ -6,7 +6,7 @@ const SUB_GENERATOR = 'java-audit';
 const SUB_GENERATOR_NAMESPACE = `jhipster-entity-audit:${SUB_GENERATOR}`;
 
 describe('SubGenerator java-audit of entity-audit JHipster blueprint', () => {
-  for (const auditFramework of [undefined, 'javers', 'custom']) {
+  for (const auditFramework of [null, 'javers', 'custom']) {
     describe(`run using auditFramework ${auditFramework}`, () => {
       beforeAll(async function () {
         await helpers
