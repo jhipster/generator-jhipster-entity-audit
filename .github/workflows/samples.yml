@@ -64,7 +64,7 @@ jobs:
           !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
         with:
           generator-path: generator-jhipster-entity-audit
-          cmd: cli.cjs generate-sample ${{ matrix.sample-file }} --build ${{ matrix.build-tool }} --audit-framework ${{ matrix.audit-framework }} --audit-page --no-insight --skip-git --skip-commit-hook --skip-jhipster-dependencies --no-cypress-audit --audit-update-type all --skip-install
+          cmd: cli.cjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }}
       - run: npm run ci:backend:test
         if: steps.compare.outputs.equals != 'true'
         id: backend

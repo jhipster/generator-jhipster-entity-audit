@@ -4,14 +4,8 @@ exports[`generator - github-build-matrix > with samples > should match matrix va
 {
   "include": [
     {
-      "audit-framework": "custom",
-      "build-tool": "maven",
       "default-environment": "prod",
       "java-version": "17",
-      "jdlOptions": {
-        "auditFramework": "custom",
-        "buildTool": "maven",
-      },
       "job-name": "custom, maven, postgresql-mvc-jwt",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "node-version": "22.12.0",
@@ -21,16 +15,14 @@ exports[`generator - github-build-matrix > with samples > should match matrix va
       "sample-file": "postgresql-mvc-jwt",
       "sample-type": "jdl-ejs",
       "samples-group": "samples",
-    },
-    {
-      "audit-framework": "javers",
-      "build-tool": "maven",
-      "default-environment": "prod",
-      "java-version": "17",
-      "jdlOptions": {
-        "auditFramework": "javers",
+      "templateOptions": {
+        "auditFramework": "custom",
         "buildTool": "maven",
       },
+    },
+    {
+      "default-environment": "prod",
+      "java-version": "17",
       "job-name": "javers, maven, postgresql-mvc-jwt",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "node-version": "22.12.0",
@@ -40,16 +32,14 @@ exports[`generator - github-build-matrix > with samples > should match matrix va
       "sample-file": "postgresql-mvc-jwt",
       "sample-type": "jdl-ejs",
       "samples-group": "samples",
+      "templateOptions": {
+        "auditFramework": "javers",
+        "buildTool": "maven",
+      },
     },
     {
-      "audit-framework": "custom",
-      "build-tool": "gradle",
       "default-environment": "prod",
       "java-version": "17",
-      "jdlOptions": {
-        "auditFramework": "custom",
-        "buildTool": "gradle",
-      },
       "job-name": "custom, gradle, postgresql-mvc-jwt",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "node-version": "22.12.0",
@@ -59,16 +49,14 @@ exports[`generator - github-build-matrix > with samples > should match matrix va
       "sample-file": "postgresql-mvc-jwt",
       "sample-type": "jdl-ejs",
       "samples-group": "samples",
-    },
-    {
-      "audit-framework": "javers",
-      "build-tool": "gradle",
-      "default-environment": "prod",
-      "java-version": "17",
-      "jdlOptions": {
-        "auditFramework": "javers",
+      "templateOptions": {
+        "auditFramework": "custom",
         "buildTool": "gradle",
       },
+    },
+    {
+      "default-environment": "prod",
+      "java-version": "17",
       "job-name": "javers, gradle, postgresql-mvc-jwt",
       "jwt-secret-key": "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ=",
       "node-version": "22.12.0",
@@ -78,6 +66,10 @@ exports[`generator - github-build-matrix > with samples > should match matrix va
       "sample-file": "postgresql-mvc-jwt",
       "sample-type": "jdl-ejs",
       "samples-group": "samples",
+      "templateOptions": {
+        "auditFramework": "javers",
+        "buildTool": "gradle",
+      },
     },
   ],
 }
