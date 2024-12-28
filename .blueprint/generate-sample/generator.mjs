@@ -42,7 +42,7 @@ export default class extends BaseGenerator {
             'sample-file': sampleFile = sampleName,
             'sample-folder': sampleFolder = samplesPath,
             generatorOptions,
-            jdlOptions,
+            templateOptions = {},
           } = samples[sampleName];
 
           this.generatorOptions = generatorOptions;
@@ -53,7 +53,7 @@ export default class extends BaseGenerator {
             this.copyTemplate(join(sampleFolder, jdlFile), jdlFile, { noGlob: true });
           } else if (sampleType === 'jdl-ejs') {
             const jdlFile = `${sampleFile}.jdl`;
-            this.renderTemplate(join(sampleFolder, `${jdlFile}.ejs`), jdlFile, jdlOptions, undefined, { noGlob: true });
+            this.renderTemplate(join(sampleFolder, `${jdlFile}.ejs`), jdlFile, templateOptions, undefined, { noGlob: true });
           } else if (sampleType === 'yo-rc') {
             this.copyTemplate('**', '', {
               fromBasePath: this.templatePath(sampleFolder, sampleFile),

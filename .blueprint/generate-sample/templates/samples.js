@@ -13,9 +13,7 @@ export default Object.fromEntries(
       'job-name': `${auditFramework}, ${buildTool}, postgresql-mvc-jwt`,
       'sample-type': 'jdl-ejs',
       'sample-file': 'postgresql-mvc-jwt',
-      jdlOptions: { auditFramework, buildTool },
-      'audit-framework': auditFramework,
-      'build-tool': buildTool,
+      templateOptions: { auditFramework, buildTool },
     },
   ]),
 );
