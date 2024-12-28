@@ -137,4 +137,8 @@ export default class extends BaseApplicationGenerator {
       },
     };
   }
+
+  shouldAskForPrompts() {
+    return this.initialRun;
+  }
 }

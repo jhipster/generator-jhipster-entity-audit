@@ -154,7 +154,7 @@ exports[`SubGenerator java-audit of entity-audit JHipster blueprint > run using 
 }
 `;
 
-exports[`SubGenerator java-audit of entity-audit JHipster blueprint > run using auditFramework undefined > should succeed 1`] = `
+exports[`SubGenerator java-audit of entity-audit JHipster blueprint > run using auditFramework null > should succeed 1`] = `
 {
   ".jhipster/Audited.json": {
     "stateCleared": "modified",

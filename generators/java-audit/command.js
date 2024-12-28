@@ -36,8 +36,8 @@ export default asCommand({
       prompt: {
         type: 'confirm',
         message: 'Do you want to add an audit log page for entities?',
-        default: true,
       },
+      default: true,
       scope: 'blueprint',
     },
     auditUpdateType: {
