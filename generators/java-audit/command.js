@@ -28,18 +28,6 @@ export default asCommand({
       ],
       scope: 'blueprint',
     },
-    auditPage: {
-      description: 'Generate client page',
-      cli: {
-        type: Boolean,
-      },
-      prompt: {
-        type: 'confirm',
-        message: 'Do you want to add an audit log page for entities?',
-      },
-      default: true,
-      scope: 'blueprint',
-    },
     auditUpdateType: {
       cli: {
         type: String,

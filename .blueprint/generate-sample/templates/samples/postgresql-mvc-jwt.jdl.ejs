@@ -1,12 +1,18 @@
 application {
   config {
     baseName jhipster
+    blueprints [generator-jhipster-entity-audit]
+    buildTool <%- buildTool %>
     cacheProvider no
     creationTimestamp 1632872179205
     devDatabaseType h2Disk
     enableTranslation false
     jwtSecretKey "ZjY4MTM4YjI5YzMwZjhjYjI2OTNkNTRjMWQ5Y2Q0Y2YwOWNmZTE2NzRmYzU3NTMwM2NjOTE3MTllOTM3MWRkMzcyYTljMjVmNmQ0Y2MxOTUzODc0MDhhMTlkMDIxMzI2YzQzZDM2ZDE3MmQ3NjVkODk3OTVmYzljYTQyZDNmMTQ="
     testFrameworks [cypress]
+  }
+
+  config(generator-jhipster-entity-audit) {
+    auditFramework <%- auditFramework %>
   }
 
   entities Blog, Post, Tag

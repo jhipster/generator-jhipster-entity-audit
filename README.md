@@ -60,6 +60,26 @@ jhipster-entity-audit app --help
 
 And looking for `(blueprint option: entity-audit)` like
 
+## JDL
+
+JHipster entity-audit blueprint supports JDL as following
+
+```jdl
+application {
+  config {
+    baseName sample
+    blueprints [generator-jhipster-entity-audit]
+  }
+
+  config(generator-jhipster-entity-audit) {
+    auditFramework javers
+  }
+
+  entities *
+}
+
+```
+
 ## Pre-release
 
 To use an unreleased version, install it using git.

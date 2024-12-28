@@ -1,23 +1,4 @@
-#
-# Copyright 2013-2022 the original author or authors from the JHipster project.
-#
-# This file is part of the JHipster project, see https://www.jhipster.tech/
-# for more information.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
-name: JDL tests
+name: Verify Sample Projects
 concurrency:
   # Group PRs by head_ref, push to main branch by commit id, and others branch by ref.
   group: ${{ github.workflow }}-${{ github.head_ref || (github.ref == 'refs/heads/main' && github.sha) || github.ref }}
@@ -25,95 +6,104 @@ concurrency:
 on:
   push:
     branches:
-      - '*'
+      - 'main'
+      - '**maintenance'
+    paths-ignore:
+      - 'package*.json'
   pull_request:
-    types: [closed, opened, synchronize, reopened]
     branches:
       - '*'
 permissions:
   contents: read
+env:
+  FORCE_COLOR: 2
 jobs:
-  applications:
-    name: ${{ matrix.audit-framework }}, ${{ matrix.build-tool }}, ${{ matrix.suite }} (${{ matrix.os }})
+  build-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.build.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - id: build
+        run: |
+          npm install
+          ./cli/cli.cjs github-build-matrix
+  samples:
+    name: ${{ matrix.job-name || matrix.sample }}
     runs-on: ${{ matrix.os }}
+    needs: build-matrix
     defaults:
       run:
-        shell: bash
         working-directory: ${{ github.workspace }}/app
-    if: github.event.action != 'closed'
     timeout-minutes: 30
     strategy:
       fail-fast: false
-      matrix:
-        os: [ubuntu-22.04]
-        build-tool: [maven, gradle]
-        audit-framework: [custom, javers]
-        suite:
-          - postgresql-mvc-jwt.jdl
+      matrix: ${{fromJson(needs.build-matrix.outputs.matrix)}}
     steps:
-      #----------------------------------------------------------------------
-      # Install all tools and check configuration
-      #----------------------------------------------------------------------
-      - uses: jhipster/actions/create-app-path@v0
-      - uses: jhipster/actions/setup-git@v0
-      - name: 'SETUP: checkout generator-jhipster-entity-audit'
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           path: generator-jhipster-entity-audit
           fetch-depth: 2
-      - name: 'SETUP: setup node'
-        uses: actions/setup-node@v4
+      - uses: jhipster/actions/setup-runner@v0
         with:
-          node-version: 20
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-      - name: 'SETUP: install generator-jhister-entity-audit'
-        run: |
-          npm ci
-          npm link
+          java-version: ${{ matrix.java-version }}
+          node-version: ${{ matrix.node-version }}
+          maven-cache: true
+          gradle-cache: true
+          binary-dir: ${{ github.workspace }}/generator-jhipster-entity-audit/cli/
+      - run: npm install
         working-directory: ${{ github.workspace }}/generator-jhipster-entity-audit
-      - name: 'SETUP: get date'
-        id: get-date
-        run: echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
-      - name: 'SETUP: load cache'
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.npm
-            ~/.cache/Cypress/
-            ~/.m2/repository
-          key: ${{ runner.os }}-app-${{ matrix.suite }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('generator-jhipster-entity-audit/package*.json') }}
-      #----------------------------------------------------------------------
-      # Install JHipster and generate project+entities
-      #----------------------------------------------------------------------
-      - name: 'PROJECT: generate'
-        run: 'jhipster-entity-audit generate-sample ${{ matrix.suite }} --build ${{ matrix.build-tool }} --audit-framework ${{ matrix.audit-framework }} --audit-page --no-insight --skip-commit-hook --skip-jhipster-dependencies --no-cypress-audit --audit-update-type all'
+      - run: cli.cjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }}
       - uses: jhipster/actions/compare-sample@v0
+        id: compare
+        if: >-
+          github.event.pull_request &&
+          !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
         with:
           generator-path: generator-jhipster-entity-audit
-          cmd: 'jhipster-entity-audit generate-sample ${{ matrix.suite }} --build ${{ matrix.build-tool }} --audit-framework ${{ matrix.audit-framework }} --audit-page --no-insight --skip-git --skip-commit-hook --skip-jhipster-dependencies --no-cypress-audit --audit-update-type all --skip-install'
-      - name: 'TESTS: backend tests'
-        run: npm run ci:backend:test
-      - name: 'TESTS: frontend tests'
-        run: npm run ci:frontend:test
-      - name: 'TESTS: packaging'
-        run: npm run ci:e2e:package
-      - name: 'TESTS: start docker dependencies'
-        run: npm run ci:e2e:prepare
-      - name: 'TESTS: run e2e'
-        run: npm run ci:e2e:run --if-present
-  check-applications:
+          cmd: cli.cjs generate-sample ${{ matrix.sample-file }} --build ${{ matrix.build-tool }} --audit-framework ${{ matrix.audit-framework }} --audit-page --no-insight --skip-git --skip-commit-hook --skip-jhipster-dependencies --no-cypress-audit --audit-update-type all --skip-install
+      - run: npm run ci:backend:test
+        if: steps.compare.outputs.equals != 'true'
+        id: backend
+      - run: npm run ci:e2e:package
+        if: steps.compare.outputs.equals != 'true'
+      - run: npm run ci:frontend:test --if-present
+        if: steps.compare.outputs.equals != 'true'
+      - run: npm run ci:e2e:prepare
+        if: steps.compare.outputs.equals != 'true'
+      - run: npm run ci:e2e:run --if-present
+        if: steps.compare.outputs.equals != 'true'
+        id: e2e
+      - name: Store backend test failure logs
+        uses: actions/upload-artifact@v4
+        if: always() && steps.backend.outcome == 'failure'
+        with:
+          name: log-${{ matrix.job-name || matrix.sample }}
+          path: |
+            ${{ github.workspace }}/app/build/test-results/**/*.xml
+            ${{ github.workspace }}/app/target/surefire-reports
+      - name: Store cypress screenshots
+        uses: actions/upload-artifact@v4
+        if: always() && steps.e2e.outcome == 'failure'
+        with:
+          name: screenshots-${{ matrix.job-name || matrix.sample }}
+          path: ${{ github.workspace }}/app/**/cypress/screenshots
+      - name: Dump docker logs
+        if: always()
+        uses: jwalton/gh-docker-logs@v2
+  check-samples:
     permissions:
       contents: none
     runs-on: ubuntu-latest
-    needs: [applications]
+    needs: [samples]
     if: always()
     steps:
       - run: |
           echo '${{ toJSON(needs) }}'
-          if [ 'skipped' == '${{ needs.applications.result }}' ] || [ 'success' == '${{ needs.applications.result }}' ] || [ 'closed' == '${{ github.event.action }}' ]; then
+          if [ 'skipped' == '${{ needs.samples.result }}' ] || [ 'success' == '${{ needs.samples.result }}' ] || [ 'closed' == '${{ github.event.action }}' ]; then
             exit 0
           fi
           exit 1
