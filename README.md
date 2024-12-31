@@ -46,12 +46,6 @@ To use this blueprint, run the below command
 jhipster-entity-audit
 ```
 
-or
-
-```bash
-jhipster --blueprints entity-audit
-```
-
 You can look for updated entity-audit blueprint specific options by running
 
 ```bash
@@ -62,7 +56,13 @@ And looking for `(blueprint option: entity-audit)` like
 
 ## JDL
 
-JHipster entity-audit blueprint supports JDL as following
+JHipster entity-audit blueprint supports `jdl` command
+
+```
+jhipster-entity-audit jdl app.jdl
+```
+
+And JDL file as following
 
 ```jdl
 application {
@@ -78,6 +78,18 @@ application {
   entities *
 }
 
+@EnableAudit
+entity Sample {
+  name String required
+}
+```
+
+## More than one blueprint
+
+To mix blueprints you can use `jhipster` command
+
+```bash
+jhipster --blueprints entity-audit
 ```
 
 ## Pre-release
