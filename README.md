@@ -78,6 +78,10 @@ application {
   entities *
 }
 
+@EnableAudit
+entity Sample {
+  name String required
+}
 ```
 
 ## Pre-release
