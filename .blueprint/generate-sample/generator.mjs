@@ -42,18 +42,14 @@ export default class extends BaseGenerator {
             'sample-file': sampleFile = sampleName,
             'sample-folder': sampleFolder = samplesPath,
             generatorOptions,
-            templateOptions = {},
           } = samples[sampleName];
 
           this.generatorOptions = generatorOptions;
-          this.sampleType = sampleType === 'jdl-ejs' ? 'jdl' : sampleType;
+          this.sampleType = sampleType;
 
           if (sampleType === 'jdl') {
             const jdlFile = `${sampleFile}.jdl`;
             this.copyTemplate(join(sampleFolder, jdlFile), jdlFile, { noGlob: true });
-          } else if (sampleType === 'jdl-ejs') {
-            const jdlFile = `${sampleFile}.jdl`;
-            this.renderTemplate(join(sampleFolder, `${jdlFile}.ejs`), jdlFile, templateOptions, undefined, { noGlob: true });
           } else if (sampleType === 'yo-rc') {
             this.copyTemplate('**', '', {
               fromBasePath: this.templatePath(sampleFolder, sampleFile),
