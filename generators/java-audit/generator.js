@@ -138,7 +138,7 @@ export default class extends BaseApplicationGenerator {
               )
               .replace(
                 '.satisfies(a -> assertThat(a.getLastModifiedDate()).as("check lastModifiedDate").isEqualTo(expected.getLastModifiedDate()))',
-                '',
+                '.satisfies(a -> assertThat(a.getLastModifiedDate()).as("check lastModifiedDate").isAfter(expected.getLastModifiedDate()))',
               ),
           );
         }
