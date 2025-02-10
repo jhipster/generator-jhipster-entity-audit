@@ -133,11 +133,11 @@ export default class extends BaseApplicationGenerator {
           this.editFile(`${testJavaPackageDir}${entityPackage}/domain/${persistClass}Asserts.java`, contents =>
             contents
               .replace(
-                `.satisfies(e -> assertThat(e.getLastModifiedBy()).as("check lastModifiedBy").isEqualTo(actual.getLastModifiedBy()))`,
+                `.satisfies(a -> assertThat(a.getLastModifiedBy()).as("check lastModifiedBy").isEqualTo(expected.getLastModifiedBy()))`,
                 '',
               )
               .replace(
-                '.satisfies(e -> assertThat(e.getLastModifiedDate()).as("check lastModifiedDate").isEqualTo(actual.getLastModifiedDate()))',
+                '.satisfies(a -> assertThat(a.getLastModifiedDate()).as("check lastModifiedDate").isEqualTo(expected.getLastModifiedDate()))',
                 '',
               ),
           );
