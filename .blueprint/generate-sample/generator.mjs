@@ -51,7 +51,6 @@ export default class extends BaseGenerator {
           if (sampleType === 'jdl') {
             const jdlFile = `${sampleFile}.jdl`;
             this.copyTemplate(join(sampleFolder, jdlFile), jdlFile, { noGlob: true });
-
           } else if (sampleType === 'jdl-ejs') {
             const jdlFile = `${sampleFile}.jdl`;
             this.renderTemplate(join(sampleFolder, `${jdlFile}.ejs`), jdlFile, templateOptions, undefined, { noGlob: true });
