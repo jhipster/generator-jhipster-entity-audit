@@ -20,7 +20,7 @@
         >
           <option value="{{ null }}" selected>Select</option>
           @for (entityOption of entities(); track $index) {
-            <option [value]="entityOption">{{ entityOption }}</option>
+            <option [value]="entityOption.value">{{ entityOption.name }}</option>
           }
         </select>
 

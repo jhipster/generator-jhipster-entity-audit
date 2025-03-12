@@ -1,3 +1,8 @@
+export type EntityAuditEntityChoice = {
+  name: string;
+  value: string;
+};
+
 export type EntityAuditEvent = {
   id: number;
   entityId: any;

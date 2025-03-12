@@ -2,15 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { EntityAuditEvent } from './entity-audit-event.model';
+import { EntityAuditEntityChoice, EntityAuditEvent } from './entity-audit-event.model';
 
 @Injectable({ providedIn: 'root' })
 export class EntityAuditService {
 
     constructor(private http: HttpClient) { }
 
-    getAllAudited(): Observable<string[]> {
-        return this.http.get<string[]>('api/audits/entity/all');
+    getAllAudited(): Observable<EntityAuditEntityChoice[]> {
+        return this.http.get<EntityAuditEntityChoice[]>('api/audits/entity/all');
     }
 
     findByEntity(entity: string, limit: number): Observable<HttpResponse<EntityAuditEvent[]>> {

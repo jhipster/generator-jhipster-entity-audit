@@ -6,7 +6,7 @@ import { tap } from 'rxjs';
 import SharedModule from 'app/shared/shared.module';
 import { AlertService } from 'app/core/util/alert.service';
 import { EntityAuditService } from './entity-audit.service';
-import { EntityAuditEvent } from './entity-audit-event.model';
+import { EntityAuditEntityChoice, EntityAuditEvent } from './entity-audit-event.model';
 import EntityAuditModalComponent from './entity-audit-modal.component';
 
 @Component({
@@ -24,7 +24,7 @@ import EntityAuditModalComponent from './entity-audit-modal.component';
   ],
 })
 export default class EntityAuditComponent implements OnInit {
-  entities = signal<string[]>([]);
+  entities = signal<EntityAuditEntityChoice[]>([]);
   selectedEntity = signal<string | undefined>(undefined);
   limits = [25, 50, 100, 200];
   selectedLimit = signal(this.limits[0]);
