@@ -23,4 +23,46 @@ describe('SubGenerator spring-boot-javers of entity-audit JHipster blueprint', (
       expect(result.getStateSnapshot()).toMatchSnapshot();
     });
   });
+  describe('should generate AuditedEntity', () => {
+    beforeAll(async function () {
+      await helpers
+        .runJDL(
+          `
+application {
+  config {
+    baseName jhipster
+    blueprints [generator-jhipster-entity-audit]
+  }
+
+  config(generator-jhipster-entity-audit) {
+    auditFramework javers
+  }
+
+  entities *
+}
+
+@EnableAudit
+@ChangelogDate("20200101000100")
+entity CamelCase {
+  name String required
+}
+
+@EnableAudit
+@EntityPackage("custom")
+@ChangelogDate("20200101000200")
+entity WithEntityPackage {
+  name String required
+}
+`,
+        )
+        .withParentBlueprintLookup();
+    });
+
+    it('generate .yo-rc.json content', () => {
+      expect(result.getSnapshot('**/.yo-rc.json')).toMatchSnapshot();
+    });
+    it('generate AuditedEntity content', () => {
+      expect(result.getSnapshot('**/AuditedEntity.java')).toMatchSnapshot();
+    });
+  });
 });

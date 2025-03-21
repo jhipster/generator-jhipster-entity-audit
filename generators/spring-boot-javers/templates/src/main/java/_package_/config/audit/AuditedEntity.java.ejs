@@ -1,0 +1,22 @@
+package <%=packageName%>.config.audit;
+
+public enum AuditedEntity {
+    ;
+    // jhipster-needle-add-audited-entities - JHipster will add entities to this enum
+
+    private final Class<?> entityClass;
+    private final String eventEntityType;
+
+    private AuditedEntity(Class<?> entityClass, String eventEntityType) {
+        this.entityClass = entityClass;
+        this.eventEntityType = eventEntityType;
+    }
+
+    public Class<?> getEntityClass() {
+        return entityClass;
+    }
+
+    public String getEventEntityType() {
+        return eventEntityType;
+    }
+}

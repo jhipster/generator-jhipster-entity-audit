@@ -44,8 +44,8 @@ public class EntityAuditResource {
      */
     @GetMapping(value = "/audits/entity/all", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public List<String> getAuditedEntities() {
-        return entityAuditEventRepository.findAllEntityTypes();
+    public List<AuditedEntityRecord> getAuditedEntities() {
+        return entityAuditEventRepository.findAllEntityTypes().stream().map(e -> new AuditedEntityRecord(e, e)).toList();
     }
 
     /**
@@ -84,4 +84,6 @@ public class EntityAuditResource {
         );
         return new ResponseEntity<>(prev, HttpStatus.OK);
     }
+
+    public record AuditedEntityRecord(String name, String value) {}
 }
