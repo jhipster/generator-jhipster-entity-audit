@@ -97,9 +97,6 @@ exports[`SubGenerator java-audit of entity-audit JHipster blueprint > run using 
   "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/config/audit/AuditedEntity.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/audit/JaversAuthorProvider.java": {
     "stateCleared": "modified",
   },
@@ -110,6 +107,12 @@ exports[`SubGenerator java-audit of entity-audit JHipster blueprint > run using 
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/Authority.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/audit/AuditedEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/audit/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/package-info.java": {

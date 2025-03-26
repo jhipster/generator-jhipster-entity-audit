@@ -8,9 +8,6 @@ exports[`SubGenerator spring-boot-javers of entity-audit JHipster blueprint > ru
   "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/config/audit/AuditedEntity.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/audit/JaversAuthorProvider.java": {
     "stateCleared": "modified",
   },
@@ -18,6 +15,12 @@ exports[`SubGenerator spring-boot-javers of entity-audit JHipster blueprint > ru
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/Authority.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/audit/AuditedEntity.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/domain/audit/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/package-info.java": {
@@ -90,8 +93,8 @@ exports[`SubGenerator spring-boot-javers of entity-audit JHipster blueprint > sh
 
 exports[`SubGenerator spring-boot-javers of entity-audit JHipster blueprint > should generate AuditedEntity > generate AuditedEntity content 1`] = `
 {
-  "src/main/java/com/mycompany/myapp/config/audit/AuditedEntity.java": {
-    "contents": "package com.mycompany.myapp.config.audit;
+  "src/main/java/com/mycompany/myapp/domain/audit/AuditedEntity.java": {
+    "contents": "package com.mycompany.myapp.domain.audit;
 
 public enum AuditedEntity {
     CAMELCASE(com.mycompany.myapp.domain.CamelCase.class, "domain.CamelCase"),

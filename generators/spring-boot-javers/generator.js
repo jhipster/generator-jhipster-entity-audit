@@ -24,7 +24,7 @@ export default class extends BaseApplicationGenerator {
         source.addEntityToAuditedEntityEnum = ({ entityAuditEnumValue, entityAbsoluteClass, entityAuditEventType }) => {
           const enumValueDeclaration = `${entityAuditEnumValue}(${entityAbsoluteClass}.class, "${entityAuditEventType}")`;
           this.editFile(
-            `${application.javaPackageSrcDir}config/audit/AuditedEntity.java`,
+            `${application.javaPackageSrcDir}domain/audit/AuditedEntity.java`,
             createNeedleCallback({
               needle: 'add-audited-entities',
               contentToAdd: (content, { indentPrefix }) => {
@@ -86,7 +86,7 @@ export default class extends BaseApplicationGenerator {
         await this.writeFiles({
           blocks: [
             javaMainPackageTemplatesBlock({
-              templates: ['config/audit/JaversAuthorProvider.java', 'config/audit/AuditedEntity.java'],
+              templates: ['config/audit/JaversAuthorProvider.java', 'domain/audit/AuditedEntity.java'],
             }),
             javaMainPackageTemplatesBlock({
               condition: application.auditPage,
