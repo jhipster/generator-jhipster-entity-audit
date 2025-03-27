@@ -22,7 +22,7 @@ export default class extends BaseApplicationGenerator {
       },
       async addNeedle({ application, source }) {
         source.addEntityToAuditedEntityEnum = ({ entityAuditEnumValue, entityAbsoluteClass, entityAuditEventType }) => {
-          const enumValueDeclaration = `${entityAuditEnumValue}(${entityAbsoluteClass}.class, "${entityAuditEventType}")`;
+          const enumValueDeclaration = `${entityAuditEnumValue}( ${entityAbsoluteClass}.class, "${entityAuditEventType}" )`;
           this.editFile(
             `${application.javaPackageSrcDir}config/audit/AuditedEntity.java`,
             createNeedleCallback({
@@ -39,7 +39,7 @@ export default class extends BaseApplicationGenerator {
                 const needleIndex = content.indexOf('    // jhipster-needle-add-audited-entities');
                 let beforeContent = content.substring(0, needleIndex);
                 // Drop extra line ending if it exists, can be caused by prettier formatting
-                beforeContent = beforeContent.endsWith('/n/n') ? beforeContent.slice(0, -1) : beforeContent;
+                beforeContent = beforeContent.endsWith('\n\n') ? beforeContent.slice(0, -1) : beforeContent;
                 const afterContent = content.substring(needleIndex);
 
                 if (!beforeContent.includes(needleValuePrefix) || !beforeContent.endsWith(needleValueSuffix)) {
