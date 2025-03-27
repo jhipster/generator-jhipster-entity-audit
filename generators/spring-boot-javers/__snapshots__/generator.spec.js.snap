@@ -94,8 +94,8 @@ exports[`SubGenerator spring-boot-javers of entity-audit JHipster blueprint > sh
     "contents": "package com.mycompany.myapp.config.audit;
 
 public enum AuditedEntity {
-    CAMELCASE(com.mycompany.myapp.domain.CamelCase.class, "domain.CamelCase"),
-    CUSTOM_WITHENTITYPACKAGE(com.mycompany.myapp.custom.domain.WithEntityPackage.class, "custom.domain.WithEntityPackage");
+    CAMELCASE( com.mycompany.myapp.domain.CamelCase.class, "domain.CamelCase" ),
+    CUSTOM_WITHENTITYPACKAGE( com.mycompany.myapp.custom.domain.WithEntityPackage.class, "custom.domain.WithEntityPackage" );
     // jhipster-needle-add-audited-entities - JHipster will add entities to this enum
 
     private final Class<?> entityClass;
