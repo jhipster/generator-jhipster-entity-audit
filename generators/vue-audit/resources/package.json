@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "vue-diff": "1.2.4",
+    "dompurify": "3.2.6",
+    "deep-diff": "1.0.2",
+    "deepmerge": "4.3.1"
+  }
+}

@@ -1,0 +1,202 @@
+<template>
+  <div>
+    <h2>{{ $t('entityAudit.home.title') }}</h2>
+
+    <div v-if="error" class="alert alert-danger">
+      {{ error }}
+    </div>
+
+    <div>
+      <h4>{{ $t('entityAudit.home.filter') }}</h4>
+
+      <form @submit.prevent="loadChanges" class="form-inline">
+        <div class="d-flex mb-2">
+          <label class="form-control-label mr-sm-2 col-2" for="entityName">{{ $t('entityAudit.home.entityOrTable') }}</label>
+          <select v-model="selectedEntity" class="form-control mb-2 mr-sm-2 mb-sm-0" id="entityName" required>
+            <option value="">Select</option>
+            <option v-for="entity in entities" :key="entity.value" :value="entity.value">{{ entity.name }}</option>
+          </select>
+
+          <label class="form-control-label mr-sm-2 col-2" for="limit">{{ $t('entityAudit.home.limitTo') }}</label>
+          <select v-model="selectedLimit" class="form-control mb-2 mr-sm-2 mb-sm-0" id="limit" required>
+            <option v-for="limit in limits" :key="limit" :value="limit">{{ limit }}</option>
+          </select>
+
+          <button class="btn btn-primary float-right col-2" type="submit" :disabled="!selectedEntity">
+            <i class="fa fa-sync"></i>
+            <span>{{ $t('entityAudit.home.loadChangeList') }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div v-if="loading">
+      Loading...
+    </div>
+
+    <div v-else>
+      <div
+        v-if="audits.length > 0 || filterEntityId"
+        v-html="renderTranslation($t('entityAudit.result.showInfo'), { entity: selectedEntity, limit: selectedLimit })"
+      ></div>
+
+      <form class="form-inline mb-2">
+        <div class="form-group">
+          <label for="searchFieldEntityId">{{ $t('entityAudit.result.searchFieldLabel') }}</label>
+          <input
+            type="text"
+            class="form-control ml-2"
+            id="searchFieldEntityId"
+            v-model="filterEntityId"
+            :placeholder="$t('entityAudit.result.entityIdFilter')"
+          />
+        </div>
+      </form>
+
+      <table class="table table-condensed table-striped table-bordered">
+        <thead>
+          <tr>
+            <th @click="orderBy('entityId')">{{ $t('entityAudit.result.tableHeader.entityId') }}</th>
+            <th @click="orderBy('action')">{{ $t('entityAudit.result.tableHeader.action') }}</th>
+            <th @click="orderBy('commitVersion')">{{ $t('entityAudit.result.tableHeader.version') }}</th>
+            <th>{{ $t('entityAudit.result.tableHeader.value') }}</th>
+            <th @click="orderBy('modifiedDate')">{{ $t('entityAudit.result.tableHeader.modifiedDate') }}</th>
+            <th @click="orderBy('modifiedBy')">{{ $t('entityAudit.result.tableHeader.modifiedBy') }}</th>
+            <th><i class="fa fa-eye"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="audit in filteredAudits" :key="audit.id">
+            <td>{{ audit.entityId }}</td>
+            <td>{{ audit.action }}</td>
+            <td>{{ audit.commitVersion }}</td>
+            <td><pre class="code">{{ JSON.stringify(audit.entityValue, null, 2) }}</pre></td>
+            <td>{{ formatDate(audit.modifiedDate) }}</td>
+            <td>{{ audit.modifiedBy }}</td>
+            <td>
+              <button
+                type="button"
+                class="btn btn-info btn-xs"
+                @click="openChange(audit)"
+              >
+                <i class="fa fa-eye"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p v-if="audits.length === 0">{{ $t('entityAudit.result.noDataFound') }}</p>
+    </div>
+
+    <!-- ✅ 增加 modal 组件引用 -->
+    <EntityAuditModal ref="modal" />
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
+import EntityAuditModal from './entity-audit-modal.component.vue';
+import EntityAuditService from './entity-audit.service';
+
+const { t } = useI18n();
+
+const service = new EntityAuditService();
+const modal = ref(null);
+
+const entities = ref([]);
+const selectedEntity = ref('');
+const selectedLimit = ref(25);
+const limits = [25, 50, 100, 200];
+const loading = ref(false);
+const filterEntityId = ref('');
+const audits = ref([]);
+const orderProp = ref('modifiedDate');
+const ascending = ref(false);
+
+const filteredAudits = computed(() => {
+  let result = [...audits.value];
+
+  if (filterEntityId.value) {
+    result = result.filter(audit => audit.entityId.toString() === filterEntityId.value);
+  }
+
+  result.sort((a, b) => {
+    const aVal = a[orderProp.value];
+    const bVal = b[orderProp.value];
+    if (aVal === bVal) return 0;
+    return ascending.value ? (aVal < bVal ? -1 : 1) : aVal > bVal ? -1 : 1;
+  });
+
+  return result;
+});
+
+function renderTranslation(text, params) {
+  let result = text;
+  // 匹配所有 {{ key }} 占位符
+  const matches = text.match(/{{ *?\w+ *?}}/g) || [];
+  // 提取 key 并替换为对应值
+  matches.forEach(match => {
+    // 提取 key（去掉 {{ 和 }}）
+    const key = match.replace(/{{ *?| *?}}/g, '').trim();
+    // 如果 params 中有对应的 key，则替换
+    if (params[key] !== undefined) {
+      result = result.replace(match, params[key]);
+    }
+  });
+  // 使用 DOMPurify 清理输出，确保安全
+  return this.sanitize(result);
+}
+function sanitize(html) {
+  // 假设已引入 DOMPurify
+  return window.DOMPurify ? window.DOMPurify.sanitize(html) : html;
+}
+
+function orderBy(prop) {
+  ascending.value = orderProp.value === prop ? !ascending.value : true;
+  orderProp.value = prop;
+}
+
+function formatDate(date) {
+  return new Date(date).toLocaleString();
+}
+
+async function loadChanges() {
+  if (!selectedEntity.value) return;
+  loading.value = true;
+  try {
+    const res = await service.findByEntity(selectedEntity.value, selectedLimit.value);
+    audits.value = res.map(it => ({
+      ...it,
+      entityValue: JSON.parse(it.entityValue || '{}'),
+    }));
+  } finally {
+    loading.value = false;
+  }
+}
+
+async function openChange(audit) {
+  if (!audit.commitVersion || audit.commitVersion < 2) {
+    alert(t('entityAudit.result.firstAuditEntry'));
+  } else {
+    const prev = await service.getPrevVersion(selectedEntity.value, audit.entityId, audit.commitVersion);
+    // 增加给prev的entityType更新值
+    prev.entityType = selectedEntity.value;
+    modal.value?.openChange(prev);
+  }
+}
+
+onMounted(() => {
+  service.getAllAudited().then(data => {
+    entities.value = data;
+  });
+});
+</script>
+
+<style scoped>
+.code {
+  background: #dcdada;
+  padding: 10px;
+}
+</style>

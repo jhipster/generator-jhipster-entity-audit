@@ -1,0 +1,49 @@
+{
+    "global": {
+        "menu": {
+            "admin": {
+                "entityAudit": "实体审计"
+            }
+        }
+    },
+    "entityAudit": {
+        "home": {
+            "title": "实体审计",
+            "filter": "筛选",
+            "entityOrTable": "实体/表",
+            "limitTo": "限制到",
+            "loadChangeList": "加载变更列表"
+        },
+        "result": {
+            "showInfo": "<strong>{{ entity }}</strong> 的最近 <strong>{{ limit }}</strong> 个变更",
+            "searchFieldLabel": "筛选:",
+            "globalFilter": "全局筛选",
+            "entityIdFilter": "实体ID筛选",
+            "tableHeader": {
+                "entityId": "实体ID",
+                "action": "操作",
+                "version": "版本",
+                "value": "值",
+                "modifiedDate": "修改日期",
+                "modifiedBy": "修改人"
+            },
+            "tableBody": {
+                "field": "字段",
+                "value": "值",
+                "viewDetails": "查看审计变更详情"
+            },
+            "noDataFound": "未找到符合条件的数据",
+            "firstAuditEntry": "此条目没有之前的版本。\n这是为此对象捕获的第一个审计条目。"
+        },
+        "detail": {
+            "close": "关闭",
+            "title": "审计详情",
+            "action": "以下数据执行了{{action}}操作",
+            "old": "旧值/移除的值",
+            "new": "新值/添加的值",
+            "changedFields": "更改字段",
+            "allFields": "所有字段",
+            "done": "完成"
+        }
+    }
+}
