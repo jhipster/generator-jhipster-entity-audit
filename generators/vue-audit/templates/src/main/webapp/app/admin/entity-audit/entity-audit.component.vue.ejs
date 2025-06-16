@@ -180,10 +180,10 @@ async function openChange(audit) {
   if (!audit.commitVersion || audit.commitVersion < 2) {
     alert(t('entityAudit.result.firstAuditEntry'));
   } else {
-    const prev = await service.getPrevVersion(selectedEntity.value, audit.entityId, audit.commitVersion);
+    // const prev = await service.getPrevVersion(selectedEntity.value, audit.entityId, audit.commitVersion);
     // 增加给prev的entityType更新值
-    prev.entityType = selectedEntity.value;
-    modal.value?.openChange(prev);
+    audit.entityType = selectedEntity.value;
+    modal.value?.openChange(audit);
   }
 }
 
