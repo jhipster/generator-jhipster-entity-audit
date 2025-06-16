@@ -12,7 +12,10 @@
         <div class="modal-body" @click.stop>
           <p>
             <strong>
-              <span v-html="renderTranslation($t('entityAudit.detail.action'), { action: action })"></span>
+              <translate-html
+                path="entityAudit.detail.action"
+                :values="{ action: action }"
+              />
             </strong>
           </p>
           <del class="diff deleted">{{ $t('entityAudit.detail.old') }}</del>
@@ -38,8 +41,8 @@ import 'vue-diff/dist/index.css';
 import hljs from 'highlight.js/lib/core';
 import json from 'highlight.js/lib/languages/json';
 import { diff } from 'deep-diff'; // 引入 deep-diff 进行 JSON 结构比较
-import DOMPurify from 'dompurify';
 import EntityAuditService from './entity-audit.service';
+import TranslateHtml from "./entity-audit/translate-html.vue";
 
 // 注册 JSON 语言支持
 hljs.registerLanguage('json', json);
@@ -50,19 +53,6 @@ const left = ref('');
 const right = ref('');
 const action = ref('');
 const service = new EntityAuditService();
-
-// 渲染翻译文本并清理 HTML
-function renderTranslation(text, params) {
-  let result = text;
-  const matches = text.match(/{{ *?\w+ *?}}/g) || [];
-  matches.forEach(match => {
-    const key = match.replace(/{{ *?| *?}}/g, '').trim();
-    if (params[key] !== undefined) {
-      result = result.replace(match, params[key]);
-    }
-  });
-  return DOMPurify.sanitize(result);
-}
 
 // 直接返回 JSON 字符串，不添加注解
 function annotateJson(json) {

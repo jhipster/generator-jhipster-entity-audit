@@ -35,10 +35,11 @@
     </div>
 
     <div v-else>
-      <div
+      <translate-html
         v-if="audits.length > 0 || filterEntityId"
-        v-html="renderTranslation($t('entityAudit.result.showInfo'), { entity: selectedEntity, limit: selectedLimit })"
-      ></div>
+        path="entityAudit.result.showInfo"
+        :values="{ entity: selectedEntity, limit: selectedLimit }"
+      />
 
       <form class="form-inline mb-2">
         <div class="form-group">
@@ -99,6 +100,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import EntityAuditModal from './entity-audit-modal.component.vue';
 import EntityAuditService from './entity-audit.service';
+import TranslateHtml from "./entity-audit/translate-html.vue";
 
 const { t } = useI18n();
 
@@ -132,26 +134,6 @@ const filteredAudits = computed(() => {
   return result;
 });
 
-function renderTranslation(text, params) {
-  let result = text;
-  // 匹配所有 {{ key }} 占位符
-  const matches = text.match(/{{ *?\w+ *?}}/g) || [];
-  // 提取 key 并替换为对应值
-  matches.forEach(match => {
-    // 提取 key（去掉 {{ 和 }}）
-    const key = match.replace(/{{ *?| *?}}/g, '').trim();
-    // 如果 params 中有对应的 key，则替换
-    if (params[key] !== undefined) {
-      result = result.replace(match, params[key]);
-    }
-  });
-  // 使用 DOMPurify 清理输出，确保安全
-  return this.sanitize(result);
-}
-function sanitize(html) {
-  // 假设已引入 DOMPurify
-  return window.DOMPurify ? window.DOMPurify.sanitize(html) : html;
-}
 
 function orderBy(prop) {
   ascending.value = orderProp.value === prop ? !ascending.value : true;
