@@ -93,7 +93,7 @@ public class JaversEntityAuditResource {
 
         snapshots.forEach(snapshot -> {
            EntityAuditEvent event = EntityAuditEvent.fromJaversSnapshot(snapshot);
-           event.setEntityType(auditedEntity.getEventEntityType());
+           event.setEntityType(auditedEntity.name());
            auditEvents.add(event);
         });
 
