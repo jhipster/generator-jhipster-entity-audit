@@ -14,6 +14,8 @@ export default class extends BaseApplicationGenerator {
       async composeTask() {
         if (this.blueprintConfig.auditPage && ['angularX', 'angular'].includes(this.jhipsterConfigWithDefaults.clientFramework)) {
           await this.composeWithJHipster('jhipster-entity-audit:angular-audit');
+        } else if (this.blueprintConfig.auditPage && ['vue'].includes(this.jhipsterConfigWithDefaults.clientFramework)) {
+          await this.composeWithJHipster('jhipster-entity-audit:vue-audit');
         }
       },
     });
