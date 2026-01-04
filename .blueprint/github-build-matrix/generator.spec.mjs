@@ -1,7 +1,8 @@
+import { beforeAll, describe, expect, it } from 'vitest';
 import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { beforeAll, describe, expect, it } from 'vitest';
-import { getGithubSamplesGroups, defaultHelpers as helpers, runResult } from 'generator-jhipster/testing';
+
+import { defaultHelpers as helpers, getGithubSamplesGroups, runResult } from 'generator-jhipster/testing';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

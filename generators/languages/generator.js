@@ -1,4 +1,5 @@
 import { existsSync } from 'fs';
+
 import { TEMPLATES_WEBAPP_SOURCES_DIR } from 'generator-jhipster';
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 

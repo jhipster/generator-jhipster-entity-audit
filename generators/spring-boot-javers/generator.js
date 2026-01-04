@@ -1,7 +1,7 @@
+import { createNeedleCallback, normalizeLineEndings } from 'generator-jhipster/generators/base/support';
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import { javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
 import { getPomVersionProperties } from 'generator-jhipster/generators/server/support';
-import { createNeedleCallback, normalizeLineEndings } from 'generator-jhipster/generators/base/support';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
