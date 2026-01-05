@@ -16,7 +16,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { GENERATOR_APP } from 'generator-jhipster/generators';
 import { getGithubSamplesGroup, getGithubSamplesGroups } from 'generator-jhipster/testing';
 
 const DEFAULT_SAMPLES_GROUP = 'samples';
@@ -76,7 +75,7 @@ const command = {
     },
   },
   options: {},
-  import: [GENERATOR_APP],
+  import: ['jhipster:app'],
 };
 
 export default command;
