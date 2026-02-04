@@ -15,8 +15,8 @@ describe('SubGenerator spring-boot-javers of entity-audit JHipster blueprint', (
           ignoreNeedlesError: true,
           auditFramework: 'javers',
         })
-        .withJHipsterLookup()
-        .withParentBlueprintLookup();
+        .withJHipsterGenerators()
+        .withConfiguredBlueprint();
     });
 
     it('should succeed', () => {
@@ -55,7 +55,7 @@ entity WithEntityPackage {
 }
 `,
         )
-        .withParentBlueprintLookup();
+        .withConfiguredBlueprint();
     });
 
     it('generate .yo-rc.json content', () => {

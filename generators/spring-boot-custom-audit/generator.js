@@ -1,6 +1,6 @@
 import { JAVA_MAIN_RESOURCES_DIR } from 'generator-jhipster';
-import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
+import BaseApplicationGenerator from 'generator-jhipster/generators/spring-boot';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
@@ -8,7 +8,7 @@ export default class extends BaseApplicationGenerator {
   }
 
   async beforeQueue() {
-    await this.dependsOnBootstrapApplicationBase();
+    await this.dependsOnBootstrap('java');
     await this.dependsOnJHipster('jhipster-entity-audit:java-audit');
   }
 
@@ -16,7 +16,7 @@ export default class extends BaseApplicationGenerator {
     return this.asConfiguringTaskGroup({
       async configuringTask() {
         if (!this.blueprintConfig.entityAuditEventChangelogDate) {
-          this.blueprintConfig.entityAuditEventChangelogDate = this.dateFormatForLiquibase();
+          this.blueprintConfig.entityAuditEventChangelogDate = this.nextTimestamp();
         }
       },
     });
@@ -96,10 +96,10 @@ export default class extends BaseApplicationGenerator {
         );
       },
 
-      async customizeAbstractAuditingEntity({ source, application: { mainJavaPackageDir, packageName } }) {
+      async customizeAbstractAuditingEntity({ source, application: { javaPackageSrcDir, packageName } }) {
         // add the new Listener to the 'AbstractAuditingEntity' class and add import if necessary
         source.editJavaFile(
-          `${mainJavaPackageDir}domain/AbstractAuditingEntity.java`,
+          `${javaPackageSrcDir}domain/AbstractAuditingEntity.java`,
           { imports: [`${packageName}.audit.EntityAuditEventListener`] },
           contents => {
             if (!contents.includes(', EntityAuditEventListener.class')) {

@@ -128,6 +128,9 @@ exports[`SubGenerator server of entity-audit JHipster blueprint > run > should s
   "src/main/java/com/mycompany/myapp/config/CacheConfiguration.java": {
     "stateCleared": "modified",
   },
+  "src/main/java/com/mycompany/myapp/config/CacheKeyGeneratorConfiguration.java": {
+    "stateCleared": "modified",
+  },
   "src/main/java/com/mycompany/myapp/config/Constants.java": {
     "stateCleared": "modified",
   },
@@ -138,6 +141,9 @@ exports[`SubGenerator server of entity-audit JHipster blueprint > run > should s
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/JacksonConfiguration.java": {
+    "stateCleared": "modified",
+  },
+  "src/main/java/com/mycompany/myapp/config/JacksonHibernateConfiguration.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/LiquibaseConfiguration.java": {
@@ -362,55 +368,7 @@ exports[`SubGenerator server of entity-audit JHipster blueprint > run > should s
   "src/main/resources/templates/mail/passwordResetEmail.html": {
     "stateCleared": "modified",
   },
-  "src/main/webapp/i18n/en/activate.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/adminAuthority.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/configuration.json": {
-    "stateCleared": "modified",
-  },
   "src/main/webapp/i18n/en/entity-audit.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/error.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/global.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/health.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/home.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/login.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/logs.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/metrics.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/password.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/register.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/reset.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/sessions.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/settings.json": {
-    "stateCleared": "modified",
-  },
-  "src/main/webapp/i18n/en/user-management.json": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/IntegrationTest.java": {
@@ -425,19 +383,10 @@ exports[`SubGenerator server of entity-audit JHipster blueprint > run > should s
   "src/test/java/com/mycompany/myapp/config/CRLFLogConverterTest.java": {
     "stateCleared": "modified",
   },
-  "src/test/java/com/mycompany/myapp/config/EmbeddedSQL.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/config/PostgreSqlTestContainer.java": {
+  "src/test/java/com/mycompany/myapp/config/DatabaseTestcontainer.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/SpringBootTestClassOrderer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/config/SqlTestContainer.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/java/com/mycompany/myapp/config/SqlTestContainersSpringContextCustomizerFactory.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/config/StaticResourcesWebConfigurerTest.java": {
@@ -528,9 +477,6 @@ exports[`SubGenerator server of entity-audit JHipster blueprint > run > should s
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/web/rest/errors/ExceptionTranslatorTestController.java": {
-    "stateCleared": "modified",
-  },
-  "src/test/resources/META-INF/spring.factories": {
     "stateCleared": "modified",
   },
   "src/test/resources/config/application-testdev.yml": {

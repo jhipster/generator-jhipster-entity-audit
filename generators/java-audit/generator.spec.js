@@ -28,8 +28,8 @@ describe('SubGenerator java-audit of entity-audit JHipster blueprint', () => {
             ignoreNeedlesError: true,
             auditFramework,
           })
-          .withJHipsterLookup()
-          .withParentBlueprintLookup();
+          .withJHipsterGenerators()
+          .withConfiguredBlueprint();
       });
 
       it('should succeed', () => {

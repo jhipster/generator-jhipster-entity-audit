@@ -1,4 +1,4 @@
-import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
+import BaseApplicationGenerator from 'generator-jhipster/generators/java';
 import { javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
 
 const COMMON_ATTRIBUTES = {
@@ -126,11 +126,11 @@ export default class extends BaseApplicationGenerator {
   }
 
   get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
-    return {
-      async postWritingEntitiesTask({ application: { testJavaPackageDir }, entities }) {
+    return this.asPostWritingEntitiesTaskGroup({
+      async postWritingEntitiesTask({ application: { javaPackageTestDir }, entities }) {
         for (const entity of entities.filter(e => !e.builtIn && e.enableAudit)) {
           const { persistClass, entityPackage = '' } = entity;
-          this.editFile(`${testJavaPackageDir}${entityPackage}/domain/${persistClass}Asserts.java`, contents =>
+          this.editFile(`${javaPackageTestDir}${entityPackage}/domain/${persistClass}Asserts.java`, contents =>
             contents
               .replace(
                 `.satisfies(a -> assertThat(a.getLastModifiedBy()).as("check lastModifiedBy").isEqualTo(expected.getLastModifiedBy()))`,
@@ -143,7 +143,7 @@ export default class extends BaseApplicationGenerator {
           );
         }
       },
-    };
+    });
   }
 
   shouldAskForPrompts() {

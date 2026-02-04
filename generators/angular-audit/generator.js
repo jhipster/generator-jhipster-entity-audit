@@ -9,7 +9,7 @@ export default class extends BaseApplicationGenerator {
   }
 
   async beforeQueue() {
-    await this.dependsOnJHipster('bootstrap-application');
+    await this.dependsOnBootstrap('client');
   }
 
   get [BaseApplicationGenerator.PREPARING]() {

@@ -1,4 +1,5 @@
 import { existsSync } from 'fs';
+
 import { TEMPLATES_WEBAPP_SOURCES_DIR } from 'generator-jhipster';
 import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 
@@ -8,7 +9,7 @@ export default class extends BaseApplicationGenerator {
   }
 
   async beforeQueue() {
-    await this.dependsOnJHipster('bootstrap-application');
+    await this.dependsOnBootstrap('languages');
   }
 
   get [BaseApplicationGenerator.WRITING]() {
@@ -27,7 +28,7 @@ export default class extends BaseApplicationGenerator {
           return {
             file: `${TEMPLATES_WEBAPP_SOURCES_DIR}i18n/${sourceLanguage}/entity-audit.json`,
             renameTo: `${clientSrcDir}i18n/${language}/entity-audit.json`,
-            noEjs: true,
+            transform: false,
           };
         });
         if (templates.length > 0) {

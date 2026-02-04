@@ -8,9 +8,6 @@ exports[`SubGenerator java-audit of entity-audit JHipster blueprint > run using 
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/audit/AsyncEntityAuditEventWriter.java": {
     "stateCleared": "modified",
   },
@@ -18,9 +15,6 @@ exports[`SubGenerator java-audit of entity-audit JHipster blueprint > run using 
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/audit/EntityAuditEventWriter.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/audit/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/Audited.java": {
@@ -35,25 +29,10 @@ exports[`SubGenerator java-audit of entity-audit JHipster blueprint > run using 
   "src/main/java/com/mycompany/myapp/domain/enumeration/EntityAuditAction.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/domain/enumeration/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/repository/EntityAuditEventRepository.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/repository/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/web/rest/EntityAuditResource.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/resources/config/liquibase/changelog/20220101000100_added_entity_EntityAuditEvent.xml": {
@@ -94,28 +73,16 @@ exports[`SubGenerator java-audit of entity-audit JHipster blueprint > run using 
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/audit/AuditedEntity.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/audit/JaversAuthorProvider.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/config/audit/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/domain/Audited.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/Authority.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/JaversEntityAuditResource.java": {
@@ -125,12 +92,6 @@ exports[`SubGenerator java-audit of entity-audit JHipster blueprint > run using 
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/dto/EntityAuditEvent.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/web/rest/dto/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/AssertUtils.java": {
@@ -165,19 +126,10 @@ exports[`SubGenerator java-audit of entity-audit JHipster blueprint > run using 
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/domain/Audited.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/domain/Authority.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/AssertUtils.java": {
