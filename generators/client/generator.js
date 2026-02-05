@@ -1,4 +1,4 @@
-import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
+import BaseApplicationGenerator from 'generator-jhipster/generators/client';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {

@@ -2,8 +2,8 @@ import { readFileSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { extname, join } from 'node:path';
 
+import { getGithubSamplesGroup } from 'generator-jhipster/ci';
 import BaseGenerator from 'generator-jhipster/generators/base';
-import { getGithubSamplesGroup } from 'generator-jhipster/testing';
 
 export default class extends BaseGenerator {
   /** @type {string | undefined} */
