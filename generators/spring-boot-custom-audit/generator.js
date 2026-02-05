@@ -72,9 +72,9 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
-      async customizeArchTest({ application: { testJavaPackageDir, packageName }, source }) {
+      async customizeArchTest({ application: { javaPackageTestDir, packageName }, source }) {
         source.editJavaFile(
-          `${testJavaPackageDir}TechnicalStructureTest.java`,
+          `${javaPackageTestDir}TechnicalStructureTest.java`,
           {
             staticImports: [
               'com.tngtech.archunit.core.domain.JavaClass.Predicates.type',
