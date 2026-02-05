@@ -1,4 +1,5 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { NgbModal, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { tap } from 'rxjs';
@@ -23,6 +24,7 @@ import EntityAuditModalComponent from './entity-audit-modal.component';
   imports: [
     Alert,
     AlertError,
+    DatePipe,
     FontAwesomeModule,
     FormsModule,
     EntityAuditModalComponent,
