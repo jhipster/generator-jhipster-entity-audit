@@ -26,8 +26,8 @@ describe('SubGenerator spring-boot-custom-audit of entity-audit JHipster bluepri
           ignoreNeedlesError: true,
           auditFramework: 'custom',
         })
-        .withJHipsterLookup()
-        .withParentBlueprintLookup();
+        .withJHipsterGenerators()
+        .withConfiguredBlueprint();
     });
 
     it('should succeed', () => {

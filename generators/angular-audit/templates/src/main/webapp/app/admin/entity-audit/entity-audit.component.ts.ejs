@@ -1,10 +1,18 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DatePipe, JsonPipe } from '@angular/common';
+import { NgbModal, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { tap } from 'rxjs';
 
-import SharedModule from 'app/shared/shared.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule } from '@ngx-translate/core';
+import { TranslateDirective } from 'app/shared/language';
+<%_ } _%>
 import { AlertService } from 'app/core/util/alert.service';
+import { AlertError } from 'app/shared/alert/alert-error';
+import { Alert } from 'app/shared/alert/alert';
+
 import { EntityAuditService } from './entity-audit.service';
 import { EntityAuditEntityChoice, EntityAuditEvent } from './entity-audit-event.model';
 import EntityAuditModalComponent from './entity-audit-modal.component';
@@ -13,7 +21,20 @@ import EntityAuditModalComponent from './entity-audit-modal.component';
   standalone: true,
   selector: '<%= jhiPrefixDashed %>-entity-audit',
   templateUrl: './entity-audit.component.html',
-  imports: [SharedModule, FormsModule, EntityAuditModalComponent],
+  imports: [
+    Alert,
+    AlertError,
+    DatePipe,
+    FontAwesomeModule,
+    FormsModule,
+    EntityAuditModalComponent,
+    NgbTooltipModule,
+    JsonPipe,
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule,
+<%_ } _%>
+  ],
   styles: [
     `
       .code {

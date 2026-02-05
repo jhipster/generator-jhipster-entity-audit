@@ -1,4 +1,4 @@
-import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
+import BaseApplicationGenerator from 'generator-jhipster/generators/client';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
@@ -6,13 +6,13 @@ export default class extends BaseApplicationGenerator {
   }
 
   async beforeQueue() {
-    await this.dependsOnJHipster('bootstrap-application');
+    await this.dependsOnBootstrap('client');
   }
 
   get [BaseApplicationGenerator.COMPOSING]() {
     return this.asComposingTaskGroup({
       async composeTask() {
-        if (this.blueprintConfig.auditPage && ['angularX', 'angular'].includes(this.jhipsterConfigWithDefaults.clientFramework)) {
+        if (this.blueprintConfig.auditPage && this.jhipsterConfigWithDefaults.clientFramework === 'angular') {
           await this.composeWithJHipster('jhipster-entity-audit:angular-audit');
         }
       },

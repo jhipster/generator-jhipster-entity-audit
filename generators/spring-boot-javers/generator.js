@@ -1,7 +1,8 @@
-import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
+import { createNeedleCallback } from 'generator-jhipster/generators/base-core/support';
 import { javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
-import { getPomVersionProperties } from 'generator-jhipster/generators/server/support';
-import { createNeedleCallback, normalizeLineEndings } from 'generator-jhipster/generators/base/support';
+import { getPomVersionProperties } from 'generator-jhipster/generators/java-simple-application/generators/maven/support';
+import BaseApplicationGenerator from 'generator-jhipster/generators/spring-boot';
+import { normalizeLineEndings } from 'generator-jhipster/utils';
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
@@ -9,7 +10,7 @@ export default class extends BaseApplicationGenerator {
   }
 
   async beforeQueue() {
-    await this.dependsOnBootstrapApplicationBase();
+    await this.dependsOnBootstrap('java');
     await this.dependsOnJHipster('jhipster-entity-audit:java-audit');
   }
 
@@ -106,10 +107,10 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
       async postWritingTemplateTask({ source, application }) {
-        const { mainJavaPackageDir, databaseTypeSql, databaseTypeMongodb, javaDependencies } = application;
+        const { javaPackageSrcDir, databaseTypeSql, databaseTypeMongodb, javaDependencies } = application;
         // add annotations for Javers to ignore fields in 'AbstractAuditingEntity' class
         source.editJavaFile(
-          `${mainJavaPackageDir}domain/AbstractAuditingEntity.java`,
+          `${javaPackageSrcDir}domain/AbstractAuditingEntity.java`,
           { annotations: [{ annotation: 'DiffIgnore', package: 'org.javers.core.metamodel.annotation' }] },
           contents => contents.replace(/\s*import com.fasterxml.jackson.annotation.JsonIgnore;/, ''),
         );

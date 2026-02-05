@@ -5,25 +5,13 @@ exports[`SubGenerator spring-boot-javers of entity-audit JHipster blueprint > ru
   ".yo-rc.json": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/GeneratedByJHipster.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/config/audit/AuditedEntity.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/config/audit/JaversAuthorProvider.java": {
     "stateCleared": "modified",
   },
-  "src/main/java/com/mycompany/myapp/config/audit/package-info.java": {
-    "stateCleared": "modified",
-  },
   "src/main/java/com/mycompany/myapp/domain/Authority.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/domain/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/package-info.java": {
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/JaversEntityAuditResource.java": {
@@ -33,12 +21,6 @@ exports[`SubGenerator spring-boot-javers of entity-audit JHipster blueprint > ru
     "stateCleared": "modified",
   },
   "src/main/java/com/mycompany/myapp/web/rest/dto/EntityAuditEvent.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/web/rest/dto/package-info.java": {
-    "stateCleared": "modified",
-  },
-  "src/main/java/com/mycompany/myapp/web/rest/package-info.java": {
     "stateCleared": "modified",
   },
   "src/test/java/com/mycompany/myapp/domain/AssertUtils.java": {

@@ -16,7 +16,7 @@ describe('SubGenerator angular-audit of entity-audit JHipster blueprint', () => 
         })
         .withJHipsterGenerators()
         .withConfiguredBlueprint()
-        .withBlueprintConfig();
+        .withBlueprintConfig({});
     });
 
     it('should succeed', () => {

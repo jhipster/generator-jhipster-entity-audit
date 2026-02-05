@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { UnifiedDiffComponent } from 'ngx-diff';
 
-import SharedModule from 'app/shared/shared.module';
+<%_ if (enableTranslation) { _%>
+import { TranslateModule } from '@ngx-translate/core';
+import { TranslateDirective } from 'app/shared/language';
+<%_ } _%>
 import { EntityAuditService } from './entity-audit.service';
 import { EntityAuditEvent } from './entity-audit-event.model';
 
@@ -11,7 +14,13 @@ import { EntityAuditEvent } from './entity-audit-event.model';
   standalone: true,
   selector: '<%= jhiPrefixDashed %>-entity-audit-modal',
   templateUrl: './entity-audit-modal.component.html',
-  imports: [SharedModule, UnifiedDiffComponent],
+  imports: [
+    UnifiedDiffComponent,
+<%_ if (enableTranslation) { _%>
+    TranslateDirective,
+    TranslateModule,
+<%_ } _%>
+  ],
   styles: [
     `
       @import 'ngx-diff/styles/default-theme';
@@ -29,14 +38,11 @@ import { EntityAuditEvent } from './entity-audit-event.model';
   ],
 })
 export default class EntityAuditModalComponent {
-  action?: string;
+  public activeModal = inject(NgbActiveModal);  action?: string;
   left?: string;
   right?: string;
 
-  constructor(
-    private service: EntityAuditService,
-    public activeModal: NgbActiveModal,
-  ) {}
+  private service = inject(EntityAuditService);
 
   openChange(audit: EntityAuditEvent): void {
     this.service.getPrevVersion(audit.entityType, audit.entityId, audit.commitVersion!).subscribe((res: HttpResponse<EntityAuditEvent>) => {

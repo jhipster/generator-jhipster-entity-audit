@@ -15,8 +15,8 @@ describe('SubGenerator server of entity-audit JHipster blueprint', () => {
           ignoreNeedlesError: true,
           blueprint: ['entity-audit'],
         })
-        .withJHipsterLookup()
-        .withParentBlueprintLookup()
+        .withJHipsterGenerators()
+        .withConfiguredBlueprint()
         .withMockedGenerators(['jhipster-entity-audit:java-audit']);
     });
 

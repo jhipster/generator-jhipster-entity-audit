@@ -23,10 +23,10 @@ jobs:
     outputs:
       matrix: ${{ steps.build.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
       - id: build
         run: |
           npm install
@@ -43,11 +43,11 @@ jobs:
       fail-fast: false
       matrix: ${{fromJson(needs.build-matrix.outputs.matrix)}}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           path: generator-jhipster-entity-audit
           fetch-depth: 2
-      - uses: jhipster/actions/setup-runner@v0
+      - uses: jhipster/actions/setup-runner@v1
         with:
           java-version: ${{ matrix.java-version }}
           node-version: ${{ matrix.node-version }}
@@ -57,7 +57,7 @@ jobs:
       - run: npm install
         working-directory: ${{ github.workspace }}/generator-jhipster-entity-audit
       - run: cli.cjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }}
-      - uses: jhipster/actions/compare-sample@v0
+      - uses: jhipster/actions/compare-sample@v1
         id: compare
         if: >-
           github.event.pull_request &&
@@ -78,7 +78,7 @@ jobs:
         if: steps.compare.outputs.equals != 'true'
         id: e2e
       - name: Store backend test failure logs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always() && steps.backend.outcome == 'failure'
         with:
           name: log-${{ matrix.job-name || matrix.sample }}
@@ -86,7 +86,7 @@ jobs:
             ${{ github.workspace }}/app/build/test-results/**/*.xml
             ${{ github.workspace }}/app/target/surefire-reports
       - name: Store cypress screenshots
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.job-name || matrix.sample }}

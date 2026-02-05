@@ -1,4 +1,4 @@
-import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
+import BaseApplicationGenerator from 'generator-jhipster/generators/client';
 import { clientApplicationTemplatesBlock } from 'generator-jhipster/generators/client/support';
 
 export default class extends BaseApplicationGenerator {
@@ -9,7 +9,7 @@ export default class extends BaseApplicationGenerator {
   }
 
   async beforeQueue() {
-    await this.dependsOnJHipster('bootstrap-application');
+    await this.dependsOnBootstrap('client');
   }
 
   get [BaseApplicationGenerator.PREPARING]() {
@@ -61,7 +61,6 @@ export default class extends BaseApplicationGenerator {
             'ngx-diff': this.ngxDiff,
           },
         });
-        if (this.options.skipMenu) return;
         source.addAdminRoute?.({
           route: 'entity-audit',
           modulePath: './entity-audit/entity-audit.component',
