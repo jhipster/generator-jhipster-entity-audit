@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { UnifiedDiffComponent } from 'ngx-diff';
@@ -38,14 +38,11 @@ import { EntityAuditEvent } from './entity-audit-event.model';
   ],
 })
 export default class EntityAuditModalComponent {
-  action?: string;
+  public activeModal = inject(NgbActiveModal);  action?: string;
   left?: string;
   right?: string;
 
-  constructor(
-    private service: EntityAuditService,
-    public activeModal: NgbActiveModal,
-  ) {}
+  private service = inject(EntityAuditService);
 
   openChange(audit: EntityAuditEvent): void {
     this.service.getPrevVersion(audit.entityType, audit.entityId, audit.commitVersion!).subscribe((res: HttpResponse<EntityAuditEvent>) => {
