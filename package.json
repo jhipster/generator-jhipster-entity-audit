@@ -52,12 +52,8 @@
     "update-snapshot": "vitest run --update",
     "vitest": "vitest"
   },
-  "overrides": {
-    "chevrotain": "11.0.3",
-    "yeoman-environment": "5.1.3"
-  },
   "dependencies": {
-    "generator-jhipster": "9.0.0-beta.2"
+    "generator-jhipster": "9.0.0-beta.3"
   },
   "devDependencies": {
     "ejs-lint": "2.0.1",
@@ -72,7 +68,7 @@
     "yeoman-test": ">=10"
   },
   "engines": {
-    "generator-jhipster": "^9.0.0-beta.2",
+    "generator-jhipster": "^9.0.0-beta.3",
     "node": "^22.18.0 || >=24.11.0"
   }
 }
