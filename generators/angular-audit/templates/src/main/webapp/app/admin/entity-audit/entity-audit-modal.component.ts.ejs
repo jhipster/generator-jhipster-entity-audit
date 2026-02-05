@@ -3,7 +3,10 @@ import { HttpResponse } from '@angular/common/http';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { UnifiedDiffComponent } from 'ngx-diff';
 
-import SharedModule from 'app/shared/shared.module';
+<%_ if (enableTranslation) { _%>
+import { TranslateDirective } from 'app/shared/language';
+import { TranslateModule } from '@ngx-translate/core';
+<%_ } _%>
 import { EntityAuditService } from './entity-audit.service';
 import { EntityAuditEvent } from './entity-audit-event.model';
 
@@ -11,7 +14,11 @@ import { EntityAuditEvent } from './entity-audit-event.model';
   standalone: true,
   selector: '<%= jhiPrefixDashed %>-entity-audit-modal',
   templateUrl: './entity-audit-modal.component.html',
-  imports: [SharedModule, UnifiedDiffComponent],
+  imports: [
+    UnifiedDiffComponent,
+    TranslateDirective,
+    TranslateModule,
+  ],
   styles: [
     `
       @import 'ngx-diff/styles/default-theme';
