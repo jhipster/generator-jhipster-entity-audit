@@ -15,7 +15,9 @@
   <br />
 
   <label for="changelogDiff">__jhiTranslateTag__('entityAudit.detail.changedFields')</label>
-  <ngx-unified-diff id="changelogDiff" *ngIf="left && right" class="ngx-diff-light-theme" [before]="left" [after]="right" />
+  @if (left && right) {
+    <ngx-unified-diff id="changelogDiff" class="ngx-diff-light-theme" [before]="left" [after]="right" />
+  }
 </div>
 <div class="modal-footer">
   <button
