@@ -323,6 +323,9 @@ exports[`SubGenerator server of entity-audit JHipster blueprint > run > should s
   "src/main/resources/config/application-prod.yml": {
     "stateCleared": "modified",
   },
+  "src/main/resources/config/application-secret-samples.yml": {
+    "stateCleared": "modified",
+  },
   "src/main/resources/config/application-tls.yml": {
     "stateCleared": "modified",
   },
