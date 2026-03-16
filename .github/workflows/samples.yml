@@ -78,7 +78,7 @@ jobs:
         if: steps.compare.outputs.equals != 'true'
         id: e2e
       - name: Store backend test failure logs
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always() && steps.backend.outcome == 'failure'
         with:
           name: log-${{ matrix.job-name || matrix.sample }}
@@ -86,7 +86,7 @@ jobs:
             ${{ github.workspace }}/app/build/test-results/**/*.xml
             ${{ github.workspace }}/app/target/surefire-reports
       - name: Store cypress screenshots
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         if: always() && steps.e2e.outcome == 'failure'
         with:
           name: screenshots-${{ matrix.job-name || matrix.sample }}

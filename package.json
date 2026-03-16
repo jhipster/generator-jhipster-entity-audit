@@ -53,22 +53,22 @@
     "vitest": "vitest"
   },
   "dependencies": {
-    "generator-jhipster": "9.0.0-beta.3"
+    "generator-jhipster": "9.0.0"
   },
   "devDependencies": {
     "ejs-lint": "2.0.1",
     "eslint": "9.39.2",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.5",
-    "globals": "17.3.0",
+    "globals": "17.4.0",
     "jiti": "2.6.1",
     "prettier": "3.8.1",
-    "prettier-plugin-packagejson": "3.0.0",
+    "prettier-plugin-packagejson": "3.0.2",
     "vitest": "4.0.18",
     "yeoman-test": ">=10"
   },
   "engines": {
-    "generator-jhipster": "^9.0.0-beta.3",
+    "generator-jhipster": "^9.0.0",
     "node": "^22.18.0 || >=24.11.0"
   }
 }
