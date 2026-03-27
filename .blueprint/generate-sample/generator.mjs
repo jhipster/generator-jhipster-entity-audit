@@ -3,9 +3,9 @@ import { readdir } from 'node:fs/promises';
 import { extname, join } from 'node:path';
 
 import { getGithubSamplesGroup } from 'generator-jhipster/ci';
-import BaseGenerator from 'generator-jhipster/generators/base';
+import BaseCoreGenerator from 'generator-jhipster/generators/base-core';
 
-export default class extends BaseGenerator {
+export default class extends BaseCoreGenerator {
   /** @type {string | undefined} */
   samplesFolder;
   /** @type {string} */
@@ -21,12 +21,8 @@ export default class extends BaseGenerator {
   /** @type {any} */
   generatorOptions;
 
-  constructor(args, opts, features) {
-    super(args, opts, { ...features, queueCommandTasks: true, jhipsterBootstrap: false });
-  }
-
-  get [BaseGenerator.WRITING]() {
-    return this.asWritingTaskGroup({
+  get [BaseCoreGenerator.WRITING]() {
+    return this.asAnyTaskGroup({
       async copySample() {
         const { samplesFolder, samplesGroup, all, sampleName } = this;
         const samplesPath = samplesFolder ? join(samplesFolder, samplesGroup) : samplesGroup;
@@ -54,7 +50,7 @@ export default class extends BaseGenerator {
             this.copyTemplate(join(sampleFolder, jdlFile), jdlFile, { noGlob: true });
           } else if (sampleType === 'jdl-ejs') {
             const jdlFile = `${sampleFile}.jdl`;
-            this.renderTemplate(join(sampleFolder, `${jdlFile}.ejs`), jdlFile, templateOptions, undefined, { noGlob: true });
+            this.renderTemplate(join(sampleFolder, `${jdlFile}.ejs`), jdlFile, templateOptions, { noGlob: true });
           } else if (sampleType === 'yo-rc') {
             this.copyTemplate('**', '', {
               fromBasePath: this.templatePath(sampleFolder, sampleFile),
@@ -66,8 +62,8 @@ export default class extends BaseGenerator {
     });
   }
 
-  get [BaseGenerator.END]() {
-    return this.asEndTaskGroup({
+  get [BaseCoreGenerator.END]() {
+    return this.asAnyTaskGroup({
       async generateYoRcSample() {
         if (this.sampleType !== 'yo-rc') return;
 

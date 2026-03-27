@@ -5,10 +5,6 @@ import BaseApplicationGenerator from 'generator-jhipster/generators/spring-boot'
 import { normalizeLineEndings } from 'generator-jhipster/utils';
 
 export default class extends BaseApplicationGenerator {
-  constructor(args, opts, features) {
-    super(args, opts, { ...features, queueCommandTasks: true });
-  }
-
   async beforeQueue() {
     await this.dependsOnBootstrap('java');
     await this.dependsOnJHipster('jhipster-entity-audit:java-audit');

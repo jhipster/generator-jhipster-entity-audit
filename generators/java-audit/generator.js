@@ -41,10 +41,6 @@ export default class extends BaseApplicationGenerator {
   auditUpdateType;
   auditedEntities;
 
-  constructor(args, opts, features) {
-    super(args, opts, { ...features, queueCommandTasks: true });
-  }
-
   async beforeQueue() {
     await this.dependsOnJHipster('jhipster:java:domain');
   }

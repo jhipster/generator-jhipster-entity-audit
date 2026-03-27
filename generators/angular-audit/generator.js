@@ -4,10 +4,6 @@ import { clientApplicationTemplatesBlock } from 'generator-jhipster/generators/c
 export default class extends BaseApplicationGenerator {
   ngxDiff;
 
-  constructor(args, opts, features) {
-    super(args, opts, { ...features, queueCommandTasks: true });
-  }
-
   async beforeQueue() {
     await this.dependsOnBootstrap('client');
   }
