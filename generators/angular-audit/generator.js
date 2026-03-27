@@ -4,10 +4,6 @@ import { clientApplicationTemplatesBlock } from 'generator-jhipster/generators/c
 export default class extends BaseApplicationGenerator {
   ngxDiff;
 
-  constructor(args, opts, features) {
-    super(args, opts, { ...features, queueCommandTasks: true });
-  }
-
   async beforeQueue() {
     await this.dependsOnBootstrap('client');
   }
@@ -17,7 +13,7 @@ export default class extends BaseApplicationGenerator {
       loadDependabot() {
         const {
           dependencies: { 'ngx-diff': ngxDiff },
-        } = this.fs.readJSON(this.templatePath('../resources/package.json'));
+        } = this.readResourcesPackageJson();
         this.ngxDiff = ngxDiff;
       },
     });

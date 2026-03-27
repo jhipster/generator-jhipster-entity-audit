@@ -5,7 +5,7 @@ import BaseApplicationGenerator from 'generator-jhipster/generators/base-applica
 
 export default class extends BaseApplicationGenerator {
   constructor(args, opts, features) {
-    super(args, opts, { ...features, queueCommandTasks: true, sbsBlueprint: true });
+    super(args, opts, { ...features, sbsBlueprint: true });
   }
 
   async beforeQueue() {

@@ -8,7 +8,7 @@ export default asCommand({
         type: String,
       },
       prompt: {
-        type: 'list',
+        type: 'select',
         message: 'Choose which audit framework you would like to use.',
         default: 'custom',
       },
@@ -34,7 +34,7 @@ export default asCommand({
       },
       prompt: generator => ({
         when: answers => (generator.initialRun || generator.options.askAnswered) && ['javers', 'custom'].includes(answers.auditFramework),
-        type: 'list',
+        type: 'select',
         name: 'auditUpdateType',
         message: 'Do you want to enable audit for all existing entities?',
         choices: [
