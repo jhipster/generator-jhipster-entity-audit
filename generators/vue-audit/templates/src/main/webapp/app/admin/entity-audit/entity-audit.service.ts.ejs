@@ -1,0 +1,19 @@
+import axios from 'axios';
+
+class EntityAuditService {
+  getAllAudited() {
+    return axios.get('api/audits/entity/all').then(res => res.data);
+  }
+
+  findByEntity(entity, limit) {
+    return axios.get(`api/audits/entity/changes?entityType=${entity}&limit=${limit}`).then(res => res.data);
+  }
+
+  getPrevVersion(qualifiedName, entityId, commitVersion) {
+    return axios.get(
+      `api/audits/entity/changes/version/previous?qualifiedName=${qualifiedName}&entityId=${entityId}&commitVersion=${commitVersion}`
+    ).then(res => res.data);
+  }
+}
+
+export default EntityAuditService;
