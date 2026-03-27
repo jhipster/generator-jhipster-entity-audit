@@ -21,7 +21,7 @@ jobs:
         with:
           generator-path: generator-jhipster-entity-audit
         if: always()
-      - run: cli.cjs generate-sample --all
+      - run: cli.cts generate-sample --all
         continue-on-error: true
       - run: npm run backend:build-cache --workspaces
         continue-on-error: true
