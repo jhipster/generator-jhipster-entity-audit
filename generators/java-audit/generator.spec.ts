@@ -21,7 +21,7 @@ describe('SubGenerator java-audit of entity-audit JHipster blueprint', () => {
                   fieldType: 'String',
                 },
               ],
-            },
+            } as any,
           ])
           .withOptions({
             creationTimestamp: '2022-01-01',

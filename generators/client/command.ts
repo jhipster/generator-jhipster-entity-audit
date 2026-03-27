@@ -1,4 +1,4 @@
-import { asCommand } from 'generator-jhipster';
+import { asCommand } from '../base-generator.ts';
 
 export default asCommand({
   configs: {

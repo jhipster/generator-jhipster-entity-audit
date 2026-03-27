@@ -1,5 +1,6 @@
-import BaseApplicationGenerator from 'generator-jhipster/generators/java';
 import { javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
+
+import { EntityAuditApplicationGenerator } from '../base-generator.ts';
 
 const COMMON_ATTRIBUTES = {
   // Hides form on create
@@ -37,15 +38,16 @@ const ADDITIONAL_FIELDS = [
   },
 ];
 
-export default class extends BaseApplicationGenerator {
-  auditUpdateType;
-  auditedEntities;
+export default class extends EntityAuditApplicationGenerator {
+  declare initialRun: boolean;
+  auditUpdateType?: string;
+  auditedEntities?: string[];
 
   async beforeQueue() {
     await this.dependsOnJHipster('jhipster:java:domain');
   }
 
-  get [BaseApplicationGenerator.INITIALIZING]() {
+  get [EntityAuditApplicationGenerator.INITIALIZING]() {
     return this.asInitializingTaskGroup({
       setInitialRun() {
         this.initialRun = this.blueprintConfig.auditFramework === undefined;
@@ -53,7 +55,7 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.COMPOSING]() {
+  get [EntityAuditApplicationGenerator.COMPOSING]() {
     return this.asComposingTaskGroup({
       async composingTask() {
         if (this.blueprintConfig.auditFramework === 'javers') {
@@ -67,7 +69,7 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
+  get [EntityAuditApplicationGenerator.CONFIGURING_EACH_ENTITY]() {
     return this.asConfiguringEachEntityTaskGroup({
       async configureEntity({ entityName, entityConfig, entityStorage }) {
         entityConfig.annotations ??= {};
@@ -77,20 +79,20 @@ export default class extends BaseApplicationGenerator {
         }
         if (entityConfig.annotations.enableAudit === undefined) {
           const auditedEntities = this.auditUpdateType === 'all' ? this.getExistingEntities().map(e => e.name) : this.auditedEntities;
-          entityConfig.annotations.enableAudit = auditedEntities?.includes(entityName);
+          entityConfig.annotations!.enableAudit = auditedEntities?.includes(entityName) ?? false;
           entityStorage.save();
         }
         if (!entityConfig.annotations.enableAudit) return;
 
-        const fieldNames = entityConfig.fields.map(f => f.fieldName);
+        const fieldNames = entityConfig.fields!.map(f => f.fieldName);
         const fieldsToAdd = ADDITIONAL_FIELDS.filter(f => !fieldNames.includes(f.fieldName)).map(f => ({ ...f }));
-        entityConfig.fields = entityConfig.fields.concat(fieldsToAdd);
+        entityConfig.fields = entityConfig.fields!.concat(fieldsToAdd as any);
       },
     });
   }
 
-  get [BaseApplicationGenerator.PREPARING_EACH_ENTITY]() {
-    return this.asConfiguringEachEntityTaskGroup({
+  get [EntityAuditApplicationGenerator.PREPARING_EACH_ENTITY]() {
+    return this.asPreparingEachEntityTaskGroup({
       async configureEntity({ entity }) {
         if (entity.enableAudit) {
           entity.requiresPersistableImplementation = true;
@@ -99,7 +101,7 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+  get [EntityAuditApplicationGenerator.WRITING_ENTITIES]() {
     return this.asWritingEntitiesTaskGroup({
       async writingTemplateTask({ application, entities }) {
         await Promise.all(
@@ -121,7 +123,7 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+  get [EntityAuditApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.asPostWritingEntitiesTaskGroup({
       async postWritingEntitiesTask({ application: { javaPackageTestDir }, entities }) {
         for (const entity of entities.filter(e => !e.builtIn && e.enableAudit)) {
