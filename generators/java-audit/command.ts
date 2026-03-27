@@ -1,4 +1,4 @@
-import { asCommand } from 'generator-jhipster';
+import { asCommand } from '../base-generator.ts';
 
 export default asCommand({
   configs: {
@@ -33,7 +33,8 @@ export default asCommand({
         type: String,
       },
       prompt: generator => ({
-        when: answers => (generator.initialRun || generator.options.askAnswered) && ['javers', 'custom'].includes(answers.auditFramework),
+        when: answers =>
+          Boolean(generator.initialRun || generator.options.askAnswered) && ['javers', 'custom'].includes(answers.auditFramework),
         type: 'select',
         name: 'auditUpdateType',
         message: 'Do you want to enable audit for all existing entities?',
