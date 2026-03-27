@@ -13,7 +13,7 @@ export default class extends BaseApplicationGenerator {
       loadDependabot() {
         const {
           dependencies: { 'ngx-diff': ngxDiff },
-        } = this.fs.readJSON(this.templatePath('../resources/package.json'));
+        } = this.readResourcesPackageJson();
         this.ngxDiff = ngxDiff;
       },
     });
