@@ -3,25 +3,18 @@ import { readdir } from 'node:fs/promises';
 import { extname, join } from 'node:path';
 
 import { getGithubSamplesGroup } from 'generator-jhipster/ci';
-import BaseCoreGenerator from 'generator-jhipster/generators/base-core';
+import BaseGenerator from 'generator-jhipster/generators/base-core';
 
-export default class extends BaseCoreGenerator {
-  /** @type {string | undefined} */
-  samplesFolder;
-  /** @type {string} */
-  samplesGroup;
-  /** @type {string} */
-  sampleName;
-  /** @type {boolean} */
-  all;
-  /** @type {string} */
-  sampleType;
-  /** @type {string} */
-  sampleFile;
-  /** @type {any} */
-  generatorOptions;
+export default class extends BaseGenerator {
+  samplesFolder?: string;
+  samplesGroup!: string;
+  sampleName!: string;
+  all?: boolean;
+  sampleType?: string;
+  sampleFile?: string;
+  generatorOptions: any;
 
-  get [BaseCoreGenerator.WRITING]() {
+  get [BaseGenerator.WRITING]() {
     return this.asAnyTaskGroup({
       async copySample() {
         const { samplesFolder, samplesGroup, all, sampleName } = this;
@@ -40,7 +33,7 @@ export default class extends BaseCoreGenerator {
             'sample-folder': sampleFolder = samplesPath,
             generatorOptions,
             templateOptions = {},
-          } = samples[sampleName];
+          } = samples[sampleName] as any;
 
           this.generatorOptions = generatorOptions;
           this.sampleType = sampleType === 'jdl-ejs' ? 'jdl' : sampleType;
@@ -62,7 +55,7 @@ export default class extends BaseCoreGenerator {
     });
   }
 
-  get [BaseCoreGenerator.END]() {
+  get [BaseGenerator.END]() {
     return this.asAnyTaskGroup({
       async generateYoRcSample() {
         if (this.sampleType !== 'yo-rc') return;
@@ -92,7 +85,7 @@ export default class extends BaseCoreGenerator {
   }
 
   getDefaultComposeOptions() {
-    const packageJson = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url)));
+    const packageJson = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), { encoding: 'utf-8' }));
     const projectVersion = `${packageJson.version}-git`;
     return {
       skipJhipsterDependencies: true,

@@ -1,8 +1,10 @@
 import { JAVA_MAIN_RESOURCES_DIR } from 'generator-jhipster';
+import BaseApplicationGenerator from 'generator-jhipster/generators/base-application';
 import { javaMainPackageTemplatesBlock, javaTestPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
-import BaseApplicationGenerator from 'generator-jhipster/generators/spring-boot';
 
-export default class extends BaseApplicationGenerator {
+import { EntityAuditApplicationGenerator } from '../base-generator.ts';
+
+export default class extends EntityAuditApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnBootstrap('java');
     await this.dependsOnJHipster('jhipster-entity-audit:java-audit');
@@ -21,7 +23,7 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.LOADING]() {
     return this.asLoadingTaskGroup({
       async loadingTask({ application }) {
-        application.entityAuditEventChangelogDate = this.blueprintConfig.entityAuditEventChangelogDate;
+        application.entityAuditEventChangelogDate = this.blueprintConfig.entityAuditEventChangelogDate!;
       },
     });
   }
@@ -69,7 +71,7 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
       async customizeArchTest({ application: { javaPackageTestDir, packageName }, source }) {
-        source.editJavaFile(
+        source.editJavaFile!(
           `${javaPackageTestDir}TechnicalStructureTest.java`,
           {
             staticImports: [
@@ -94,7 +96,7 @@ export default class extends BaseApplicationGenerator {
 
       async customizeAbstractAuditingEntity({ source, application: { javaPackageSrcDir, packageName } }) {
         // add the new Listener to the 'AbstractAuditingEntity' class and add import if necessary
-        source.editJavaFile(
+        source.editJavaFile!(
           `${javaPackageSrcDir}domain/AbstractAuditingEntity.java`,
           { imports: [`${packageName}.audit.EntityAuditEventListener`] },
           contents => {
@@ -109,7 +111,9 @@ export default class extends BaseApplicationGenerator {
       },
 
       async addLiquibaseChangelog({ source, application: { entityAuditEventChangelogDate } }) {
-        source.addLiquibaseIncrementalChangelog?.({ changelogName: `${entityAuditEventChangelogDate}_added_entity_EntityAuditEvent` });
+        source.addLiquibaseIncrementalChangelog?.({
+          changelogName: `${entityAuditEventChangelogDate}_added_entity_EntityAuditEvent`,
+        });
       },
 
       async addEntityAuditEventToCache({ source, application: { packageName } }) {

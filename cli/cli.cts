@@ -28,10 +28,10 @@ const blueprint = packageFolderName.startsWith('jhipster-') ? `generator-${packa
       console.log('');
     },
     lookups: [{ packagePaths: [packagePath] }],
-    ...require('./cli-customizations.cjs'),
+    ...require('./cli-customizations.cts'),
   }).catch(done);
 
-  process.on('unhandledRejection', up => {
+  process.on('unhandledRejection', (up: any) => {
     logger.error('Unhandled promise rejection at:');
     logger.fatal(up);
   });

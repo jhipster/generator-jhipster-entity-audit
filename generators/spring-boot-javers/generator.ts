@@ -1,16 +1,17 @@
 import { createNeedleCallback } from 'generator-jhipster/generators/base-core/support';
 import { javaMainPackageTemplatesBlock } from 'generator-jhipster/generators/java/support';
 import { getPomVersionProperties } from 'generator-jhipster/generators/java-simple-application/generators/maven/support';
-import BaseApplicationGenerator from 'generator-jhipster/generators/spring-boot';
 import { normalizeLineEndings } from 'generator-jhipster/utils';
 
-export default class extends BaseApplicationGenerator {
+import { EntityAuditApplicationGenerator } from '../base-generator.ts';
+
+export default class extends EntityAuditApplicationGenerator {
   async beforeQueue() {
     await this.dependsOnBootstrap('java');
     await this.dependsOnJHipster('jhipster-entity-audit:java-audit');
   }
 
-  get [BaseApplicationGenerator.PREPARING]() {
+  get [EntityAuditApplicationGenerator.PREPARING]() {
     return this.asPreparingTaskGroup({
       async defaultTask({ application }) {
         const pomFile = this.readTemplate(this.templatePath('../resources/pom.xml'));
@@ -58,7 +59,7 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
+  get [EntityAuditApplicationGenerator.POST_PREPARING_EACH_ENTITY]() {
     return this.asPostPreparingEachEntityTaskGroup({
       async postPreparingEntityTask({ entity }) {
         if (!entity.enableAudit) return;
@@ -69,15 +70,15 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.DEFAULT]() {
+  get [EntityAuditApplicationGenerator.DEFAULT]() {
     return this.asDefaultTaskGroup({
       async defaultTask({ application, entities }) {
-        application.auditedEntities = entities.map(e => e.entityAuditEventType).filter(Boolean);
+        application.auditedEntities = entities.map(e => e.entityAuditEventType).filter(Boolean) as string[];
       },
     });
   }
 
-  get [BaseApplicationGenerator.WRITING]() {
+  get [EntityAuditApplicationGenerator.WRITING]() {
     return this.asWritingTaskGroup({
       async writingTemplateTask({ application }) {
         await this.writeFiles({
@@ -100,12 +101,12 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING]() {
+  get [EntityAuditApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
       async postWritingTemplateTask({ source, application }) {
         const { javaPackageSrcDir, databaseTypeSql, databaseTypeMongodb, javaDependencies } = application;
         // add annotations for Javers to ignore fields in 'AbstractAuditingEntity' class
-        source.editJavaFile(
+        source.editJavaFile!(
           `${javaPackageSrcDir}domain/AbstractAuditingEntity.java`,
           { annotations: [{ annotation: 'DiffIgnore', package: 'org.javers.core.metamodel.annotation' }] },
           contents => contents.replace(/\s*import com.fasterxml.jackson.annotation.JsonIgnore;/, ''),
@@ -140,12 +141,12 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
-  get [BaseApplicationGenerator.POST_WRITING_ENTITIES]() {
+  get [EntityAuditApplicationGenerator.POST_WRITING_ENTITIES]() {
     return this.asPostWritingEntitiesTaskGroup({
       async postWritingEntitiesTask({ application: { srcMainJava }, entities, source }) {
         for (const entity of entities.filter(e => !e.builtIn && e.enableAudit)) {
           const { persistClass, entityAbsoluteFolder } = entity;
-          source.editJavaFile(`${srcMainJava}${entityAbsoluteFolder}/repository/${persistClass}Repository.java`, {
+          source.editJavaFile!(`${srcMainJava}${entityAbsoluteFolder}/repository/${persistClass}Repository.java`, {
             annotations: [{ annotation: 'JaversSpringDataAuditable', package: 'org.javers.spring.annotation' }],
           });
 

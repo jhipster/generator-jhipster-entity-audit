@@ -26,20 +26,20 @@
     "url": "http://deepu105.github.io"
   },
   "type": "module",
-  "main": "generators/app/index.js",
+  "main": "generators/app/index.ts",
   "bin": {
-    "jhipster-entity-audit": "cli/cli.cjs"
+    "jhipster-entity-audit": "cli/cli.cts"
   },
   "files": [
     "cli",
     "generators",
     "!**/__*",
     "!**/*.snap",
-    "!**/*.spec.?(c|m)js"
+    "!**/*.spec.?(c|m)(j|t)s"
   ],
   "scripts": {
     "ejslint": "ejslint generators/**/*.ejs",
-    "lint": "eslint .",
+    "lint": "eslint",
     "lint-fix": "npm run ejslint && npm run lint -- --fix",
     "prettier-check": "prettier --check \"{,**/}*.{md,json,yml,html,cjs,mjs,js,cts,mts,ts,tsx,css,scss,vue,java}\"",
     "prettier-format": "prettier --write \"{,**/}*.{md,json,yml,html,cjs,mjs,js,cts,mts,ts,tsx,css,scss,vue,java}\"",
@@ -47,7 +47,7 @@
     "release:major": "npm version major -a -m \"Update to %s\" && npm run release",
     "release:minor": "npm version minor -a -m \"Update to %s\" && npm run release",
     "release:patch": "npm version patch -a -m \"Update to %s\" && npm run release",
-    "pretest": "npm run prettier-check && npm run lint",
+    "pretest": "npm run prettier-check && npm run lint && tsc",
     "test": "vitest run",
     "update-snapshot": "vitest run --update",
     "vitest": "vitest"
@@ -64,6 +64,7 @@
     "jiti": "2.6.1",
     "prettier": "3.8.1",
     "prettier-plugin-packagejson": "3.0.2",
+    "typescript": "5.9.3",
     "vitest": "4.0.18",
     "yeoman-test": ">=10"
   },

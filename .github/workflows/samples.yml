@@ -30,7 +30,7 @@ jobs:
       - id: build
         run: |
           npm install
-          ./cli/cli.cjs github-build-matrix
+          ./cli/cli.cts github-build-matrix
   samples:
     name: ${{ matrix.job-name || matrix.sample }}
     runs-on: ${{ matrix.os }}
@@ -56,7 +56,7 @@ jobs:
           binary-dir: ${{ github.workspace }}/generator-jhipster-entity-audit/cli/
       - run: npm install
         working-directory: ${{ github.workspace }}/generator-jhipster-entity-audit
-      - run: cli.cjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }}
+      - run: cli.cts generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }}
       - uses: jhipster/actions/compare-sample@v1
         id: compare
         if: >-
@@ -64,7 +64,7 @@ jobs:
           !contains(github.event.pull_request.labels.*.name, 'pr: disable-compare')
         with:
           generator-path: generator-jhipster-entity-audit
-          cmd: cli.cjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }}
+          cmd: cli.cts generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }}
       - run: npm run ci:backend:test
         if: steps.compare.outputs.equals != 'true'
         id: backend
