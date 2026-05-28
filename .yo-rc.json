@@ -4,6 +4,7 @@
     "baseName": "entity-audit",
     "caret": true,
     "cli": true,
+    "defaultCommand": "generate-blueprint",
     "entities": [],
     "generators": {
       "angular-audit": {
@@ -50,7 +51,8 @@
       }
     },
     "githubWorkflows": true,
-    "jhipsterVersion": "9.0.0",
+    "javascriptBlueprint": true,
+    "jhipsterVersion": "9.1.0",
     "js": true,
     "localBlueprint": false,
     "packageJsonType": "module",
