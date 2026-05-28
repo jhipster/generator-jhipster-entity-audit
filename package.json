@@ -41,6 +41,7 @@
     "ejslint": "ejslint generators/**/*.ejs",
     "lint": "eslint .",
     "lint-fix": "npm run ejslint && npm run lint -- --fix",
+    "prepare": "husky",
     "prettier-check": "prettier --check \"{,**/}*.{md,json,yml,html,cjs,mjs,js,cts,mts,ts,tsx,css,scss,vue,java}\"",
     "prettier-format": "prettier --write \"{,**/}*.{md,json,yml,html,cjs,mjs,js,cts,mts,ts,tsx,css,scss,vue,java}\"",
     "release": "npm run lint && git push && git push --tags && npm publish",
@@ -56,11 +57,14 @@
     "generator-jhipster": "9.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.0.1",
+    "@commitlint/config-conventional": "^21.0.1",
     "ejs-lint": "2.0.1",
     "eslint": "9.39.2",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.5",
     "globals": "17.4.0",
+    "husky": "^9.1.7",
     "jiti": "2.6.1",
     "prettier": "3.8.1",
     "prettier-plugin-packagejson": "3.0.2",
