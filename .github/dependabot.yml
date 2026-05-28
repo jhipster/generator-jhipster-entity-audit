@@ -25,6 +25,9 @@ updates:
       interval: 'daily'
       time: '12:00'
     versioning-strategy: increase
+    commit-message:
+      prefix: 'fix'
+      include: 'scope'
     labels:
       - 'theme: angular'
       - 'theme: dependencies'
@@ -34,6 +37,9 @@ updates:
     schedule:
       interval: 'daily'
       time: '12:00'
+    commit-message:
+      prefix: 'fix'
+      include: 'scope'
     labels:
       - 'theme: dependencies'
       - 'theme: java'
