@@ -1,0 +1,21 @@
+import BaseApplicationGenerator, { type Features, type Options } from 'generator-jhipster/generators/base-application';
+
+export default class extends BaseApplicationGenerator {
+  constructor(args?: string[], opts?: Options, features?: Features) {
+    super(args, opts, { ...features, sbsBlueprint: true });
+  }
+
+  async beforeQueue() {
+    await this.dependsOnBootstrap('client');
+  }
+
+  get [BaseApplicationGenerator.COMPOSING]() {
+    return this.asComposingTaskGroup({
+      async composeTask() {
+        if (this.blueprintConfig!.auditPage && this.jhipsterConfigWithDefaults.clientFramework === 'angular') {
+          await this.composeWithJHipster('jhipster-entity-audit:angular-audit');
+        }
+      },
+    });
+  }
+}

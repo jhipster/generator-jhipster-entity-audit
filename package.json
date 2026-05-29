@@ -26,9 +26,9 @@
     "url": "http://deepu105.github.io"
   },
   "type": "module",
-  "main": "generators/app/index.js",
+  "main": "generators/app/index.ts",
   "bin": {
-    "jhipster-entity-audit": "cli/cli.cjs"
+    "jhipster-entity-audit": "cli/cli.cts"
   },
   "files": [
     "cli",
@@ -48,7 +48,7 @@
     "release:major": "npm version major -a -m \"Update to %s\" && npm run release",
     "release:minor": "npm version minor -a -m \"Update to %s\" && npm run release",
     "release:patch": "npm version patch -a -m \"Update to %s\" && npm run release",
-    "pretest": "npm run prettier-check && npm run lint",
+    "pretest": "npm run prettier-check && npm run lint && tsc",
     "test": "vitest run",
     "update-snapshot": "vitest run --update",
     "vitest": "vitest"
@@ -68,6 +68,7 @@
     "jiti": "2.7.0",
     "prettier": "3.8.3",
     "prettier-plugin-packagejson": "3.0.2",
+    "typescript": "6.0.3",
     "vitest": "4.1.7",
     "yeoman-test": ">=10"
   },
