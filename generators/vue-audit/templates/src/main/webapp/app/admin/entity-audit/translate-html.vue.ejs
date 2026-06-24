@@ -1,0 +1,90 @@
+<!-- TranslateHtml.vue -->
+<template>
+  <component :is="tag" v-html="translatedHtml" v-bind="$attrs"></component>
+</template>
+
+<script>
+import { computed, defineComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+export default defineComponent({
+  name: 'TranslateHtml',
+  inheritAttrs: false,
+  props: {
+    // i18n 键路径
+    path: {
+      type: String,
+      required: true
+    },
+    // 传递给翻译的参数
+    values: {
+      type: Object,
+      default: () => ({})
+    },
+    // 渲染的标签，默认为 span
+    tag: {
+      type: String,
+      default: 'span'
+    },
+    // 是否使用 Angular 风格的占位符 {{ }}
+    angularStyle: {
+      type: Boolean,
+      default: true
+    },
+    // 自定义占位符正则（高级用法）
+    placeholderPattern: {
+      type: RegExp,
+      default: null
+    }
+  },
+  setup(props) {
+    const { tm, locale } = useI18n()
+
+    const translatedHtml = computed(() => {
+      try {
+        // 使用 tm() 获取原始消息，而不是 t()
+        // tm() 返回原始消息对象，不会进行编译
+        const messages = tm(props.path)
+
+        // 获取当前语言的消息
+        let text = ''
+        if (typeof messages === 'string') {
+          text = messages
+        } else if (messages && messages[locale.value]) {
+          text = messages[locale.value]
+        } else if (messages) {
+          // 如果是对象但没有当前语言，尝试获取第一个可用的值
+          const availableLocale = Object.keys(messages)[0]
+          if (availableLocale) {
+            text = messages[availableLocale]
+          }
+        }
+
+        // 如果还是没有找到，返回路径
+        if (!text) {
+          console.warn(`TranslateHtml: 未找到翻译 - ${props.path}`)
+          return `[${props.path}]`
+        }
+
+        // 手动替换 Angular 风格的占位符
+        if (props.values && Object.keys(props.values).length > 0) {
+          Object.entries(props.values).forEach(([key, value]) => {
+            // 支持 {{ key }} 和 {{key}} 两种格式
+            const regex = new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, 'g')
+            text = text.replace(regex, value)
+          })
+        }
+
+        return text
+      } catch (error) {
+        console.error(`TranslateHtml: 翻译失败 - ${props.path}`, error)
+        return `[翻译错误: ${props.path}]`
+      }
+    })
+
+    return {
+      translatedHtml
+    }
+  }
+})
+</script>

@@ -1,0 +1,49 @@
+{
+    "global": {
+        "menu": {
+            "admin": {
+                "entityAudit": "การตรวจสอบข้อมูล"
+            }
+        }
+    },
+    "entityAudit": {
+        "home": {
+            "title": "รายการการตรวจสอบข้อมูล",
+            "filter": "ตัวกรอง",
+            "entityOrTable": "เอนทิตี/ตาราง",
+            "limitTo": "จำกัดจำนวน",
+            "loadChangeList": "โหลดรายการเปลี่ยนแปลง"
+        },
+        "result": {
+            "showInfo": "แสดง <strong>{{ limit }}</strong> การเปลี่ยนแปลงล่าสุดของ <strong>{{ entity }}</strong>",
+            "searchFieldLabel": "ตัวกรอง:",
+            "globalFilter": "ตัวกรองทั่วไป",
+            "entityIdFilter": "ตัวกรอง ID ของเอนทิตี",
+            "tableHeader": {
+                "entityId": "ID ของเอนทิตี",
+                "action": "การกระทำ",
+                "version": "เวอร์ชัน",
+                "value": "ค่า",
+                "modifiedDate": "วันที่แก้ไข",
+                "modifiedBy": "ผู้แก้ไข"
+            },
+            "tableBody": {
+                "field": "ฟิลด์",
+                "value": "ค่า",
+                "viewDetails": "ดูรายละเอียดการเปลี่ยนแปลง"
+            },
+            "noDataFound": "ไม่พบข้อมูลตามเงื่อนไขที่กรอง",
+            "firstAuditEntry": "ไม่มีเวอร์ชันก่อนหน้าสำหรับรายการนี้\nเป็นรายการบันทึกการตรวจสอบครั้งแรกของวัตถุนี้"
+        },
+        "detail": {
+            "close": "ปิด",
+            "title": "รายละเอียดการตรวจสอบ",
+            "action": "มีการดำเนินการ <strong>{{action}}</strong> กับข้อมูลด้านล่าง",
+            "old": "ค่าเก่า/ค่าที่ถูกลบ",
+            "new": "ค่าใหม่/ค่าที่เพิ่ม",
+            "changedFields": "ฟิลด์ที่เปลี่ยนแปลง",
+            "allFields": "ฟิลด์ทั้งหมด",
+            "done": "เสร็จสิ้น"
+        }
+    }
+}
