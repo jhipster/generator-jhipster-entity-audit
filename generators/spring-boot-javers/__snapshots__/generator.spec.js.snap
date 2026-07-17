@@ -38,38 +38,6 @@ exports[`SubGenerator spring-boot-javers of entity-audit JHipster blueprint > ru
 }
 `;
 
-exports[`SubGenerator spring-boot-javers of entity-audit JHipster blueprint > should generate AuditedEntity > generate .yo-rc.json content 1`] = `
-{
-  ".yo-rc.json": {
-    "contents": "{
-  "generator-jhipster": {
-    "baseName": "jhipster",
-    "blueprints": [
-      {
-        "name": "generator-jhipster-entity-audit"
-      }
-    ],
-    "entities": [
-      "CamelCase",
-      "WithEntityPackage"
-    ],
-    "jwtSecretKey": "SECRET--64",
-    "languages": [
-      "en"
-    ],
-    "nativeLanguage": "en"
-  },
-  "generator-jhipster-entity-audit": {
-    "auditFramework": "javers",
-    "auditPage": true
-  }
-}
-",
-    "stateCleared": "modified",
-  },
-}
-`;
-
 exports[`SubGenerator spring-boot-javers of entity-audit JHipster blueprint > should generate AuditedEntity > generate AuditedEntity content 1`] = `
 {
   "src/main/java/com/mycompany/myapp/config/audit/AuditedEntity.java": {

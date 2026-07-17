@@ -23,7 +23,7 @@ jobs:
     outputs:
       matrix: ${{ steps.build.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v6
         with:
           node-version: 24
@@ -43,7 +43,7 @@ jobs:
       fail-fast: false
       matrix: ${{fromJson(needs.build-matrix.outputs.matrix)}}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           path: generator-jhipster-entity-audit
           fetch-depth: 2
@@ -57,6 +57,8 @@ jobs:
       - run: npm install
         working-directory: ${{ github.workspace }}/generator-jhipster-entity-audit
       - run: cli.cjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }}
+        env:
+          JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
       - uses: jhipster/actions/compare-sample@v1
         id: compare
         if: >-
@@ -65,6 +67,8 @@ jobs:
         with:
           generator-path: generator-jhipster-entity-audit
           cmd: cli.cjs generate-sample ${{ matrix.sample }} --skip-jhipster-dependencies --skip-install ${{ matrix.extra-args }}
+        env:
+          JHI_JWT_SECRET_KEY: ${{ matrix.jwt-secret-key }}
       - run: npm run ci:backend:test
         if: steps.compare.outputs.equals != 'true'
         id: backend
