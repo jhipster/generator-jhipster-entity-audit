@@ -51,7 +51,7 @@
       }
     },
     "githubWorkflows": true,
-    "javascriptBlueprint": true,
+    "javascriptBlueprint": false,
     "jhipsterVersion": "9.1.0",
     "js": true,
     "localBlueprint": false,
