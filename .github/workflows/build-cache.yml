@@ -3,6 +3,8 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 0 * * 0'
+permissions:
+  contents: read
 jobs:
   build-cache:
     runs-on: ubuntu-latest
@@ -10,7 +12,7 @@ jobs:
       run:
         working-directory: ${{ github.workspace }}/app
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           path: generator-jhipster-entity-audit
       - uses: jhipster/actions/setup-runner@v1

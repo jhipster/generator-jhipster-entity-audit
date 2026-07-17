@@ -59,8 +59,14 @@ entity WithEntityPackage {
     });
 
     it('generate .yo-rc.json content', () => {
-      expect(result.getSnapshot('**/.yo-rc.json')).toMatchSnapshot();
+      result.assertJsonFileContent('.yo-rc.json', {
+        'generator-jhipster-entity-audit': {
+          auditFramework: 'javers',
+          auditPage: true,
+        },
+      });
     });
+
     it('generate AuditedEntity content', () => {
       expect(result.getSnapshot('**/AuditedEntity.java')).toMatchSnapshot();
     });

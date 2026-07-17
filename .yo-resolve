@@ -1,2 +1,17 @@
 README.md diff
 .blueprint/generate-sample/generator.mjs diff
+generators/angular-audit/generator.js skip
+generators/client/command.js skip
+generators/client/generator.js skip
+generators/java-audit/command.js skip
+generators/java-audit/generator.js skip
+generators/java-audit/generator.spec.js skip
+generators/languages/generator.js skip
+generators/languages/generator.spec.js skip
+generators/server/command.js skip
+generators/server/generator.js skip
+generators/server/generator.spec.js skip
+generators/spring-boot-javers/generator.spec.js skip
+generators/spring-boot-javers/generator.js skip
+generators/spring-boot-custom-audit/generator.js skip
+generators/spring-boot-custom-audit/generator.spec.js skip
