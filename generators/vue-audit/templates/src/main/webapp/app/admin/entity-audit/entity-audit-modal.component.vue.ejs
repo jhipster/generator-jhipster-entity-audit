@@ -1,0 +1,202 @@
+<template>
+  <!-- ✅ 使用 v-if 控制是否渲染模态框 -->
+  <div v-if="visible" class="modal fade show d-block">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content" @click.stop>
+        <div class="modal-header">
+          <h5 class="modal-title">{{ $t('entityAudit.detail.title') }}</h5>
+          <button type="button" class="close" @click="close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" @click.stop>
+          <p>
+            <strong>
+              <translate-html
+                path="entityAudit.detail.action"
+                :values="{ action: action }"
+              />
+            </strong>
+          </p>
+          <del class="diff deleted">{{ $t('entityAudit.detail.old') }}</del>
+          <ins class="diff inserted">{{ $t('entityAudit.detail.new') }}</ins>
+          <Diff v-if="left && right" language="json" mode="unified" :prev="left" :current="right" class="diff-view" />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" @click="close">
+            {{ $t('entityAudit.detail.close') }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-backdrop fade show" @click="close"></div>
+  </div>
+</template>
+
+<script setup>
+import { ref, watch } from 'vue';
+import { Diff } from 'vue-diff';
+// 引入高亮，语法，高亮json
+import 'vue-diff/dist/index.css';
+import hljs from 'highlight.js/lib/core';
+import json from 'highlight.js/lib/languages/json';
+import { diff } from 'deep-diff'; // 引入 deep-diff 进行 JSON 结构比较
+import EntityAuditService from './entity-audit.service';
+import TranslateHtml from "./entity-audit/translate-html.vue";
+
+// 注册 JSON 语言支持
+hljs.registerLanguage('json', json);
+
+// 响应式状态
+const visible = ref(false);
+const left = ref('');
+const right = ref('');
+const action = ref('');
+const service = new EntityAuditService();
+
+// 直接返回 JSON 字符串，不添加注解
+function annotateJson(json) {
+  if (!json) return '{}';
+  try {
+    return JSON.stringify(json, null, 2);
+  } catch (error) {
+    console.error('JSON 解析失败:', error);
+    return '{}';
+  }
+}
+
+// ✅ 新增：获取上一版本数据并对比
+async function openChange(audit) {
+  if (!audit || !audit.entityType || !audit.entityId || !audit.commitVersion) {
+    alert('无效的审计记录');
+    return;
+  }
+
+  try {
+    const prev = await service.getPrevVersion(audit.entityType, audit.entityId, audit.commitVersion);
+
+    // 确保 entityValue 是对象
+    let prevValue = prev.entityValue || {};
+    let currentValue = audit.entityValue || {};
+
+    // 如果 entityValue 是字符串，尝试解析
+    if (typeof prevValue === 'string') {
+      try {
+        prevValue = JSON.parse(prevValue);
+      } catch (e) {
+        console.error('解析 prev.entityValue 失败:', e);
+        prevValue = {};
+      }
+    }
+    if (typeof currentValue === 'string') {
+      try {
+        currentValue = JSON.parse(currentValue);
+      } catch (e) {
+        console.error('解析 audit.entityValue 失败:', e);
+        currentValue = {};
+      }
+    }
+
+    // 使用 deep-diff 比较
+    const differences = diff(prevValue, currentValue) || [];
+    console.log('deep-diff 结果:', differences); // 调试：查看差异
+
+    // 直接序列化 JSON，不添加注解
+    left.value = annotateJson(prevValue);
+    right.value = annotateJson(currentValue);
+    action.value = audit.action || '';
+    visible.value = true;
+  } catch (err) {
+    console.error('获取上一版本失败:', err);
+    alert('无法加载上一版本数据。');
+  }
+}
+
+// 关闭模态框
+function close() {
+  visible.value = false;
+  left.value = '';
+  right.value = '';
+  action.value = '';
+}
+
+// 禁用父页面滚动
+watch(visible, newVal => {
+  if (newVal) {
+    document.body.style.overflow = 'hidden';
+    document.body.style.height = '100vh';
+  } else {
+    document.body.style.overflow = '';
+    document.body.style.height = '';
+  }
+});
+
+defineExpose({ openChange });
+</script>
+
+<style scoped>
+.modal {
+  display: block;
+  z-index: 1050;
+}
+.modal-dialog {
+  max-width: 800px;
+  z-index: 1060; /* 确保模态框在遮罩层之上 */
+}
+.modal-content {
+  max-height: 80vh; /* 限制模态框高度 */
+  background-color: #fff;
+}
+.modal-body {
+  max-height: 40vh; /* 确保内容触发滚动 */
+  overflow-y: auto; /* 启用垂直滚动条 */
+  padding: 15px;
+  position: relative;
+  z-index: 1070; /* 提高 z-index 确保滚动条可点击 */
+}
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+}
+.diff.deleted {
+  background-color: #ffe6e6;
+  padding: 2px 4px;
+  margin-right: 8px;
+}
+.diff.inserted {
+  background-color: #e6ffe6;
+  padding: 2px 4px;
+}
+.diff-view {
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  max-height: 100%;
+  overflow: hidden;
+  pointer-events: auto;
+}
+/* 为 vue-diff 的删除部分添加删除线 */
+.vue-diff__line--removed,
+.vue-diff-cell-removed {
+  text-decoration: line-through;
+  background-color: #ffe6e6;
+}
+
+/* 自定义滚动条样式 */
+.modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+.modal-body::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
+}
+.modal-body::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+</style>
