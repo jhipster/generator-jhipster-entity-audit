@@ -54,7 +54,7 @@
     "vitest": "vitest"
   },
   "dependencies": {
-    "generator-jhipster": "9.2.0"
+    "generator-jhipster": "9.3.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.1",
