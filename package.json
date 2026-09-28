@@ -54,7 +54,7 @@
     "vitest": "vitest"
   },
   "dependencies": {
-    "generator-jhipster": "9.2.0"
+    "generator-jhipster": "9.3.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.1",
@@ -72,7 +72,7 @@
     "yeoman-test": ">=10"
   },
   "engines": {
-    "generator-jhipster": "^9.2.0",
+    "generator-jhipster": "^9.3.0",
     "node": "^22.18.0 || >=24.11.0"
   }
 }

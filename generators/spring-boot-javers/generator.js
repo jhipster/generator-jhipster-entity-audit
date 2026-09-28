@@ -105,11 +105,9 @@ export default class extends BaseApplicationGenerator {
       async postWritingTemplateTask({ source, application }) {
         const { javaPackageSrcDir, databaseTypeSql, databaseTypeMongodb, javaDependencies } = application;
         // add annotations for Javers to ignore fields in 'AbstractAuditingEntity' class
-        source.editJavaFile(
-          `${javaPackageSrcDir}domain/AbstractAuditingEntity.java`,
-          { annotations: [{ annotation: 'DiffIgnore', package: 'org.javers.core.metamodel.annotation' }] },
-          contents => contents.replace(/\s*import com.fasterxml.jackson.annotation.JsonIgnore;/, ''),
-        );
+        source.editJavaFile(`${javaPackageSrcDir}domain/AbstractAuditingEntity.java`, {
+          annotations: [{ annotation: 'DiffIgnore', package: 'org.javers.core.metamodel.annotation' }],
+        });
 
         this.editFile(`${application.srcTestJava}${application.packageFolder}TechnicalStructureTest.java`, content => {
           const applicationProperties = `${application.packageName}.config.ApplicationProperties.class`;
