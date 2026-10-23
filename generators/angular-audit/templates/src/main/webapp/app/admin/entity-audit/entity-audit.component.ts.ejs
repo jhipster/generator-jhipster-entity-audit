@@ -6,7 +6,7 @@ import { tap } from 'rxjs';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 <%_ if (enableTranslation) { _%>
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 import { AlertService } from 'app/core/util/alert.service';
@@ -32,7 +32,7 @@ import EntityAuditModalComponent from './entity-audit-modal.component';
     JsonPipe,
 <%_ if (enableTranslation) { _%>
     TranslateDirective,
-    TranslateModule,
+    TranslatePipe,
 <%_ } _%>
   ],
   styles: [
