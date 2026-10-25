@@ -4,7 +4,6 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { UnifiedDiffComponent } from 'ngx-diff';
 
 <%_ if (enableTranslation) { _%>
-import { TranslateModule } from '@ngx-translate/core';
 import { TranslateDirective } from 'app/shared/language';
 <%_ } _%>
 import { EntityAuditService } from './entity-audit.service';
@@ -18,7 +17,6 @@ import { EntityAuditEvent } from './entity-audit-event.model';
     UnifiedDiffComponent,
 <%_ if (enableTranslation) { _%>
     TranslateDirective,
-    TranslateModule,
 <%_ } _%>
   ],
   styles: [
