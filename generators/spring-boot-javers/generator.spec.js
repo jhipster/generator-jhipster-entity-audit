@@ -71,4 +71,44 @@ entity WithEntityPackage {
       expect(result.getSnapshot('**/AuditedEntity.java')).toMatchSnapshot();
     });
   });
+
+  describe('with TextBlob field on MySQL', () => {
+    beforeAll(async function () {
+      await helpers
+        .runJDL(
+          `
+application {
+  config {
+    baseName jhipster
+    prodDatabaseType mysql
+    blueprints [generator-jhipster-entity-audit]
+  }
+
+  config(generator-jhipster-entity-audit) {
+    auditFramework javers
+  }
+
+  entities *
+}
+
+@EnableAudit
+@ChangelogDate("20200101000100")
+entity Post {
+  title String required
+  content TextBlob required
+}
+`,
+        )
+        .withConfiguredBlueprint();
+    });
+
+    it('should annotate TextBlob field with @DiffIgnore when using MySQL', () => {
+      result.assertFileContent(
+        'src/main/java/com/mycompany/myapp/domain/Post.java',
+        'import org.javers.core.metamodel.annotation.DiffIgnore;',
+      );
+      result.assertFileContent('src/main/java/com/mycompany/myapp/domain/Post.java', /@DiffIgnore\s+private String content;/);
+      result.assertNoFileContent('src/main/java/com/mycompany/myapp/domain/Post.java', /@DiffIgnore\s+private String title;/);
+    });
+  });
 });
