@@ -23,4 +23,25 @@ describe('SubGenerator languages of entity-audit JHipster blueprint', () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
     });
   });
+
+  describe('microservice with skipClient', () => {
+    beforeAll(async function () {
+      await helpers
+        .run(BLUEPRINT_NAMESPACE)
+        .withJHipsterConfig({
+          applicationType: 'microservice',
+          skipClient: true,
+        })
+        .withOptions({
+          ignoreNeedlesError: true,
+          blueprint: ['entity-audit'],
+        })
+        .withJHipsterGenerators()
+        .withConfiguredBlueprint();
+    });
+
+    it('should skip writing client language files when skipClient is true', () => {
+      result.assertNoFile('src/main/webapp/i18n/en/entity-audit.json');
+    });
+  });
 });

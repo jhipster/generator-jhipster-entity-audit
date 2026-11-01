@@ -23,4 +23,25 @@ describe('SubGenerator client of entity-audit JHipster blueprint', () => {
       expect(result.getStateSnapshot()).toMatchSnapshot();
     });
   });
+
+  describe('microservice with angular microfrontend', () => {
+    beforeAll(async function () {
+      await helpers
+        .run(BLUEPRINT_NAMESPACE)
+        .withJHipsterConfig({
+          applicationType: 'microservice',
+          clientFramework: 'angular',
+        })
+        .withJHipsterGenerators()
+        .withConfiguredBlueprint()
+        .withBlueprintConfig({
+          auditFramework: 'javers',
+          auditPage: true,
+        });
+    });
+
+    it('should succeed without composing angular-audit admin routes', () => {
+      result.assertNoFile('src/main/webapp/app/admin/entity-audit/entity-audit.component.ts');
+    });
+  });
 });

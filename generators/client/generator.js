@@ -12,7 +12,8 @@ export default class extends BaseApplicationGenerator {
   get [BaseApplicationGenerator.COMPOSING]() {
     return this.asComposingTaskGroup({
       async composeTask() {
-        if (this.blueprintConfig.auditPage && this.jhipsterConfigWithDefaults.clientFramework === 'angular') {
+        const { applicationType, clientFramework } = this.jhipsterConfigWithDefaults;
+        if (this.blueprintConfig.auditPage && clientFramework === 'angular' && applicationType !== 'microservice') {
           await this.composeWithJHipster('jhipster-entity-audit:angular-audit');
         }
       },

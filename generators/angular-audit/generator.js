@@ -51,18 +51,20 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
-      async postWritingTemplateTask({ source }) {
+      async postWritingTemplateTask({ application, source }) {
         this.packageJson.merge({
           dependencies: {
             'ngx-diff': this.ngxDiff,
           },
         });
-        source.addAdminRoute?.({
-          route: 'entity-audit',
-          modulePath: './entity-audit/entity-audit.component',
-          title: 'entityAudit.home.title',
-          component: true,
-        });
+        if (!application.applicationTypeMicroservice) {
+          source.addAdminRoute?.({
+            route: 'entity-audit',
+            modulePath: './entity-audit/entity-audit.component',
+            title: 'entityAudit.home.title',
+            component: true,
+          });
+        }
         source.addItemToAdminMenu?.({
           icon: 'list-alt',
           route: 'admin/entity-audit',
