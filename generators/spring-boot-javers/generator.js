@@ -100,6 +100,29 @@ export default class extends BaseApplicationGenerator {
     });
   }
 
+  get [BaseApplicationGenerator.WRITING_ENTITIES]() {
+    return this.asWritingEntitiesTaskGroup({
+      async writingTemplateTask({ application, entities }) {
+        if (!application.prodDatabaseTypeMysql) return;
+        await Promise.all(
+          entities
+            .filter(e => !e.builtIn && !e.skipServer && e.enableAudit && e.anyFieldHasTextContentType)
+            .map(e =>
+              this.writeFiles({
+                blocks: [
+                  javaMainPackageTemplatesBlock({
+                    relativePath: '_entityPackage_',
+                    templates: ['domain/_persistClass_.java.jhi.spring_boot_javers'],
+                  }),
+                ],
+                context: { ...application, ...e },
+              }),
+            ),
+        );
+      },
+    });
+  }
+
   get [BaseApplicationGenerator.POST_WRITING]() {
     return this.asPostWritingTaskGroup({
       async postWritingTemplateTask({ source, application }) {
