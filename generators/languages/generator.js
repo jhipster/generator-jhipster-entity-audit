@@ -14,7 +14,8 @@ export default class extends BaseApplicationGenerator {
 
   get [BaseApplicationGenerator.WRITING]() {
     return this.asWritingTaskGroup({
-      async writingTemplateTask({ application: { languages = [], nativeLanguage, clientSrcDir } }) {
+      async writingTemplateTask({ application: { skipClient, languages = [], nativeLanguage, clientSrcDir } }) {
+        if (skipClient) return;
         if (!clientSrcDir) {
           throw new Error('clientSrcDir is missing');
         }
